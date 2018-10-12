@@ -72,12 +72,42 @@
                             </li>                                        
                         </ul>
                     </li>
-                    <li >
-                        <a  href=""><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li><router-link to="/wheel/master">Master</router-link></li>
-                            <li><router-link to="/wheel/lock">Lock</router-link></li>
-                            <li><router-link to="/wheel/pole">Pole</router-link></li>
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/master">View Master</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/master/add">Add Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Lock<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/lock">View Lock</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/lock/add">Add Lock</a>
+                                        </li>
+                                    </ul>
+                            </li>         
+                            <li>
+                                <a href="#">Pole<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/pole">View Pole</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/pole/add">Add Pole</a>
+                                        </li>
+                                    </ul>
+                            </li>
                         </ul>
                     </li>
                 </ul>

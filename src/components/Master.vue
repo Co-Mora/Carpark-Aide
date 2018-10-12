@@ -1,52 +1,122 @@
 <template>
     <div v-show="isLoggedIn">
          <div id="wrapper">
-              <nav class="navbar-default navbar-static-side" role="navigation">
-                    <div class="sidebar-collapse">
-                        <ul class="nav metismenu" id="side-menu">
-                            <li class="nav-header">
-                                <div class="dropdown profile-element">
-                                    <img alt="image" class="rounded-circle" :src="Image" />
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                        <span class="block m-t-xs font-bold">Admin</span>
-                                        <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
-                                    </a>
-                                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                        <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                        <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                        <li class="dropdown-divider"></li>
-                                        <li><router-link class="dropdown-item" to="/">Logout</router-link></li>
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" :src="Image" />
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">Admin</span>
+                                    <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                    <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
+                                    <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                                </ul>
+                            </div>
+                            <div class="logo-element">
+                                IN+
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
+                        </li>
+                        <li >
+                            <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" >
+                                <li>
+                                    <a href="#">Zone<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/zone">View Zone</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/zone/add">Add Zone</a>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Level<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/level">View Level</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/level/add">Add Level</a>
+                                            </li>
+                                        </ul>
+                                </li>         
+                                <li>
+                                    <a href="#">Street<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/street">View Street</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/street/add">Add Street</a>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li >
+                                    <a href="#">Bay<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/bay">View Bay</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/bay/add">Add Bay</a>
+                                            </li>
+                                        </ul>
+                                </li>                                    
+                            </ul>
+                        </li>
+                          <li class="active">
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li  class="active">
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li  class="active">
+                                            <a href="/wheel/master">View Master</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/master/add">Add Master</a>
+                                        </li>
                                     </ul>
-                                </div>
-                                <div class="logo-element">
-                                    IN+
-                                </div>
                             </li>
                             <li>
-                                <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
-                            </li>
-                            <li>
-                                <a  href=""><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
-                                    <ul class="nav nav-second-level collapse" >
-                                        <li><router-link to="/carparks/zone">Zone</router-link></li>
-                                        <li><router-link to="/carparks/level">Level</router-link></li>
-                                        <li ><router-link to="/carparks/street">Street</router-link></li>
-                                        <li><router-link to="/carparks/bay">Bay</router-link></li>
-
+                                <a href="#">Lock<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/lock">View Lock</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/lock/add">Add Lock</a>
+                                        </li>
                                     </ul>
-                            </li>
-                             <li class="active">
-                                    <a  href=""><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
-                                    <ul class="nav nav-second-level collapse" >
-                                        <li  class="active"> <router-link to="/wheel/master">Master</router-link></li>
-                                        <li><router-link to="/wheel/lock">Lock</router-link></li>
-                                        <li><router-link to="/wheel/pole">Pole</router-link></li>
+                            </li>         
+                            <li>
+                                <a href="#">Pole<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/pole">View Pole</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/pole/add">Add Pole</a>
+                                        </li>
                                     </ul>
                             </li>
                         </ul>
-                    </div>
-                </nav>
+                    </li>
+                    </ul>
+
+                </div>
+            </nav>
              <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -75,11 +145,10 @@
                 <div class="ibox-content">
                     <div class="col-lg-6">
                         <div class="input-group">
-                            <select v-model="selected" class="form-control m-b" >
-                            <option disabled value="">Please Select CarID</option>
-                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                            <select v-model="carparkID" class="form-control m-b" >
+                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                             </select>
-                            <button class="btn btn-primary btn-sm" @click="addLevel">Filter</button>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -91,7 +160,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>Levels</h5>
+                            <h5>Wheel Master</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -169,17 +238,16 @@ export default {
     return {
       carpark: null,
       masters: null,
-      selected: null,
-      carparkID: null,
+      carparkID: 'null',
       message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
   methods: {
-    addLevel() {
+    addMaster() {
         axios
-        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.selected}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.masters = response.data
             if(this.masters.length === 0) {
@@ -189,8 +257,8 @@ export default {
     }
 
   },
-  created() {
-    
+  updated() {
+    this.addMaster()
   },
   mounted () {
     

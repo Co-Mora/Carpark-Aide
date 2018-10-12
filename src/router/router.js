@@ -11,6 +11,16 @@ import Lock from '../components/Lock'
 import Auth from '../components/Auth'
 import Pole from '../components/Pole'
 import Bay from '../components/Bay'
+import AddLevel from '../components/AddLevel'
+import AddZone from '../components/AddZone'
+import AddStreet from '../components/AddStreet'
+import AddBay from '../components/AddBay'
+
+import AddMaster from '../components/AddMaster'
+import AddLock from '../components/AddLock'
+import AddPole from '../components/AddPole'
+
+
 Vue.use(Router)
 export function createRouter () {
   return new Router({
@@ -38,28 +48,57 @@ export function createRouter () {
         component: Level,
       },
       {
+        path:'/carparks/level/add',
+        component: AddLevel,
+      },
+      {
         path:'/carparks/street',
         component: Street,
+      },
+      {
+        path:'/carparks/street/add',
+        component: AddStreet,
       },
       {
         path:'/carparks/zone',
         component: Zone,
       },
       {
+        path:'/carparks/zone/add',
+        component: AddZone,
+      },
+      {
         path:'/carparks/bay',
         component: Bay,
+      },
+      {
+        path:'/carparks/bay/add',
+        component: AddBay,
       },
       {
         path:'/wheel/lock',
         component: Lock,
       },
       {
+        path:'/wheel/lock/add',
+        component: AddLock,
+      },
+      {
         path:'/wheel/master',
         component: Master
       },
       {
+        path:'/wheel/master/add',
+        component: AddMaster
+      },
+      {
         path:'/wheel/pole',
         component: Pole,
+
+      },
+      {
+        path:'/wheel/pole/add',
+        component: AddPole,
 
       },
     ]

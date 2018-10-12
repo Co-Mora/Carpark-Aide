@@ -29,10 +29,8 @@
                                    placeholder="Search in table">
 
                             <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                
                                 <thead>
                                 <tr>
-                                    
                                     <th data-hide="phone,tablet">bay(s)</th>
                                     <th data-hide="phone,tablet">carparkCode</th>
                                     <th data-hide="phone,tablet">cityID</th>
@@ -92,7 +90,8 @@ export default {
       .then(response => {
         this.carpark = response.data
       })
-   
+
+    
   }
 
 }

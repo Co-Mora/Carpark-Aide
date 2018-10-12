@@ -1,7 +1,122 @@
 <template>
     <div>
          <div id="wrapper">
-             <NavSide />
+              <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" :src="Image" />
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">Admin</span>
+                                    <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                    <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
+                                    <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                                </ul>
+                            </div>
+                            <div class="logo-element">
+                                IN+
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
+                        </li>
+                        <li class="active">
+                            <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" >
+                                <li >
+                                    <a href="#">Zone<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/zone">View Zone</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/zone/add">Add Zone</a>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li class="active">
+                                    <a href="#">Level<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/level">View Level</a>
+                                            </li>
+                                            <li class="active">
+                                                <a href="/carparks/level/add">Add Level</a>
+                                            </li>
+                                        </ul>
+                                </li>         
+                                <li>
+                                    <a href="#">Street<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/street">View Street</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/street/add">Add Street</a>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Bay<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/bay">View Bay</a>
+                                            </li>
+                                            <li>
+                                                <a href="/carparks/bay/add">Add Bay</a>
+                                            </li>
+                                        </ul>
+                                </li>                                        
+                            </ul>
+                        </li>
+                        <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/master">View Master</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/master/add">Add Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Lock<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/lock">View Lock</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/lock/add">Add Lock</a>
+                                        </li>
+                                    </ul>
+                            </li>         
+                            <li>
+                                <a href="#">Pole<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/wheel/pole">View Pole</a>
+                                        </li>
+                                        <li>
+                                            <a href="/wheel/pole/add">Add Pole</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    </ul>
+
+                </div>
+            </nav>
              <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -19,7 +134,7 @@
                     </li>
 
                     <li>
-                        <a href="login.html">
+                        <a href="/">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
@@ -61,41 +176,25 @@
                             </div>
                         </div>
                         <div class="ibox-content">
-                                <!-- class for error message has-error -->
+                                <div class="col-lg-6">
+                                    <div class="form-group row">
+                                       <select v-model="carparkID" class="form-control m-b" >
+                                            <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Name</label>
-                                    <div class="col-sm-10"><input v-model="levelName"  placeholder="Street Name" type="text" class="form-control"></div>
+                                    <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 1</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount1"  placeholder="levelBayCount1" type="text" class="form-control"></div>
+                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Image</label>
+                                    <div class="col-sm-10"><input v-model="image"  placeholder="Image" type="text" class="form-control"></div>
                                 </div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 2</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount2"  placeholder="levelBayCount2" type="text" class="form-control"></div>
-                                </div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 3</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount3"  placeholder="levelBayCount3" type="text" class="form-control"></div>
-                                </div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 4</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount4"  placeholder="level Bay Count 4" type="text" class="form-control"></div>
-                                </div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 5</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount5"  placeholder="level Bay Count 5" type="text" class="form-control"></div>
-                                </div>
-
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 6</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount6"  placeholder="level Bay Count 6" type="text" class="form-control"></div>
-                                </div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 7</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount7"  placeholder="level Bay Count 7" type="text" class="form-control"></div>
-                                </div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Level Bay count 8</label>
-                                    <div class="col-sm-10"><input v-model="levelBayCount8"  placeholder="level Bay Count 8" type="text" class="form-control"></div>
-                                </div>
-
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" type="submit" v-on:click.prevent="addLevel">Submit</button>
+                                        <button class="btn btn-primary btn-sm" @click="addLevel">Add by Carpark</button>
                                     </div>
                                 </div>
                         </div>
@@ -121,23 +220,20 @@
 <script>
 import axios from 'axios'
 import NavSide from './NavSide'
-// import $ from 'jquery'
-// window.$ = window.jQuery = $
+import qs from 'qs'
+
 export default {
   name: 'AddLevel',
   data () {
     return {
 
-      levelName: null,
-      levelBayCount1: null,
-      levelBayCount2: null,
-      levelBayCount3: null,
-      levelBayCount4: null,
-      levelBayCount5: null,
-      levelBayCount6: null,
-      levelBayCount7: null,
-      levelBayCount8: null,
-      errors: []
+      carparkID: 'null',
+      carpark: null,
+      name: null,
+      image: null,
+      errors: [],
+      token: localStorage.getItem('token'),
+      isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
   components: {
@@ -145,65 +241,68 @@ export default {
   },
   methods: {
 
-    addLevel () {
-      setTimeout(() => {
+    addLevel() {
+         setTimeout(() => {
         $('.alert').alert('close')
       }, 2000)
-
-      if (!this.levelName && !this.levelBayCount1 && !this.levelBayCount2 && !this.levelBayCount3 && !this.levelBayCount4 && !this.levelBayCount5 && !this.levelBayCount6 && !this.levelBayCount6 && !this.levelBayCount7) {
+         if (!this.name && !this.image) {
         this.errors.push('Please fill up the forms')
         return false
-      } if (!this.levelName) {
+      } if (!this.name) {
         this.errors.push('Please fill up the Level Name')
-      } if (!this.levelBayCount1) {
-        this.errors.push('Please fill up the Level bay count 1')
-      } if (!this.levelBayCount2) {
-        this.errors.push('Please fill up the Level bay count 2')
-      } if (!this.levelBayCount3) {
-        this.errors.push('Please fill up the Level bay count 3')
-      } if (!this.levelBayCount4) {
-        this.errors.push('Please fill up the Level bay count 4')
-      } if (!this.levelBayCount5) {
-        this.errors.push('Please fill up the Level bay count 5')
-      } if (!this.levelBayCount6) {
-        this.errors.push('Please fill up the Level bay count 6')
-      } if (!this.levelBayCount7) {
-        this.errors.push('Please fill up the Level bay count 7')
-      } if (!this.levelBayCount8) {
-        this.errors.push('Please fill up the Level bay count 8')
+      } if (!this.image) {
+        this.errors.push('Please fill up the level image')
       } else {
         this.errors = []
-        axios.post('api/biz/f69b0999-2043-48bb-8216-28306ada469a/operator/5628788a-d084-4ee1-975f-45f5680a2c5a/carpark/459bb0b4-e967-422c-9da9-0f172682e552/level',
-          {
-            LevelName: this.levelName,
-            LevelBayCount1: this.levelBayCount1,
-            LevelBayCount2: this.levelBayCount2,
-            LevelBayCount3: this.levelBayCount3,
-            LevelBayCount4: this.levelBayCount4,
-            LevelBayCount5: this.levelBayCount5,
-            LevelBayCount6: this.levelBayCount6,
-            LevelBayCount7: this.levelBayCount7,
-            LevelBayCount8: this.levelBayCount8
-          },
-          { headers: {
-            'Content-type': 'application/x-www-form-urlencoded'
-          }
-          }).then(response => console.log(response))
-        setTimeout(() => {
-          swal({
-            title: 'Add it successfully',
-            icon: 'success'
-          })
-        }, 1000)
-        setTimeout(() => {
-          window.location.href = '/level'
-        }, 2000)
-        return true
+        axios({
+        method: 'post',
+        url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels`,
+        data: qs.stringify({
+            name: this.name,
+            image: this.image,
+        }),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'x-access-token': JSON.parse(this.token)
+        },
+        }).then(response => {
+           if(response.status == 200) {
+                setTimeout(() => {
+                    swal({
+                        title: 'Add it successfully',
+                        icon: 'success'
+                    })
+                }, 400)
+            }
+            
+        })
+        .catch(error => {
+            if(error.message == 'Request failed with status code 401') {
+                 setTimeout(() => {
+                    swal({
+                        title: 'Your or password is wrong',
+                        icon: 'error'
+                    })
+                }, 1000)
+            }
+           
+        });
       }
-    }
-  }
+    },
+  },
+ mounted () {
+    
+   
+    axios
+      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
+      .then(response => {
+        this.carpark = response.data
+      })
 
+     
+  }
 }
+
 
 </script>
 
