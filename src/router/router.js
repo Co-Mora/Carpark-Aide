@@ -15,7 +15,7 @@ import AddLevel from '../components/AddLevel'
 import AddZone from '../components/AddZone'
 import AddStreet from '../components/AddStreet'
 import AddBay from '../components/AddBay'
-
+import MainChart from '../components/MainChart'
 import AddMaster from '../components/AddMaster'
 import AddLock from '../components/AddLock'
 import AddPole from '../components/AddPole'
@@ -34,7 +34,7 @@ export function createRouter () {
       },
       {
         name: 'Index',
-        path: '/',
+        path: '/login',
         component: Auth
       },
       {
@@ -42,6 +42,11 @@ export function createRouter () {
         path: '/carparks',
         component: Index,
         active: false
+      },
+      {
+        name: 'MainChart',
+        path: '/',
+        component: MainChart,
       },
       {
         path:'/carparks/level',

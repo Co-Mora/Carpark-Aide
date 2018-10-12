@@ -68,7 +68,7 @@ export default {
                 localStorage.setItem('token', parsed);
                  let loggedIn = JSON.stringify(this.isLoggedIn)
                 localStorage.setItem('isLogged', loggedIn);
-                window.location.href = '/carparks'
+                window.location.href = '/'
             }
             
         })

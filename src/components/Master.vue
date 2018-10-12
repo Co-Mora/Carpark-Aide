@@ -16,19 +16,19 @@
                                     <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
                                     <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
                                     <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/login">Logout</a></li>
                                 </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
                             </div>
                         </li>
-                        <li>
-                            <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
-                        </li>
                         <li >
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
+                                 <li>
+                                    <a href="/carparks">All Carparks</a>
+                                </li>
                                 <li>
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
@@ -121,12 +121,6 @@
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                <form role="search" class="navbar-form-custom" action="search_results.html">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                    </div>
-                </form>
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
@@ -134,12 +128,11 @@
                     </li>
 
                     <li>
-                        <a href="login.html">
+                        <a href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
                 </ul>
-
             </nav>
             </div>
                 <div class="ibox-content">

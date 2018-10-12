@@ -16,19 +16,20 @@
                                     <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
                                     <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
                                     <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/login">Logout</a></li>
                                 </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
                             </div>
                         </li>
-                        <li>
-                            <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
-                        </li>
+                       
                         <li class="active">
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
+                                 <li>
+                                    <a href="/carparks">All Carparks</a>
+                                </li>
                                 <li >
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
@@ -121,12 +122,6 @@
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                <form role="search" class="navbar-form-custom" action="search_results.html">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                    </div>
-                </form>
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
@@ -134,7 +129,7 @@
                     </li>
 
                     <li>
-                        <a href="/">
+                        <a href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
@@ -154,27 +149,10 @@
                 </div>
                 </div>
             </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h4>Filter by carpark</h4>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                            <h4>Add Street</h4>
                         </div>
                         <div class="ibox-content">
                                 <div class="col-lg-6">
@@ -195,12 +173,12 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addStreetCarpark">Add by Carpark</button>
+                                        <button class="btn btn-primary btn-sm" @click="addStreetCarpark" :disabled="validated == true">Add by Carpark</button>
                                     </div>
                                 </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
          <div class="wrapper wrapper-content animated fadeInRight">
@@ -240,11 +218,10 @@
                         <div class="ibox-content">
                                 <div class="col-lg-6">
                                     <div class="input-group">
-                                        <select v-model="carparkID" class="form-control m-b" >
+                                        <select v-model="carparkID" class="form-control m-b" @change="filterByZone">
                                             <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                             <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                                         </select>
-                                        <button class="btn btn-primary btn-sm" @click="filterByZone">Filter by Zone</button>
                                     </div>
                                     <div class="input-group" style="margin: 20px 0">
                                         <select v-model="zoneID" class="form-control m-b" >
@@ -263,7 +240,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addStreetZone">Add by Zone</button>
+                                        <button class="btn btn-primary btn-sm" @click="addStreetZone" :disabled="validated == true">Add by Zone</button>
                                     </div>
                                 </div>
                         </div>
@@ -306,6 +283,7 @@ export default {
       errors: [],
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
+      validated: false,
     }
   },
   components: {
@@ -325,6 +303,7 @@ export default {
       } if (!this.image) {
         this.errors.push('Please fill up the level image')
       } else {
+        this.validated = true
         this.errors = []
         axios({
         method: 'post',
@@ -344,7 +323,10 @@ export default {
                         title: 'Add it successfully',
                         icon: 'success'
                     })
-                }, 400)
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/street'
+                }, 1000)
             }
             
         })
@@ -373,7 +355,9 @@ export default {
       } if (!this.image) {
         this.errors.push('Please fill up the level image')
       } else {
-        this.errors = []
+        this.errors = []        
+        this.validated = true
+
         axios({
         method: 'post',
         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets`,
@@ -392,6 +376,9 @@ export default {
                         title: 'Add it successfully',
                         icon: 'success'
                     })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/street'
                 }, 1000)
             }
             

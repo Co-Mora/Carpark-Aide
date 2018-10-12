@@ -23,9 +23,6 @@
                                 IN+
                             </div>
                         </li>
-                        <li>
-                            <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
-                        </li>
                         <li >
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
@@ -121,12 +118,6 @@
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                <form role="search" class="navbar-form-custom" action="search_results.html">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                    </div>
-                </form>
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
@@ -134,12 +125,11 @@
                     </li>
 
                     <li>
-                        <a href="/">
+                        <a href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
                 </ul>
-
             </nav>
             </div>
         <div class="wrapper wrapper-content animated fadeInRight">
@@ -172,23 +162,6 @@
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h4>Filter by Wheel Master</h4>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
                         </div>
                         <div class="ibox-content">
                                 <div class="col-lg-6">
@@ -219,7 +192,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addWheelMasterLock">Add by Wheel Master</button>
+                                        <button class="btn btn-primary btn-sm" @click="addWheelMasterLock" :disabled="validated == true">Add by Wheel Master</button>
                                     </div>
                                 </div>
                         </div>
@@ -260,6 +233,7 @@ export default {
       name: null,
       remark: null,
       bayID: null,
+      validated: false,
       errors: [],
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
@@ -283,6 +257,7 @@ export default {
         this.errors.push('Please fill up the level remark')
       } else {
         this.errors = []
+        this.validated = true
         axios({
         method: 'post',
         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMasterID}/wheellocks`,
@@ -302,6 +277,9 @@ export default {
                         title: 'Add it successfully',
                         icon: 'success'
                     })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/wheel/lock'
                 }, 1000)
             }
             

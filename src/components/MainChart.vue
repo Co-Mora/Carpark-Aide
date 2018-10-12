@@ -1,6 +1,8 @@
 <template>
     <div>
+        <NavSide />
         <div id="page-wrapper" class="gray-bg">
+            
         <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
@@ -20,7 +22,7 @@
         </div>
       <div class="wrapper wrapper-content animated fadeInRight">
 
-          <CarPark :selected="selected" />
+          <CarPark v-show="false" :selected="selected" />
 
         </div>
         <div class="footer">
@@ -38,7 +40,7 @@
 
 <script>
 import axios from 'axios'
-import CarPark from './CarPark'
+import NavSide from './NavSide'
 export default {
   name: 'MainSide',
   data () {
@@ -48,7 +50,7 @@ export default {
     }
   },
   components: {
-    CarPark,
+    NavSide,
   },
 }
 

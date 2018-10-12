@@ -23,12 +23,12 @@
                                 IN+
                             </div>
                         </li>
-                        <li>
-                            <a href="/carparks"><i class="fa fa-ticket"></i> <span class="nav-label">All Carparks</span></a>
-                        </li>
                         <li class="active">
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
+                                <li>
+                                    <a href="/carparks">All Carparks</a>
+                                </li>
                                 <li>
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
@@ -121,12 +121,6 @@
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                <form role="search" class="navbar-form-custom" action="search_results.html">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                    </div>
-                </form>
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
@@ -134,12 +128,11 @@
                     </li>
 
                     <li>
-                        <a href="/">
+                        <a href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
                 </ul>
-
             </nav>
             </div>
         <div class="wrapper wrapper-content animated fadeInRight">
@@ -154,27 +147,10 @@
                 </div>
                 </div>
             </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h4>Filter by carpark</h4>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                            <h4>Add Bay</h4>
                         </div>
                         <div class="ibox-content">
                                 <div class="col-lg-6">
@@ -200,7 +176,7 @@
                                 </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
          <div class="wrapper wrapper-content animated fadeInRight">
@@ -219,39 +195,20 @@
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h4>Filter by Zone</h4>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
                         </div>
                         <div class="ibox-content">
                                 <div class="col-lg-6">
                                     <div class="input-group" style="margin-bottom: 20px">
-                                        <select v-model="carparkID" class="form-control m-b" >
+                                        <select v-model="carparkID" class="form-control m-b" @change="filterByZone">
                                             <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                             <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                                         </select>
-                                        <button class="btn btn-primary btn-sm" @click="filterByZone">Filter by Zone</button>
                                     </div>
                                     <div class="input-group" style="margin-bottom: 20px">
-                                        <select v-model="zoneID" class="form-control m-b" >
+                                        <select v-model="zoneID" class="form-control m-b" @change="filterByStreet">
                                             <option disabled selected value="null" key="null">Please Select Zone Name</option>
                                             <option v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
                                         </select>
-                                        <button class="btn btn-primary btn-sm" @click="filterByStreet">Filter by Street</button>
                                     </div>
                                     <div class="input-group" style="margin-bottom: 20px">
                                         <select v-model="streetID" class="form-control m-b" >
@@ -270,7 +227,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addStreetBay">Add by Street</button>
+                                        <button class="btn btn-primary btn-sm" @click="addStreetBay" :disabled="validated == true">Add by Street</button>
                                     </div>
                                 </div>
                         </div>
@@ -310,6 +267,7 @@ export default {
       zoneID: 'null',
       street: null,
       streetID: null,
+      validated: false,
       name: null,
       image: null,
       errors: [],
@@ -335,6 +293,7 @@ export default {
         this.errors.push('Please fill up the level image')
       } else {
         this.errors = []
+        this.validated = true
         axios({
         method: 'post',
         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/streets`,
@@ -354,7 +313,10 @@ export default {
                         title: 'Add it successfully',
                         icon: 'success'
                     })
-                }, 400)
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/bay'
+                }, 1000)
             }
             
         })
@@ -384,6 +346,7 @@ export default {
         this.errors.push('Please fill up the level image')
       } else {
         this.errors = []
+        this.validated = true
         axios({
         method: 'post',
         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays`,
@@ -397,12 +360,15 @@ export default {
         },
         }).then(response => {
             console.log(response)
-           if(response.status == 200) {
+            if(response.status == 200) {
                 setTimeout(() => {
                     swal({
                         title: 'Add it successfully',
                         icon: 'success'
                     })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/bay'
                 }, 1000)
             }
             
