@@ -11,7 +11,7 @@
                     </li>
 
                     <li>
-                        <a href="/login">
+                        <a @click="logout" href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
@@ -45,6 +45,12 @@ export default {
     return {
       biz: null,
       selected: ''
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('isLogged');
+      localStorage.removeItem('token');
     }
   },
   components: {

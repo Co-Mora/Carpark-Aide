@@ -1,24 +1,35 @@
 // router.js
 import Vue from 'vue'
 import Router from 'vue-router'
-import Level from '../components/Level'
 import Index from '../components/Index'
+import MainChart from '../components/MainChart'
+
+import Level from '../components/Level'
 import Zone from '../components/Zone'
 import Street from '../components/Street'
-import Master from '../components/Master'
-import CarparkFees from '../components/CarparkFees'
-import Lock from '../components/Lock'
-import Auth from '../components/Auth'
-import Pole from '../components/Pole'
 import Bay from '../components/Bay'
+import Voucher from '../components/Voucher'
+
+import CarparkFees from '../components/CarparkFees'
+import Auth from '../components/Auth'
+
+import Master from '../components/Master'
+import Lock from '../components/Lock'
+import Pole from '../components/Pole'
+import City from '../components/City'
+
+import AddSubscribe from '../components/AddSubscribe'
+import VerifySubscribe from '../components/VerifySubscribe'
+
 import AddLevel from '../components/AddLevel'
 import AddZone from '../components/AddZone'
 import AddStreet from '../components/AddStreet'
 import AddBay from '../components/AddBay'
-import MainChart from '../components/MainChart'
 import AddMaster from '../components/AddMaster'
 import AddLock from '../components/AddLock'
 import AddPole from '../components/AddPole'
+import AddVoucher from '../components/AddVoucher'
+import AddCity from '../components/AddCity'
 
 
 Vue.use(Router)
@@ -38,6 +49,14 @@ export function createRouter () {
         component: Auth
       },
       {
+        path:'/subscribe/add',
+        component: AddSubscribe,
+      },
+      {
+        path:'/subscribe/verify',
+        component: VerifySubscribe,
+      },
+      {
         name: 'Index',
         path: '/carparks',
         component: Index,
@@ -47,6 +66,14 @@ export function createRouter () {
         name: 'MainChart',
         path: '/',
         component: MainChart,
+      },
+      {
+        path:'/cities',
+        component: City,
+      },
+      {
+        path:'/cities/add',
+        component: AddCity,
       },
       {
         path:'/carparks/level',
@@ -80,6 +107,15 @@ export function createRouter () {
         path:'/carparks/bay/add',
         component: AddBay,
       },
+      {
+        path:'/carparks/voucher',
+        component: Voucher,
+      },
+      {
+        path:'/carparks/voucher/add',
+        component: AddVoucher,
+      },
+
       {
         path:'/wheel/lock',
         component: Lock,

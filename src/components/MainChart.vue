@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div v-show="isLoggedIn">
         <NavSide />
         <div id="page-wrapper" class="gray-bg">
-            
+
         <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
@@ -13,7 +13,7 @@
                     </li>
 
                     <li>
-                        <a href="/login">
+                        <a @click="logout" href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
@@ -45,8 +45,14 @@ export default {
   name: 'MainSide',
   data () {
     return {
-      biz: null,
-      selected: ''
+      token: localStorage.getItem('token'),
+      isLoggedIn: localStorage.getItem('isLogged'),
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('isLogged');
+      localStorage.removeItem('token');
     }
   },
   components: {

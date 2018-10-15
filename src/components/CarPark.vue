@@ -55,15 +55,20 @@ import axios from 'axios'
 import { mapActions, mapGetters} from 'vuex';
 
 export default {
-  name: 'CarPark',
- 
+ name: 'CarPark',
   data () {
     return {
       carpark: null,
       isLoggedIn: localStorage.getItem('isLogged'),
       token: localStorage.getItem('token')
     }
-    
+
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('isLogged');
+      localStorage.removeItem('token');
+    }
   },
   mounted () {
     axios
@@ -72,7 +77,7 @@ export default {
         this.carpark = response.data
       })
 
-    
+
   }
 
 }

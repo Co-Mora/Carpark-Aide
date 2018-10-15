@@ -23,7 +23,7 @@
                                 IN+
                             </div>
                         </li>
-                       
+
                         <li class="active">
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
@@ -36,9 +36,6 @@
                                             <li>
                                                 <a href="/carparks/zone">View Zone</a>
                                             </li>
-                                            <li>
-                                                <a href="/carparks/zone/add">Add Zone</a>
-                                            </li>
                                         </ul>
                                 </li>
                                 <li >
@@ -47,19 +44,13 @@
                                             <li>
                                                 <a href="/carparks/level">View Level</a>
                                             </li>
-                                            <li >
-                                                <a href="/carparks/level/add">Add Level</a>
-                                            </li>
                                         </ul>
-                                </li>         
+                                </li>
                                 <li class="active">
                                     <a href="#">Street<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li >
                                                 <a href="/carparks/street">View Street</a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="/carparks/street/add">Add Street</a>
                                             </li>
                                         </ul>
                                 </li>
@@ -69,11 +60,8 @@
                                             <li>
                                                 <a href="/carparks/bay">View Bay</a>
                                             </li>
-                                            <li>
-                                                <a href="/carparks/bay/add">Add Bay</a>
-                                            </li>
                                         </ul>
-                                </li>                                        
+                                </li>
                             </ul>
                         </li>
                          <li>
@@ -85,9 +73,6 @@
                                         <li>
                                             <a href="/wheel/master">View Master</a>
                                         </li>
-                                        <li>
-                                            <a href="/wheel/master/add">Add Master</a>
-                                        </li>
                                     </ul>
                             </li>
                             <li>
@@ -96,19 +81,39 @@
                                         <li>
                                             <a href="/wheel/lock">View Lock</a>
                                         </li>
-                                        <li>
-                                            <a href="/wheel/lock/add">Add Lock</a>
-                                        </li>
                                     </ul>
-                            </li>         
+                            </li>
                             <li>
                                 <a href="#">Pole<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/wheel/pole">View Pole</a>
                                         </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li class="active">
+                                <a href="#">City<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
                                         <li>
-                                            <a href="/wheel/pole/add">Add Pole</a>
+                                            <a href="/cities">View City</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Subscriber<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/subscribe/add">Add User</a>
                                         </li>
                                     </ul>
                             </li>
@@ -129,7 +134,7 @@
                     </li>
 
                     <li>
-                        <a href="/login">
+                        <a @click="logout" href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
@@ -196,24 +201,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h4>Filter by Zone</h4>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                            <h4>Add Street</h4>
                         </div>
                         <div class="ibox-content">
                                 <div class="col-lg-6">
@@ -230,12 +218,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Level Name</label>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Street Name</label>
                                     <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Image</label>
-                                    <div class="col-sm-10"><input v-model="image"  placeholder="Image" type="text" class="form-control"></div>
+                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Street Image</label>
+                                    <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
@@ -268,7 +256,6 @@
 import axios from 'axios'
 import NavSide from './NavSide'
 import qs from 'qs'
-
 export default {
   name: 'AddStreet',
   data () {
@@ -279,6 +266,7 @@ export default {
       zone: null,
       zoneID: 'null',
       name: null,
+      file: null,
       image: null,
       errors: [],
       token: localStorage.getItem('token'),
@@ -290,7 +278,32 @@ export default {
     NavSide
   },
   methods: {
+    processFile() {
+      let formData = new FormData();
+      formData.append('imgUploader', this.file);
 
+      axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'x-access-token': JSON.parse(this.token)
+                }
+              }
+            ).then(response => {
+              this.image = response.data
+              console.log('SUCCESS!!', response.data);
+        })
+        .catch(function(ex){
+          console.log(ex);
+        });
+
+    },
+    handleFileUpload() {
+       this.file = this.$refs.file.files[0];
+       console.log("File:", this.file)
+       this.processFile();
+    },
     addStreetCarpark() {
          setTimeout(() => {
         $('.alert').alert('close')
@@ -328,7 +341,7 @@ export default {
                      window.location.href = '/carparks/street'
                 }, 1000)
             }
-            
+
         })
         .catch(error => {
             if(error.message == 'Request failed with status code 401') {
@@ -339,7 +352,7 @@ export default {
                     })
                 }, 1000)
             }
-           
+
         });
       }
     },
@@ -355,7 +368,7 @@ export default {
       } if (!this.image) {
         this.errors.push('Please fill up the level image')
       } else {
-        this.errors = []        
+        this.errors = []
         this.validated = true
 
         axios({
@@ -381,7 +394,7 @@ export default {
                      window.location.href = '/carparks/street'
                 }, 1000)
             }
-            
+
         })
         .catch(error => {
             if(error.message == 'Request failed with status code 401') {
@@ -392,7 +405,7 @@ export default {
                     })
                 }, 1000)
             }
-           
+
         });
       }
     },
@@ -405,19 +418,23 @@ export default {
                   this.message = "Threre's no carpark";
             }
         })
+    },
+    logout() {
+      localStorage.removeItem('isLogged');
+      localStorage.removeItem('token');
     }
   },
- 
+
  mounted () {
-    
-   
+
+
     axios
       .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
       })
 
-     
+
   }
 }
 

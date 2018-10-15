@@ -35,9 +35,6 @@
                                             <li>
                                                 <a href="/carparks/zone">View Zone</a>
                                             </li>
-                                            <li>
-                                                <a href="/carparks/zone/add">Add Zone</a>
-                                            </li>
                                         </ul>
                                 </li>
                                 <li class="active">
@@ -46,19 +43,13 @@
                                             <li class="active">
                                                 <a href="/carparks/level">View Level</a>
                                             </li>
-                                            <li >
-                                                <a href="/carparks/level/add">Add Level</a>
-                                            </li>
                                         </ul>
-                                </li>         
+                                </li>
                                 <li>
                                     <a href="#">Street<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
                                                 <a href="/carparks/street">View Street</a>
-                                            </li>
-                                            <li>
-                                                <a href="/carparks/street/add">Add Street</a>
                                             </li>
                                         </ul>
                                 </li>
@@ -68,11 +59,16 @@
                                             <li>
                                                 <a href="/carparks/bay">View Bay</a>
                                             </li>
-                                            <li>
-                                                <a href="/carparks/bay/add">Add Bay</a>
-                                            </li>
                                         </ul>
-                                </li>                                        
+                                </li>
+                                <li>
+                                <a href="#">Voucher<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/carparks/voucher">View Voucher</a>
+                                        </li>
+                                    </ul>
+                            </li>
                             </ul>
                         </li>
                         <li>
@@ -84,9 +80,6 @@
                                         <li>
                                             <a href="/wheel/master">View Master</a>
                                         </li>
-                                        <li>
-                                            <a href="/wheel/master/add">Add Master</a>
-                                        </li>
                                     </ul>
                             </li>
                             <li>
@@ -95,19 +88,39 @@
                                         <li>
                                             <a href="/wheel/lock">View Lock</a>
                                         </li>
-                                        <li>
-                                            <a href="/wheel/lock/add">Add Lock</a>
-                                        </li>
                                     </ul>
-                            </li>         
+                            </li>
                             <li>
                                 <a href="#">Pole<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/wheel/pole">View Pole</a>
                                         </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li class="active">
+                                <a href="#">City<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
                                         <li>
-                                            <a href="/wheel/pole/add">Add Pole</a>
+                                            <a href="/cities">View City</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Subscriber<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/subscribe/add">Add User</a>
                                         </li>
                                     </ul>
                             </li>
@@ -128,7 +141,7 @@
                     </li>
 
                     <li>
-                        <a href="/login">
+                        <a @click="logout" href="/login">
                             <i class="fa fa-sign-out"></i> Log out
                         </a>
                     </li>
@@ -138,13 +151,16 @@
             </div>
                 <div class="ibox-content">
                     <div class="col-lg-6">
+                        <div class="input-group" style="margin-bottom: 20px">
+                            <a href="/carparks/level/add" class="btn btn-w-m btn-success">Add Level</a>
+                        </div>
                         <div class="input-group">
                             <select v-model="carparkID" class="form-control m-b" @change="addLevel">
                                 <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                 <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                             </select>
                         </div>
-                       
+
                     </div>
                     <div class="col-lg-2">
 
@@ -212,7 +228,7 @@ import NavSide from './NavSide'
 import Zone from './Zone'
 export default {
   name: 'Level',
-  
+
   data () {
     return {
       carpark: null,
@@ -234,19 +250,23 @@ export default {
                   this.message = "Threre's no carpark";
             }
         })
+    },
+    logout() {
+      localStorage.removeItem('isLogged');
+      localStorage.removeItem('token');
     }
 
   },
   mounted () {
-    
-   
+
+
     axios
       .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
       })
 
-     
+
   }
 
 

@@ -26,13 +26,13 @@
                         <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                             <li>
+                                    <a href="/carparks">All Carparks</a>
+                            </li>
+                            <li>
                                 <a href="#">Zone<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/carparks/zone">View Zone</a>
-                                        </li>
-                                        <li>
-                                            <a href="/carparks/zone/add">Add Zone</a>
                                         </li>
                                     </ul>
                             </li>
@@ -42,19 +42,13 @@
                                         <li>
                                             <a href="/carparks/level">View Level</a>
                                         </li>
-                                        <li>
-                                            <a href="/carparks/level/add">Add Level</a>
-                                        </li>
                                     </ul>
-                            </li>         
+                            </li>
                             <li>
                                 <a href="#">Street<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/carparks/street">View Street</a>
-                                        </li>
-                                        <li>
-                                            <a href="/carparks/street/add">Add Street</a>
                                         </li>
                                     </ul>
                             </li>
@@ -64,11 +58,16 @@
                                         <li>
                                             <a href="/carparks/bay">View Bay</a>
                                         </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Voucher<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
                                         <li>
-                                            <a href="/carparks/bay/add">Add Bay</a>
+                                            <a href="/carparks/voucher">View Voucher</a>
                                         </li>
                                     </ul>
-                            </li>                                        
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -80,9 +79,6 @@
                                         <li>
                                             <a href="/wheel/master">View Master</a>
                                         </li>
-                                        <li>
-                                            <a href="/wheel/master/add">Add Master</a>
-                                        </li>
                                     </ul>
                             </li>
                             <li>
@@ -91,19 +87,39 @@
                                         <li>
                                             <a href="/wheel/lock">View Lock</a>
                                         </li>
-                                        <li>
-                                            <a href="/wheel/lock/add">Add Lock</a>
-                                        </li>
                                     </ul>
-                            </li>         
+                            </li>
                             <li>
                                 <a href="#">Pole<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/wheel/pole">View Pole</a>
                                         </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li class="active">
+                                <a href="#">City<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
                                         <li>
-                                            <a href="/wheel/pole/add">Add Pole</a>
+                                            <a href="/cities">View City</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Subscriber<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/subscribe/add">Add User</a>
                                         </li>
                                     </ul>
                             </li>
@@ -123,7 +139,7 @@ import Image from '../../static/img/profile_small.jpg'
 export default {
   name: 'NavSide',
   aria: false,
-  
+
   methods: {
   },
   data () {
