@@ -58,6 +58,29 @@ export default {
   components: {
     NavSide,
   },
+
+  mounted() {
+    axios({
+    method: 'get',
+    url: 'https://sys2.parkaidemobile.com/api/auth/me',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+         'x-access-token': JSON.parse(this.token)
+    },
+    }).then(response => {
+        console.log(response)
+        if(response.data.status == 200) {
+            window.location.href = '/'
+        }
+
+    })
+    .catch(error => {
+        if(error.message == 'Request failed with status code 500') {
+            window.location.href = '/login'
+        }
+
+    });
+  }
 }
 
 

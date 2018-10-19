@@ -31,6 +31,12 @@ import AddPole from '../components/AddPole'
 import AddVoucher from '../components/AddVoucher'
 import AddCity from '../components/AddCity'
 
+import GateMaster from '../components/GateMaster'
+import AddGetMaster from '../components/AddGetMaster'
+import Gates from '../components/Gates'
+
+import Adverts from '../components/Adverts'
+import AddAdverts from '../components/AddAdverts'
 
 Vue.use(Router)
 export function createRouter () {
@@ -140,6 +146,31 @@ export function createRouter () {
       {
         path:'/wheel/pole/add',
         component: AddPole,
+
+      },
+      {
+        path:'/get-master',
+        component: GateMaster,
+
+      },
+      {
+        path:'/get-master/add',
+        component: AddGetMaster,
+
+      },
+      {
+        path:'/gates',
+        component: Gates,
+
+      },
+      {
+        path:'/adverts',
+        component: Adverts,
+
+      },
+      {
+        path:'/adverts/add',
+        component: AddAdverts,
 
       },
     ]

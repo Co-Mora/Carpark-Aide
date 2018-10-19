@@ -7,40 +7,40 @@
                             <h5>CarParks</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                  <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">bay(s)</th>
+                                      <th data-hide="phone,tablet">carparkCode</th>
+                                      <th data-hide="phone,tablet">image</th>
+                                      <th data-hide="phone,tablet">cityID</th>
+                                      <th data-hide="phone,tablet">lat</th>
+                                      <th data-hide="phone,tablet">lon</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr v-for="car in carpark" :key="car" class="gradeX">
+                                          <td class="center">{{car.bay || 'Unknown'}}</td>
+                                          <td class="center">{{car.carparkCode || 'Unknown'}}</td>
+                                          <td class="center"><a :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
+                                          <td class="center">{{car.cityID   || 'Unknown'}}</td>
+                                          <td class="center">{{car.lat   || 'Unknown'}}</td>
+                                          <td class="center">{{car.lon   || 'Unknown'}}</td>
+                                          <td class="center">{{car.name   || 'Unknown'}}</td>
+                                      </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                                  </tfoot>
+                              </table>
+                            </div>
 
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">bay(s)</th>
-                                    <th data-hide="phone,tablet">carparkCode</th>
-                                    <th data-hide="phone,tablet">cityID</th>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">lat</th>
-                                    <th data-hide="phone,tablet">lon</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="car in carpark" :key="car" class="gradeU">
-                                        <td>{{car.bay || 'Unknown'}}</td>
-                                        <td>{{car.carparkCode || 'Unknown'}}</td>
-                                        <td>{{car.cityID   || 'Unknown'}}</td>
-                                        <td>{{car.image   || 'Unknown'}}</td>
-                                        <td>{{car.lat   || 'Unknown'}}</td>
-                                        <td>{{car.lon   || 'Unknown'}}</td>
-                                        <td>{{car.name   || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
                         </div>
                     </div>
                 </div>

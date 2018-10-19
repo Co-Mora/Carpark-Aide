@@ -1,7 +1,7 @@
 <template>
     <div v-show="isLoggedIn">
          <div id="wrapper">
-            <nav class="navbar-default navbar-static-side" role="navigation">
+             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
                         <li class="nav-header">
@@ -16,20 +16,21 @@
                                     <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
                                     <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
                                     <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/">Logout</a></li>
                                 </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
                             </div>
                         </li>
-                        <li >
+                        <li>
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
                                  <li>
                                     <a href="/carparks">All Carparks</a>
                                 </li>
                                 <li>
+
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -53,7 +54,7 @@
                                             </li>
                                         </ul>
                                 </li>
-                                <li >
+                                <li>
                                     <a href="#">Bay<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -71,13 +72,13 @@
                             </li>
                             </ul>
                         </li>
-                          <li class="active">
+                          <li>
                         <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li  class="active">
+                            <li>
                                 <a href="#">Master<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li  class="active">
+                                        <li>
                                             <a href="/wheel/master">View Master</a>
                                         </li>
                                     </ul>
@@ -147,24 +148,24 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="active">
                         <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li>
+                            <li class="active">
                                 <a href="#">Adverts<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li>
+                                        <li class="active">
                                             <a href="/adverts">View Adverts</a>
                                         </li>
                                     </ul>
                             </li>
                         </ul>
                     </li>
-                    </ul>
+                  </ul>
 
                 </div>
             </nav>
-             <div id="page-wrapper" class="gray-bg">
+            <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -182,79 +183,66 @@
                 </ul>
             </nav>
             </div>
+
                 <div class="ibox-content">
-                    <div class="col-lg-12">
-                         <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/wheel/master/add" class="btn btn-w-m btn-success">Add Master</a>
+
+                      <div class="col-lg-12">
+                          <div class="input-group" style="margin-bottom: 20px">
+                            <a href="/adverts/add" class="btn btn-w-m btn-success">Add Adverts</a>
                           </div>
-                        <div class="input-group">
-                            <select v-model="carparkID" class="form-control m-b" @change="addMaster">
+
+                          <div class="input-group">
+                            <select v-model="carparkID" class="form-control m-b" @change="addAdverts">
                                 <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                 <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                             </select>
-                        </div>
+                          </div>
+
                     </div>
                     <div class="col-lg-2">
 
                     </div>
                 </div>
-        <div class="wrapper wrapper-content animated fadeInRight">
+         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>Wheel Master</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                            <h5>Adverts (Carpark)</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                    <th data-hide="phone,tablet">remark</th>
-                                    <th data-hide="phone,tablet">Carpark Name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="masters == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="master in masters" :key="master" class="gradeU">
-                                        <td>{{master.id || 'Unknown'}}</td>
-                                        <td>{{master.name || 'Unknown'}}</td>
-                                        <td>{{master.remark || 'Unknown'}}</td>
-                                         <td>{{carparkName || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                          <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                               <thead>
+                               <tr>
+                                   <th data-hide="phone,tablet">id(s)</th>
+                                   <th data-hide="phone,tablet">image</th>
+                                   <th data-hide="phone,tablet">Carpark Name</th>
+                                   <th data-hide="phone,tablet">name</th>
+                               </tr>
+                               </thead>
+                               <tbody>
+                                    <span v-show="adverts == 0" style="font-size: 20px;">{{message}}</span>
+                                   <tr v-for="ad in adverts" :key="ad" class="gradeX">
+                                       <td class="center">{{ad.id || 'Unknown'}}</td>
+                                       <td class="center"><a :href="ad.image"><img style="width: 10%" :src="ad.image"></a></td>
+                                       <td class="center">{{carparkName || 'Unknown'}}</td>
+                                      <td class="center">{{ad.name || 'Unknown'}}</td>
+                                   </tr>
+                               </tbody>
+                               <tfoot>
+                               <tr>
+                                   <td colspan="5">
+                                       <ul class="pagination float-right"></ul>
+                                   </td>
+                               </tr>
+                               </tfoot>
+                           </table>
+                          </div>
+
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
             <div class="footer">
@@ -267,37 +255,39 @@
             </div>
 
         </div>
-         </div>
+    </div>
     </div>
 </template>
-
 <script>
-import axios from 'axios'
-import NavSide from './NavSide'
-export default {
-  name: 'Master',
+import axios from "axios";
 
-  data () {
+export default {
+  name: "Adverts",
+  data() {
     return {
       carpark: null,
-      masters: null,
+      adverts: null,
       carparkID: 'null',
       carparkName: null,
-      message: null,
-      token: localStorage.getItem('token'),
-      isLoggedIn: localStorage.getItem('isLogged'),
-    }
+      token: localStorage.getItem("token"),
+      isLoggedIn: localStorage.getItem("isLogged"),
+      carparkID: null,
+      message: null
+    };
   },
   methods: {
-    addMaster() {
-        axios
-        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
+    addAdverts() {
+      axios
+        .get(
+          `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts`,
+          { headers: { "x-access-token": JSON.parse(this.token) } }
+        )
         .then(response => {
-            this.masters = response.data
-            if(this.masters.length === 0) {
-                  this.message = "Threre's no carpark";
-            }
-        })
+          this.adverts = response.data;
+          if (this.adverts.length === 0) {
+            this.message = "Threre's no carpark";
+          }
+        });
         this.carpark.forEach((el) => {
            if(el.id === this.carparkID) {
              this.carparkName = el.name
@@ -308,21 +298,15 @@ export default {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
     }
-
   },
-  mounted () {
-
-
+  mounted() {
     axios
-      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
-      .then(response => {
-        this.carpark = response.data
+      .get("https://sys2.parkaidemobile.com/api/carparks/", {
+        headers: { "x-access-token": JSON.parse(this.token) }
       })
-
-     //
+      .then(response => {
+        this.carpark = response.data;
+      });
   }
-
-
-}
-
+};
 </script>

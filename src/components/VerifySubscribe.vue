@@ -118,6 +118,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>

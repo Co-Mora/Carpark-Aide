@@ -103,7 +103,7 @@
                     <li>
                         <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li class="active">
+                            <li>
                                 <a href="#">City<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
@@ -121,6 +121,40 @@
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/subscribe/add">Add User</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
                                         </li>
                                     </ul>
                             </li>
@@ -149,7 +183,7 @@
             </nav>
             </div>
                 <div class="ibox-content">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                          <div class="input-group" style="margin-bottom: 20px">
                             <a href="/wheel/pole/add" class="btn btn-w-m btn-success">Add Pole</a>
                           </div>
@@ -191,12 +225,12 @@
                                     <th data-hide="phone,tablet">qrcode</th>
                                     <th data-hide="phone,tablet">bayID</th>
                                     <th data-hide="phone,tablet">mac</th>
-                                    <th data-hide="phone,tablet">wheelmasterID</th>
+                                    <th data-hide="phone,tablet">wheelmaster Name</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                      <span v-show="poleMasters == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="pole in poleMasters" :key="pole" class="gradeU">
+                                    <tr v-for="pole in poleMasters" :key="pole" class="gradeX">
                                         <td>{{pole.id || 'Unknown'}}</td>
                                         <td>{{pole.name || 'Unknown'}}</td>
                                         <td>{{pole.remark || 'Unknown'}}</td>
@@ -204,8 +238,7 @@
                                         <td>{{pole.qrcode || 'Unknown'}}</td>
                                         <td>{{pole.bayID || 'Unknown'}}</td>
                                         <td>{{pole.mac || 'Unknown'}}</td>
-                                        <td>{{pole.wheelmasterID || 'Unknown'}}</td>
-
+                                        <td>{{wheelMastersName || 'Unknown'}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -253,6 +286,7 @@ export default {
       selected: null,
       carparkID: null,
       wheelMastersID: null,
+      wheelMastersName: null,
       message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
@@ -278,6 +312,11 @@ export default {
             if(this.poleMasters.length === 0) {
                   this.message = "Threre's no carpark";
             }
+        })
+        this.wheelMasters.forEach((el) => {
+           if(el.id === this.wheelMastersID) {
+             this.wheelMastersName = el.name
+           }
         })
     },
     logout() {

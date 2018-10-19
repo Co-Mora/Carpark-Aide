@@ -126,6 +126,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -149,7 +183,7 @@
             </nav>
             </div>
                 <div class="ibox-content">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                          <div class="input-group" style="margin-bottom: 20px">
                             <a href="/wheel/lock/add" class="btn btn-w-m btn-success">Add Lock</a>
                           </div>
@@ -191,7 +225,7 @@
                                     <th data-hide="phone,tablet">qrcode</th>
                                     <th data-hide="phone,tablet">bayID</th>
                                     <th data-hide="phone,tablet">mac</th>
-                                    <th data-hide="phone,tablet">wheelmasterID</th>
+                                    <th data-hide="phone,tablet">Wheelmaster Name</th>
                                     <th data-hide="phone,tablet">Trigger Lock</th>
                                 </tr>
                                 </thead>
@@ -205,7 +239,7 @@
                                         <td>{{lock.qrcode || 'Unknown'}}</td>
                                         <td>{{lock.bayID || 'Unknown'}}</td>
                                         <td>{{lock.mac || 'Unknown'}}</td>
-                                        <td>{{lock.wheelmasterID || 'Unknown'}}</td>
+                                        <td>{{wheelMastersName || 'Unknown'}}</td>
                                         <td><button class="pull-right btn btn-primary btn-sm" value="lock.id" @click="addTrigger(lock.id)">Trigger</button></td>
 
                                     </tr>
@@ -255,6 +289,7 @@ export default {
       selected: null,
       carparkID: null,
       wheelMastersID: null,
+      wheelMastersName: null,
       message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
@@ -300,6 +335,11 @@ export default {
 
 
             }
+        })
+        this.wheelMasters.forEach((el) => {
+           if(el.id === this.wheelMastersID) {
+             this.wheelMastersName = el.name
+           }
         })
 
     },

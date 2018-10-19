@@ -118,6 +118,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -158,7 +192,7 @@
                             <h4>Add Zone</h4>
                         </div>
                         <div class="ibox-content">
-                               <div class="col-lg-6">
+                               <div class="col-lg-12">
                                     <div class="form-group row">
                                         <select v-model="carparkID" class="form-control m-b" >
                                             <option disabled selected value="null" key="null">Please Select Carpark Name</option>
@@ -171,7 +205,9 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                  <div class="form-group row"><label class="col-sm-2 col-form-label">Zone Image</label>
-                                    <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control"></div>
+                                    <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control">
+                                      <img style="width: 10%" :src="image" />
+                                    </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
@@ -179,7 +215,7 @@
                                         <button class="btn btn-primary btn-sm" @click="addZone()" :disabled="validated == true">Add by Carpark</button>
                                     </div>
                                 </div>
-                                {{image}}
+
                         </div>
                     </div>
                 </div>

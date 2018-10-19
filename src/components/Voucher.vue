@@ -127,6 +127,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -152,7 +186,7 @@
 
                 <div class="ibox-content">
 
-                      <div class="col-lg-6">
+                      <div class="col-lg-12">
                           <div class="input-group" style="margin-bottom: 20px">
                             <a href="/carparks/voucher/add" class="btn btn-w-m btn-success">Add Vocuher</a>
                           </div>
@@ -174,38 +208,38 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>Zone (Carpark)</h5>
+                            <h5>Vocuher (Carpark)</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                 <thead>
+                                 <tr>
+                                     <th data-hide="phone,tablet">id(s)</th>
+                                     <th data-hide="phone,tablet">image</th>
+                                     <th data-hide="phone,tablet">carpark Name</th>
+                                     <th data-hide="phone,tablet">name</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                      <span v-show="voucher == 0" style="font-size: 20px;">{{message}}</span>
+                                     <tr v-for="v in voucher" :key="v" class="gradeX">
+                                         <td class="center">{{v.id || 'Unknown'}}</td>
+                                         <td class="center"><a :href="v.image"><img style="width: 10%" :src="v.image"></a></td>
+                                         <td class="center">{{carparkName || 'Unknown'}}</td>
+                                         <td class="center">{{v.name || 'Unknown'}}</td>
+                                     </tr>
+                                 </tbody>
+                                 <tfoot>
+                                 <tr>
+                                     <td colspan="5">
+                                         <ul class="pagination float-right"></ul>
+                                     </td>
+                                 </tr>
+                                 </tfoot>
+                             </table>
+                            </div>
 
-                             <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">carparkID</th>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="voucher == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="v in voucher" :key="v" class="gradeU">
-                                        <td>{{v.id || 'Unknown'}}</td>
-                                        <td>{{v.carparkID || 'Unknown'}}</td>
-                                        <td>{{v.image || 'Unknown'}}</td>
-                                         <td>{{v.name || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -234,6 +268,7 @@ export default {
       carpark: null,
       voucher: null,
       carparkID: 'null',
+      carparkName: null,
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       carparkID: null,
@@ -253,6 +288,11 @@ export default {
             this.message = "Threre's no carpark";
           }
         });
+        this.carpark.forEach((el) => {
+           if(el.id === this.carparkID) {
+             this.carparkName = el.name
+           }
+        })
     },
     logout() {
       localStorage.removeItem('isLogged');

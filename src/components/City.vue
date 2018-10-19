@@ -127,6 +127,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                   </ul>
 
                 </div>
@@ -180,7 +214,7 @@
                             <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
                                    placeholder="Search in table">
 
-                             <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+                             <table class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                 <tr>
                                     <th data-hide="phone,tablet">id(s)</th>
@@ -191,9 +225,9 @@
                                 <tbody>
                                      <span v-show="city == 0" style="font-size: 20px;">{{message}}</span>
                                     <tr v-for="c in city" :key="c" class="gradeU">
-                                        <td>{{c.id || 'Unknown'}}</td>
-                                        <td>{{c.image || 'Unknown'}}</td>
-                                        <td>{{c.name || 'Unknown'}}</td>
+                                        <td class="center">{{c.id || 'Unknown'}}</td>
+                                        <td class="center"><a :href="c.image"><img style="width: 10%" :src="c.image"></a></td>
+                                        <td class="center">{{c.name || 'Unknown'}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>

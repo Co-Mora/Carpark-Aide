@@ -1,5 +1,50 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{zoneName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">image</th>
+                                      <th data-hide="phone,tablet">Carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedStreet == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="street in selectedStreet" :key="z" class="gradeX">
+                                      <td class="center">
+                                          <a :href="street.image"><img style="width: 10%" :src="street.image"></a>
+                                      </td>
+                                      <td class="center">{{zoneName || 'Unknown'}}</td>
+                                      <td class="center">{{street.name || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
               <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -126,6 +171,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -151,19 +230,19 @@
             </div>
                 <div class="ibox-content">
 
-                      <div class="col-lg-6">
+                      <div class="col-lg-12">
                            <div class="input-group" style="margin-bottom: 20px">
                             <a href="/carparks/street/add" class="btn btn-w-m btn-success">Add Street</a>
                           </div>
                            <div class="input-group" style="margin-bottom: 20px">
                                 <select v-model="carparkID" class="form-control m-b" @change="filterZone">
-                                    <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                    <option disabled value="null" key="null">Please Select Carpark Name</option>
                                     <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                                 </select>
                             </div>
                             <div class="input-group" style="margin-bottom: 20px">
                                 <select v-model="zoneID" class="form-control m-b" @change="filterZoneByStreet">
-                                    <option disabled selected value="null" key="null">Please Select Zone Name</option>
+                                    <option disabled  selected value="null" key="null">{{carparkID !== 'null' ? zone[0].name : 'Please Select Zone Name'}}</option>
                                     <option v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
                                 </select>
                             </div>
@@ -180,35 +259,35 @@
                             <h5>Street (Carpark)</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                 <thead>
+                                 <tr>
+                                     <th data-hide="phone,tablet">id(s)</th>
+                                     <th data-hide="phone,tablet">image</th>
+                                     <th data-hide="phone,tablet">Zone Name</th>
+                                     <th data-hide="phone,tablet">name</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                      <span v-show="streets == 0" style="font-size: 20px;">{{message}}</span>
+                                     <tr v-for="s in streets" :key="s" class="gradeX">
+                                         <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewStreet(s.id)">{{'Level: ' + s.id || 'Unknown'}}</a></td>
+                                         <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
+                                         <td class="center">{{zoneName || 'Unknown'}}</td>
+                                         <td class="center">{{s.name || 'Unknown'}}</td>
+                                     </tr>
+                                 </tbody>
+                                 <tfoot>
+                                 <tr>
+                                     <td colspan="5">
+                                         <ul class="pagination float-right"></ul>
+                                     </td>
+                                 </tr>
+                                 </tfoot>
+                             </table>
+                            </div>
 
-                             <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">ZoneID</th>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="streets == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="s in streets" :key="s" class="gradeU">
-                                        <td>{{s.id || 'Unknown'}}</td>
-                                        <td>{{s.zoneID || 'Unknown'}}</td>
-                                        <td>{{s.image || 'Unknown'}}</td>
-                                         <td>{{s.name || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -238,7 +317,9 @@ export default {
       zone: [],
       streets: null,
       zoneID: 'null',
+      selectedStreet: null,
       carparkID: 'null',
+      zoneName: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
       message: null,
@@ -262,6 +343,28 @@ export default {
                   this.message = "Threre's no carpark";
             }
         })
+        this.zone.forEach((el) => {
+           if(el.id === this.zoneID) {
+             this.zoneName = el.name
+           }
+        })
+    },
+    viewStreet(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedStreet = response.data;
+                if (this.selectedStreet.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');

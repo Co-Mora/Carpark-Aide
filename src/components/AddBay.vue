@@ -126,7 +126,41 @@
                             </li>
                         </ul>
                     </li>
-                    </ul>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                  </ul>
 
                 </div>
             </nav>
@@ -210,7 +244,7 @@
                             <h4>Add Bay</h4>
                         </div>
                         <div class="ibox-content">
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="input-group" style="margin-bottom: 20px">
                                         <select v-model="carparkID" class="form-control m-b" @change="filterByZone">
                                             <option disabled selected value="null" key="null">Please Select Carpark Name</option>
@@ -230,12 +264,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Level Name</label>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Bay Name</label>
                                     <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Image</label>
-                                    <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control"></div>
+                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Bay Image</label>
+                                    <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control">
+                                      <img style="width: 10%" :src="image" />
+                                    </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">

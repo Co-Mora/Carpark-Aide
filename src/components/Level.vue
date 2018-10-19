@@ -1,5 +1,50 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">image</th>
+                                      <th data-hide="phone,tablet">Carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedLevel == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="level in selectedLevel" :key="z" class="gradeX">
+                                      <td class="center">
+                                          <a :href="level.image"><img style="width: 10%" :src="level.image"></a>
+                                      </td>
+                                      <td class="center">{{carparkName || 'Unknown'}}</td>
+                                      <td class="center">{{level.name || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -126,6 +171,40 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Master<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/get-master">View Master</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">Gates<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/gates">View Gates</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="#">Adverts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/adverts">View Adverts</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -150,7 +229,7 @@
             </nav>
             </div>
                 <div class="ibox-content">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="input-group" style="margin-bottom: 20px">
                             <a href="/carparks/level/add" class="btn btn-w-m btn-success">Add Level</a>
                         </div>
@@ -174,34 +253,36 @@
                             <h5>Levels</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">carparkID</th>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="levels == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="level in levels" :key="level" class="gradeU">
-                                        <td>{{level.id || 'Unknown'}}</td>
-                                        <td>{{level.carparkID || 'Unknown'}}</td>
-                                        <td>{{level.image || 'Unknown'}}</td>
-                                         <td>{{level.name || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                  <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">id(s)</th>
+                                      <th data-hide="phone,tablet">image</th>
+                                      <th data-hide="phone,tablet">carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                       <span v-show="levels == 0" style="font-size: 20px;">{{message}}</span>
+                                      <tr v-for="level in levels" :key="level" class="gradeU">
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(level.id)">{{'Level: ' + level.id || 'Unknown'}}</a></td>
+                                          <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
+                                          <td class="center">{{carparkName || 'Unknown'}}</td>
+                                           <td class="center">{{level.name || 'Unknown'}}</td>
+                                      </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                                  </tfoot>
+                              </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -233,8 +314,9 @@ export default {
     return {
       carpark: null,
       levels: null,
-      selected: null,
+      selectedLevel: null,
       carparkID: 'null',
+      carparkName: null,
       message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
@@ -250,6 +332,28 @@ export default {
                   this.message = "Threre's no carpark";
             }
         })
+        this.carpark.forEach((el) => {
+           if(el.id === this.carparkID) {
+             this.carparkName = el.name
+           }
+        })
+    },
+    viewLevel(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedLevel = response.data;
+                if (this.selectedLevel.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');
