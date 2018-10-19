@@ -38,6 +38,9 @@ import Gates from '../components/Gates'
 import Adverts from '../components/Adverts'
 import AddAdverts from '../components/AddAdverts'
 
+import Customer from '../components/Customer'
+import CustomerCP from '../components/CustomerCP'
+
 Vue.use(Router)
 export function createRouter () {
   return new Router({
@@ -173,6 +176,19 @@ export function createRouter () {
         component: AddAdverts,
 
       },
+      {
+        path:'/customers',
+        component: Customer,
+      },
+      {
+        path:'/customers/:id',
+        component: CustomerCP,
+        props: (route) => ({
+          query: route.query.q
+        })
+
+      },
+
     ]
   })
 }

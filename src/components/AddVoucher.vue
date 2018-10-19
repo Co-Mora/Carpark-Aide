@@ -169,6 +169,25 @@ input-placeholder {
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="/customers">All</a>
+                            </li>
+                            <li>
+                                <a href="#">Branch<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/customers/company?q=1">View Company</a>
+                                        </li>
+                                        <li>
+                                            <a href="/customers/personal?q=0">View Perosnal</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
 
             </div>

@@ -3,51 +3,6 @@
 <template>
 
 <div v-show="isLoggedIn">
-    <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">{{carparkName}}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                            <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">Carpark Name</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <span v-show="selectedZone == 0" style="font-size: 20px;">{{message}}</span>
-                                <tr v-for="z in selectedZone" :key="z" class="gradeX">
-                                    <td class="center">
-                                        <a :href="z.image"><img style="width: 10%" :src="z.image"></a>
-                                    </td>
-                                    <td class="center">{{carparkName || 'Unknown'}}</td>
-                                    <td class="center">{{z.name || 'Unknown'}}</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
@@ -71,17 +26,17 @@
                             IN+
                         </div>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="/carparks">All Carparks</a>
                             </li>
-                            <li class="active">
+                            <li>
 
                                 <a href="#">Zone<span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li class="active">
+                                    <li>
                                         <a href="/carparks/zone">View Zone</a>
                                     </li>
                                 </ul>
@@ -209,22 +164,22 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a  href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
+                    <li class="active">
+                        <a href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="/customers">All</a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a href="#">Branch<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/customers/company?q=1">View Company</a>
-                                        </li>
-                                        <li>
-                                            <a href="/customers/personal?q=0">View Perosnal</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="/customers/company?q=1">View Company</a>
+                                    </li>
+                                    <li>
+                                        <a href="/customers/personal?q=0">View Perosnal</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -250,24 +205,9 @@
                     </ul>
                 </nav>
             </div>
-
-            <div class="ibox-content">
-
-                <div class="col-lg-12">
-                    <div class="input-group" style="margin-bottom: 20px">
-                        <a href="/carparks/zone/add" class="btn btn-w-m btn-success">Add Zone</a>
-                    </div>
-
-                    <div class="input-group">
-                        <select v-model="carparkID" class="form-control m-b" @change="addZone">
-                            <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                        </select>
-                    </div>
-
-                </div>
-                <div class="col-lg-2">
-
+            <div class="col-lg-12">
+                <div class="input-group" style="margin-bottom: 20px">
+                    <a href="/customers/add" class="btn btn-w-m btn-success">Add Customer</a>
                 </div>
             </div>
             <div class="wrapper wrapper-content animated fadeInRight">
@@ -275,7 +215,7 @@
                     <div class="col-lg-12">
                         <div class="ibox ">
                             <div class="ibox-title">
-                                <h5>Zone (Carpark)</h5>
+                                <h5>Customers</h5>
                             </div>
                             <div class="ibox-content">
                                 <div class="table-responsive">
@@ -283,20 +223,21 @@
                                         <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet">id(s)</th>
-                                                <th data-hide="phone,tablet">image</th>
-                                                <th data-hide="phone,tablet">Carpark Name</th>
-                                                <th data-hide="phone,tablet">name</th>
+                                                <th data-hide="phone,tablet">Name</th>
+                                                <th data-hide="phone,tablet">Contact</th>
+                                                <th data-hide="phone,tablet">National ID</th>
+                                                <th data-hide="phone,tablet">Company</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <span v-show="zone == 0" style="font-size: 20px;">{{message}}</span>
-                                            <tr v-for="z in zone" :key="z" class="gradeX">
-                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZone(z.id)">{{'Zone: ' + z.id || 'Unknown'}}</a></td>
-                                                <td class="center">
-                                                    <a :href="z.image"><img style="width: 10%" :src="z.image"></a>
-                                                </td>
-                                                <td class="center">{{carparkName || 'Unknown'}}</td>
-                                                <td class="center">{{z.name || 'Unknown'}}</td>
+                                            <span v-show="customers == 0" style="font-size: 20px;">{{message}}</span>
+                                            <tr v-for="cus in customers" v-show="cus.isCompany === parseInt(query)" :key="cus" class="gradeX">
+                                                <td class="center">{{cus.id}}</td>
+                                                <td class="center">{{cus.name || 'Unknown'}}</td>
+                                                <td class="center">{{cus.contact1 || 'Unknown'}}</td>
+                                                <td class="center">{{cus.nationalID || 'Unknown'}}</td>
+                                                <td class="center">{{cus.isCompany || 0}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -334,58 +275,19 @@
 import axios from "axios";
 
 export default {
-    name: "Zone",
-    props: [''],
+    name: "CustomerCompany",
+    props: ['query'],
     data() {
         return {
-            carpark: null,
-            zone: null,
-            selectedZone: null,
-            carparkID: 'null',
-            carparkName: null,
+            customers: null,
+            selectedCustomer: null,
             token: localStorage.getItem("token"),
             isLoggedIn: localStorage.getItem("isLogged"),
             message: null
         };
     },
     methods: {
-        addZone() {
-                axios
-                    .get(
-                        `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`, {
-                            headers: {
-                                "x-access-token": JSON.parse(this.token)
-                            }
-                        }
-                    )
-                    .then(response => {
-                        this.zone = response.data;
-                        if (this.zone.length === 0) {
-                            this.message = "Threre's no carpark";
-                        }
-                    });
-
-                this.carpark.forEach((el) => {
-                    if (el.id === this.carparkID) {
-                        this.carparkName = el.name
-                    }
-                })
-            },
-            viewZone(value) {
-                axios
-                    .get(
-                        `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`, {
-                            headers: {
-                                "x-access-token": JSON.parse(this.token)
-                            }
-                        }
-                    )
-                    .then(response => {
-                        this.selectedZone = response.data;
-                        if (this.selectedZone.length === 0) {
-                            this.message = "Threre's no carpark";
-                        }
-                    });
+        addCustomer() {
 
             },
             logout() {
@@ -395,16 +297,21 @@ export default {
     },
     mounted() {
         axios
-            .get("https://sys2.parkaidemobile.com/api/carparks/", {
-                headers: {
-                    "x-access-token": JSON.parse(this.token)
+            .get(
+                `https://sys2.parkaidemobile.com/api/customers`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
                 }
-            })
+            )
             .then(response => {
-                this.carpark = response.data;
+                this.customers = response.data;
+                if (this.customers.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
             });
-
-    },
+    }
 };
+//heroku ps:scale web=0
 
 </script>

@@ -20,7 +20,7 @@
                                 </ul>
                             </div>
                             <div class="logo-element">
-                                IN+
+                                CP+
                             </div>
                         </li>
                         <li class="active">
@@ -152,6 +152,25 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                            <li>
+                                <a href="/customers">All</a>
+                            </li>
+                            <li>
+                                <a href="#">Branch<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/customers/company?q=1">View Company</a>
+                                        </li>
+                                        <li>
+                                            <a href="/customers/personal?q=0">View Perosnal</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -215,11 +234,11 @@
                                         <button class="btn btn-primary btn-sm" @click="addZone()" :disabled="validated == true">Add by Carpark</button>
                                     </div>
                                 </div>
-
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
             <div class="footer">
                 <div class="float-right">
@@ -239,9 +258,11 @@
 <script>
 import axios from 'axios'
 import NavSide from './NavSide'
+import Zone from './Zone'
+
 import qs from 'qs'
 export default {
-  name: 'AddLevel',
+  name: 'AddZone',
   data () {
     return {
 
@@ -252,20 +273,21 @@ export default {
       image: null,
       validated: false,
       errors: [],
-      clicked: [],
+      data: [{
+        name: this.name,
+        image: this.image,
+      }],
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
   components: {
-    NavSide
+    Zone
   },
   methods: {
-
     processFile() {
       let formData = new FormData();
       formData.append('imgUploader', this.file);
-
       axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
                 formData,
                 {
@@ -301,6 +323,7 @@ export default {
         this.errors.push('Please fill up the level image')
       } else {
         this.errors = []
+        this.$emit('destroy', this.data);
         this.validated = true;
         axios({
         method: 'post',
@@ -340,7 +363,9 @@ export default {
             }
 
         });
+
       }
+
     },
     logout() {
       localStorage.removeItem('isLogged');
