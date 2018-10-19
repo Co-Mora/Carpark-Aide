@@ -40,6 +40,7 @@ import AddAdverts from '../components/AddAdverts'
 
 import Customer from '../components/Customer'
 import CustomerCP from '../components/CustomerCP'
+import AddCustomer from '../components/AddCustomer'
 
 Vue.use(Router)
 export function createRouter () {
@@ -180,6 +181,11 @@ export function createRouter () {
         path:'/customers',
         component: Customer,
       },
+      {
+        path:'/customers/add',
+        component: AddCustomer,
+      },
+
       {
         path:'/customers/:id',
         component: CustomerCP,

@@ -226,7 +226,6 @@
                                                 <th data-hide="phone,tablet">Name</th>
                                                 <th data-hide="phone,tablet">Contact</th>
                                                 <th data-hide="phone,tablet">National ID</th>
-                                                <th data-hide="phone,tablet">Company</th>
 
                                             </tr>
                                         </thead>
@@ -237,7 +236,6 @@
                                                 <td class="center">{{cus.name || 'Unknown'}}</td>
                                                 <td class="center">{{cus.contact1 || 'Unknown'}}</td>
                                                 <td class="center">{{cus.nationalID || 'Unknown'}}</td>
-                                                <td class="center">{{cus.isCompany || 0}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
