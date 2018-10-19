@@ -1,6 +1,47 @@
 <template>
     <div v-show="isLoggedIn">
          <div id="wrapper">
+           <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+               <div class="modal-dialog modal-lg">
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                           <h4 class="modal-title">{{carparkName}}</h4>
+                       </div>
+                       <div class="modal-body">
+                           <div class="table-responsive">
+                               <table class="table table-striped table-bordered table-hover dataTables-example">
+                                   <thead>
+                                       <tr>
+                                           <th data-hide="phone,tablet">Carpark Name</th>
+                                           <th data-hide="phone,tablet">name</th>
+                                       </tr>
+                                   </thead>
+                                   <tbody>
+                                       <span v-show="selectedMaster == 0" style="font-size: 20px;">{{message}}</span>
+                                       <tr v-for="master in selectedMaster" :key="z" class="gradeX">
+                                           <td class="center">{{carparkName || 'Unknown'}}</td>
+                                           <td class="center">{{master.name || 'Unknown'}}</td>
+                                       </tr>
+                                   </tbody>
+                                   <tfoot>
+                                       <tr>
+                                           <td colspan="5">
+                                               <ul class="pagination float-right"></ul>
+                                           </td>
+                                       </tr>
+                                   </tfoot>
+                               </table>
+                           </div>
+
+                       </div>
+
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                       </div>
+                   </div>
+               </div>
+           </div>
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -204,53 +245,37 @@
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h5>Wheel Master</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                    <th data-hide="phone,tablet">remark</th>
-                                    <th data-hide="phone,tablet">Carpark Name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="masters == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="master in masters" :key="master" class="gradeU">
-                                        <td>{{master.id || 'Unknown'}}</td>
-                                        <td>{{master.name || 'Unknown'}}</td>
-                                        <td>{{master.remark || 'Unknown'}}</td>
-                                         <td>{{carparkName || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                  <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">id(s)</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">remark</th>
+                                      <th data-hide="phone,tablet">Carpark Name</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                       <span v-show="masters == 0" style="font-size: 20px;">{{message}}</span>
+                                      <tr v-for="master in masters" :key="master" class="gradeX">
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewMaster(master.id)">{{'Master: ' + master.id || 'Unknown'}}</a></td>
+                                          <td>{{master.name || 'Unknown'}}</td>
+                                          <td>{{master.remark || 'Unknown'}}</td>
+                                          <td>{{carparkName || 'Unknown'}}</td>
+                                      </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                                  </tfoot>
+                              </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -283,6 +308,7 @@ export default {
       masters: null,
       carparkID: 'null',
       carparkName: null,
+      selectedMaster: null,
       message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
@@ -303,6 +329,23 @@ export default {
              this.carparkName = el.name
            }
         })
+    },
+    viewMaster(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedMaster = response.data;
+                if (this.selectedMaster.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');

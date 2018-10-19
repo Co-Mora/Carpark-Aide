@@ -1,5 +1,40 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{gateMasterName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">Remark</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedGate == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="gate in selectedGate" :key="z" class="gradeX">
+                                      <td class="center">{{gate.name || 'Unknown'}}</td>
+                                      <td class="center">{{gate.remark || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+        </div>
          <div id="wrapper">
              <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -230,7 +265,7 @@
                                <tbody>
                                     <span v-show="gates == 0" style="font-size: 20px;">{{message}}</span>
                                    <tr v-for="get in gates" :key="m" class="gradeX">
-                                      <td class="center">{{get.id || 'Unknown'}}</td>
+                                      <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewGate(get.id)">{{'Gate: ' + get.id || 'Unknown'}}</a></td>
                                       <td class="center">{{get.name || 'Unknown'}}</a></td>
                                       <td class="center">{{get.remark || 'Unknown'}}</td>
                                       <td class="center">{{gateMasterName || 'Unknown'}}</td>
@@ -276,6 +311,7 @@ export default {
       gateMaster: null,
       gateMasterID: null,
       gateMasterName: null,
+      selectedGate: null,
       carparkID: 'null',
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
@@ -314,6 +350,23 @@ export default {
              this.gateMasterName = el.name
            }
         })
+    },
+    viewGate(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${this.gateMasterID}/gates/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedGate = response.data;
+                if (this.selectedGate.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');

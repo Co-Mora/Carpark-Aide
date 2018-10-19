@@ -281,7 +281,7 @@
                                         <tbody>
                                             <span v-show="bays == 0" style="font-size: 20px;">{{message}}</span>
                                             <tr v-for="b in bays" :key="b" class="gradeU">
-                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBay(b.id)">{{'Level: ' + b.id || 'Unknown'}}</a></td>
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBay(b.id)">{{'Bay: ' + b.id || 'Unknown'}}</a></td>
                                                 <td class="center">
                                                     <a :href="b.image"><img style="width: 10%" :src="b.image"></a>
                                                 </td>

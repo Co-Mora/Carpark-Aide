@@ -1,5 +1,41 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">Image</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedAdverts == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="ad in selectedAdverts" :key="z" class="gradeX">
+                                      <td class="center">{{ad.name || 'Unknown'}}</td>
+                                      <td class="center">{{ad.image || 'Unknown'}}</td>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
              <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -224,7 +260,7 @@
                                <tbody>
                                     <span v-show="adverts == 0" style="font-size: 20px;">{{message}}</span>
                                    <tr v-for="ad in adverts" :key="ad" class="gradeX">
-                                       <td class="center">{{ad.id || 'Unknown'}}</td>
+                                     <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewAdverts(ad.id)">{{'Advert: ' + ad.id || 'Unknown'}}</a></td>
                                        <td class="center"><a :href="ad.image"><img style="width: 10%" :src="ad.image"></a></td>
                                        <td class="center">{{carparkName || 'Unknown'}}</td>
                                       <td class="center">{{ad.name || 'Unknown'}}</td>
@@ -269,6 +305,7 @@ export default {
       adverts: null,
       carparkID: 'null',
       carparkName: null,
+      selectedAdverts: null,
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       carparkID: null,
@@ -293,6 +330,23 @@ export default {
              this.carparkName = el.name
            }
         })
+    },
+    viewAdverts(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedAdverts = response.data;
+                if (this.selectedAdverts.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');

@@ -1,5 +1,54 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{wheelMastersName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">Carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">qrcode</th>
+                                      <th data-hide="phone,tablet">Bay ID</th>
+
+                                      <th data-hide="phone,tablet">mac</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedLock == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="lock in selectedLock" :key="z" class="gradeX">
+                                      <td class="center">{{wheelMastersName || 'Unknown'}}</td>
+                                      <td class="center">{{lock.name || 'Unknown'}}</td>
+                                      <td>{{lock.qrcode || 'Unknown'}}</td>
+                                      <td>{{lock.bayID || 'Unknown'}}</td>
+                                      <td>{{lock.mac || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
              <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -213,45 +262,40 @@
                             <h5>Wheel Lock</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                    <th data-hide="phone,tablet">remark</th>
-                                    <th data-hide="phone,tablet">lastSeen</th>
-                                    <th data-hide="phone,tablet">qrcode</th>
-                                    <th data-hide="phone,tablet">bayID</th>
-                                    <th data-hide="phone,tablet">mac</th>
-                                    <th data-hide="phone,tablet">Wheelmaster Name</th>
-                                    <th data-hide="phone,tablet">Trigger Lock</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="locks == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="lock in locks" :key="lock" class="gradeU">
-                                        <td>{{lock.id || 'Unknown'}}</td>
-                                        <td>{{lock.name || 'Unknown'}}</td>
-                                        <td>{{lock.remark || 'Unknown'}}</td>
-                                        <td>{{lock.lastSeen || 'Unknown'}}</td>
-                                        <td>{{lock.qrcode || 'Unknown'}}</td>
-                                        <td>{{lock.bayID || 'Unknown'}}</td>
-                                        <td>{{lock.mac || 'Unknown'}}</td>
-                                        <td>{{wheelMastersName || 'Unknown'}}</td>
-                                        <td><button class="pull-right btn btn-primary btn-sm" value="lock.id" @click="addTrigger(lock.id)">Trigger</button></td>
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                  <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">id(s)</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">remark</th>
+                                      <th data-hide="phone,tablet">lastSeen</th>
+                                      <th data-hide="phone,tablet">Wheelmaster Name</th>
+                                      <th data-hide="phone,tablet">Trigger Lock</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                       <span v-show="locks == 0" style="font-size: 20px;">{{message}}</span>
+                                      <tr v-for="lock in locks" :key="lock" class="gradeX">
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLock(lock.id)">{{'Lock: ' + lock.id || 'Unknown'}}</a></td>
+                                          <td>{{lock.name || 'Unknown'}}</td>
+                                          <td>{{lock.remark || 'Unknown'}}</td>
+                                          <td>{{lock.lastSeen || 'Unknown'}}</td>
+                                          <td>{{wheelMastersName || 'Unknown'}}</td>
+                                          <td><button class="pull-right btn btn-primary btn-sm" value="lock.id" @click="addTrigger(lock.id)">Trigger</button></td>
 
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                                      </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <!-- <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr> -->
+                                  </tfoot>
+                              </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -286,6 +330,7 @@ export default {
       wheelMasters: null,
       Istrigger: null,
       locks: null,
+      selectedLock: null,
       selected: null,
       carparkID: null,
       wheelMastersID: null,
@@ -341,6 +386,23 @@ export default {
              this.wheelMastersName = el.name
            }
         })
+
+    },
+    viewLock(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedLock = response.data;
+                if (this.selectedLock.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
 
     },
     logout() {

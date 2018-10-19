@@ -1,5 +1,46 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{wheelMastersName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">Carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">qrcode</th>
+                                      <th data-hide="phone,tablet">Bay ID</th>
+                                      <th data-hide="phone,tablet">mac</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedPole == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="pole in selectedPole" :key="z" class="gradeX">
+                                      <td class="center">{{wheelMastersName || 'Unknown'}}</td>
+                                      <td class="center">{{pole.name || 'Unknown'}}</td>
+                                      <td>{{pole.qrcode || 'Unknown'}}</td>
+                                      <td>{{pole.bayID || 'Unknown'}}</td>
+                                      <td>{{pole.mac || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -213,42 +254,38 @@
                             <h5>Wheel Pole</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                    <th data-hide="phone,tablet">remark</th>
-                                    <th data-hide="phone,tablet">lastSeen</th>
-                                    <th data-hide="phone,tablet">qrcode</th>
-                                    <th data-hide="phone,tablet">bayID</th>
-                                    <th data-hide="phone,tablet">mac</th>
-                                    <th data-hide="phone,tablet">wheelmaster Name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="poleMasters == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="pole in poleMasters" :key="pole" class="gradeX">
-                                        <td>{{pole.id || 'Unknown'}}</td>
-                                        <td>{{pole.name || 'Unknown'}}</td>
-                                        <td>{{pole.remark || 'Unknown'}}</td>
-                                        <td>{{pole.lastSeen || 'Unknown'}}</td>
-                                        <td>{{pole.qrcode || 'Unknown'}}</td>
-                                        <td>{{pole.bayID || 'Unknown'}}</td>
-                                        <td>{{pole.mac || 'Unknown'}}</td>
-                                        <td>{{wheelMastersName || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                  <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">id(s)</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">remark</th>
+                                      <th data-hide="phone,tablet">lastSeen</th>
+                                      <th data-hide="phone,tablet">wheelmaster Name</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                       <span v-show="poleMasters == 0" style="font-size: 20px;">{{message}}</span>
+                                      <tr v-for="pole in poleMasters" :key="pole" class="gradeX">
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewPole(pole.id)">{{'Pole: ' + pole.id || 'Unknown'}}</a></td>
+                                          <td>{{pole.name || 'Unknown'}}</td>
+                                          <td>{{pole.remark || 'Unknown'}}</td>
+                                          <td>{{pole.lastSeen || 'Unknown'}}</td>
+                                          <td>{{wheelMastersName || 'Unknown'}}</td>
+                                      </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                                  </tfoot>
+                              </table>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -280,6 +317,7 @@ export default {
     return {
       carpark: null,
       wheelMasters: null,
+      selectedPole: null,
       Istrigger: null,
       poles: null,
       poleMasters: null,
@@ -318,6 +356,23 @@ export default {
              this.wheelMastersName = el.name
            }
         })
+    },
+    viewPole(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheelpoles/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedPole = response.data;
+                if (this.selectedPole.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');

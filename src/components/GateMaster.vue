@@ -1,5 +1,41 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">Remark</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedMaster == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="master in selectedMaster" :key="z" class="gradeX">
+                                      <td class="center">{{master.name || 'Unknown'}}</td>
+                                      <td class="center">{{master.remark || 'Unknown'}}</td>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
              <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -20,7 +56,7 @@
                                 </ul>
                             </div>
                             <div class="logo-element">
-                                IN+
+                                CP+
                             </div>
                         </li>
                         <li>
@@ -224,7 +260,7 @@
                                <tbody>
                                     <span v-show="getMaster == 0" style="font-size: 20px;">{{message}}</span>
                                    <tr v-for="m in getMaster" :key="m" class="gradeX">
-                                      <td class="center">{{m.id || 'Unknown'}}</td>
+                                      <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewMaster(m.id)">{{'Master: ' + m.id || 'Unknown'}}</a></td>
                                       <td class="center">{{m.name || 'Unknown'}}</a></td>
                                       <td class="center">{{m.remark || 'Unknown'}}</td>
                                       <td class="center">{{carparkName || 'Unknown'}}</td>
@@ -269,6 +305,7 @@ export default {
       getMaster: null,
       carparkID: 'null',
       carparkName: null,
+      selectedMaster: null,
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       carparkID: null,
@@ -293,6 +330,23 @@ export default {
              this.carparkName = el.name
            }
         })
+    },
+    viewMaster(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedMaster = response.data;
+                if (this.selectedMaster.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
+
     },
     logout() {
       localStorage.removeItem('isLogged');
