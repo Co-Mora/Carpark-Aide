@@ -218,12 +218,12 @@
                             <a href="/cities/add" class="btn btn-w-m btn-success">Add City</a>
                           </div>
 
-                          <!-- <div class="input-group">
-                            <select v-model="cityID" class="form-control m-b" @change="addCity">
-                                <option disabled selected value="null" key="null">Please Select City Name</option>
-                                <option v-for="c in city" :value="c.id" :key="c">{{c.name}}</option>
+                          <div class="input-group">
+                            <select v-model="stateID" class="form-control m-b" @change="filterByState">
+                                <option disabled selected value="null" key="null">Please Select State Name</option>
+                                <option v-for="s in state" :value="s.id" :key="s">{{s.name}}</option>
                             </select>
-                          </div> -->
+                          </div>
 
                     </div>
                     <div class="col-lg-2">
@@ -290,6 +290,8 @@ export default {
   name: "Zone",
   data() {
     return {
+      state: null,
+      stateID: null,
       cityID: null,
       city: null,
       carparkID: 'null',
@@ -300,10 +302,23 @@ export default {
     };
   },
   methods: {
-    addCity() {
+    filterByState1() {
       axios
         .get(
-          `https://sys2.parkaidemobile.com/api/city`,
+          `https://sys2.parkaidemobile.com/api/state`,
+          { headers: { "x-access-token": JSON.parse(this.token) } }
+        )
+        .then(response => {
+          this.state = response.data;
+          if (this.state.length === 0) {
+            this.message = "Threre's no carpark";
+          }
+        });
+    },
+    filterByState() {
+      axios
+        .get(
+          `https://sys2.parkaidemobile.com/api/state/${this.stateID}/city`,
           { headers: { "x-access-token": JSON.parse(this.token) } }
         )
         .then(response => {
@@ -319,17 +334,19 @@ export default {
     }
   },
   mounted() {
-      axios
-        .get(
-          `https://sys2.parkaidemobile.com/api/city`,
-          { headers: { "x-access-token": JSON.parse(this.token) } }
-        )
-        .then(response => {
-          this.city = response.data;
-          if (this.city.length === 0) {
-            this.message = "Threre's no carpark";
-          }
-        });
+    axios
+      .get(
+        `https://sys2.parkaidemobile.com/api/state`,
+        { headers: { "x-access-token": JSON.parse(this.token) } }
+      )
+      .then(response => {
+        this.state = response.data;
+        this.stateID = response.data[0].id
+        this.filterByState()
+        if (this.state.length === 0) {
+          this.message = "Threre's no carpark";
+        }
+      });
   }
 };
 </script>
