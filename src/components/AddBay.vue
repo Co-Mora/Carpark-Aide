@@ -46,6 +46,14 @@
                                         </ul>
                                 </li>
                                 <li>
+                                    <a href="#">Zone Level<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="/carparks/zlevel">View ZLevel</a>
+                                            </li>
+                                        </ul>
+                                </li>
+                                <li>
                                     <a href="#">Street<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -205,44 +213,14 @@
             <div class="row">
                 <div class="col-md-12">
                 <div class="col-md-6" v-for="error in errors" :key="error">
-                <div class=" alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{error}}
+                  <div class=" alert alert-danger alert-dismissible fade show" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                      {{error}}
+                  </div>
                 </div>
-                </div>
-            </div>
-                <!-- <div class="col-lg-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h4>Add Bay</h4>
-                        </div>
-                        <div class="ibox-content">
-                                <div class="col-lg-6">
-                                    <div class="form-group row">
-                                        <select v-model="carparkID" class="form-control m-b" >
-                                            <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Level Name</label>
-                                    <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Image</label>
-                                    <div class="col-sm-10"><input v-model="image"  placeholder="Image" type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addStreetCarpark">Add by Carpark</button>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                </div> -->
+              </div>
             </div>
         </div>
          <div class="wrapper wrapper-content animated fadeInRight">

@@ -6,6 +6,7 @@ import MainChart from '../components/MainChart'
 
 import Level from '../components/Level'
 import Zone from '../components/Zone'
+import ZLevel from '../components/ZLevel'
 import Street from '../components/Street'
 import Bay from '../components/Bay'
 import Voucher from '../components/Voucher'
@@ -25,6 +26,8 @@ import AddLevel from '../components/AddLevel'
 import AddZone from '../components/AddZone'
 import AddStreet from '../components/AddStreet'
 import AddBay from '../components/AddBay'
+import AddZLevel from '../components/AddZLevel'
+
 import AddMaster from '../components/AddMaster'
 import AddLock from '../components/AddLock'
 import AddPole from '../components/AddPole'
@@ -125,7 +128,14 @@ export function createRouter () {
         path:'/carparks/voucher/add',
         component: AddVoucher,
       },
-
+      {
+        path:'/carparks/zlevel',
+        component: ZLevel,
+      },
+      {
+        path:'/carparks/zlevel/add',
+        component: AddZLevel,
+      },
       {
         path:'/wheel/lock',
         component: Lock,

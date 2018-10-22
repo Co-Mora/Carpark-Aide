@@ -1,12 +1,57 @@
 <template>
-    <div>
+    <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">image</th>
+                                      <th data-hide="phone,tablet">Carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedLevel == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="level in selectedLevel" :key="z" class="gradeX">
+                                      <td class="center">
+                                          <a :href="level.image"><img style="width: 10%" :src="level.image"></a>
+                                      </td>
+                                      <td class="center">{{carparkName || 'Unknown'}}</td>
+                                      <td class="center">{{level.name || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
-              <nav class="navbar-default navbar-static-side" role="navigation">
+            <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
                         <li class="nav-header">
                             <div class="dropdown profile-element">
-                                <img alt="image" class="rounded-circle"/>
+                                <img alt="image" class="rounded-circle" :src="Image" />
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <span class="block m-t-xs font-bold">Admin</span>
                                     <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
@@ -23,13 +68,13 @@
                                 IN+
                             </div>
                         </li>
-                        <li>
+                        <li class="active">
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
                                  <li>
                                     <a href="/carparks">All Carparks</a>
                                 </li>
-                                <li>
+                                <li >
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -40,16 +85,16 @@
                                 <li>
                                     <a href="#">Level<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <li>
+                                            <li class="active">
                                                 <a href="/carparks/level">View Level</a>
                                             </li>
                                         </ul>
                                 </li>
-                                <li>
+                                <li class="active">
                                     <a href="#">Zone Level<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <li>
-                                                <a href="/carparks/zlevel">View ZLevel</a>
+                                            <li class="active">
+                                                <a href="/carparks/level">View ZLevel</a>
                                             </li>
                                         </ul>
                                 </li>
@@ -69,10 +114,18 @@
                                             </li>
                                         </ul>
                                 </li>
+                                <li>
+                                <a href="#">Voucher<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/carparks/voucher">View Voucher</a>
+                                        </li>
+                                    </ul>
+                            </li>
                             </ul>
                         </li>
-                          <li>
-                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
+                        <li>
+                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                             <li>
                                 <a href="#">Master<span class="fa arrow"></span></a>
@@ -101,9 +154,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li>
+                            <li class="active">
                                 <a href="#">City<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
@@ -113,13 +166,13 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="active">
-                        <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscriber</span><span class="fa arrow"></span></a>
+                    <li>
+                        <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li class="active">
+                            <li>
                                 <a href="#">Subscriber<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li class="active">
+                                        <li>
                                             <a href="/subscribe/add">Add User</a>
                                         </li>
                                     </ul>
@@ -186,7 +239,7 @@
              <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-           <div class="navbar-header">
+            <div class="navbar-header">
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
@@ -199,45 +252,74 @@
                         </a>
                     </li>
                 </ul>
+
             </nav>
             </div>
+                <div class="ibox-content">
+                    <div class="col-lg-12">
+                        <div class="input-group" style="margin-bottom: 20px">
+                            <a href="/carparks/zlevel/add" class="btn btn-w-m btn-success">Add ZLevel</a>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px">
+                            <select v-model="carparkID" class="form-control m-b" @change="ViewZone">
+                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <select v-model="zoneID" class="form-control m-b" @change="addZLevel">
+                                <option disabled selected value="null" key="null">Please Select Zone Name</option>
+                                <option v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-2">
+
+                    </div>
+                </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
-                <div class="col-md-12">
-                <div class="col-md-6" v-for="error in errors" :key="error">
-                <div class=" alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{error}}
-                </div>
-                </div>
-            </div>
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h4>Add Subscriber</h4>
+                            <h5>Levels</h5>
                         </div>
                         <div class="ibox-content">
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">User Name</label>
-                                    <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">User Phone</label>
-                                    <div class="col-sm-10"><input v-model="mobile"  placeholder="6-011-611-778-70" type="phone" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">User Email</label>
-                                    <div class="col-sm-10"><input v-model="email"  placeholder="Email" type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addSubscriber" :disabled="validated == true">Add Subscriber</button>
-                                    </div>
-                                </div>
+
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                  <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">id(s)</th>
+                                      <th data-hide="phone,tablet">image</th>
+                                      <th data-hide="phone,tablet">carpark Name</th>
+                                      <th data-hide="phone,tablet">name</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                       <span v-show="zlevels == 0" style="font-size: 20px;">{{message}}</span>
+                                      <tr v-for="level in zlevels" :key="level" class="gradeU">
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZLevel(level.id)">{{'Level: ' + level.id || 'Unknown'}}</a></td>
+                                          <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
+                                          <td class="center">{{carparkName || 'Unknown'}}</td>
+                                           <td class="center">{{level.name || 'Unknown'}}</td>
+                                      </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                                  </tfoot>
+                              </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
             <div class="footer">
@@ -249,105 +331,101 @@
                 </div>
             </div>
 
-            </div>
+        </div>
          </div>
-
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 import NavSide from './NavSide'
-import qs from 'qs'
+import Zone from './Zone'
 export default {
-  name: 'AddLevel',
+  name: 'Level',
+
   data () {
     return {
-
-      name: null,
-      email: null,
-      mobile: null,
-      validated: false,
-      errors: [],
-      clicked: [],
+      carpark: null,
+      zlevels: null,
+      selectedLevel: null,
+      carparkID: 'null',
+      zone: null,
+      zoneID: null,
+      carparkName: null,
+      message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
-  components: {
-    NavSide
-  },
   methods: {
-
-    addSubscriber() {
-         setTimeout(() => {
-        $('.alert').alert('close')
-      }, 2000)
-         if (!this.name && !this.email && !this.phone) {
-        this.errors.push('Please fill up the forms')
-        return false
-      } if (!this.name) {
-        this.errors.push('Please fill up the User Name')
-      } if (!this.email) {
-        this.errors.push('Please fill up the User email')
-      } if (!this.mobile) {
-        this.errors.push('Please fill up the User phone')
-      } if(!this.mobile.startsWith('60')){
-        this.errors.push('your phone number must start with 60')
-      }else {
-        this.errors = []
-        this.validated = true;
-        axios({
-        method: 'post',
-        url: `https://sys2.parkaidemobile.com/api/subscriber/register`,
-        data: qs.stringify({
-            name: this.name,
-            email: this.email,
-            mobile: this.mobile
-        }),
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'x-access-token': JSON.parse(this.token)
-        },
-        }).then(response => {
-           if(response.status == 200) {
-             setTimeout(() => {
-                 swal({
-                     title: 'Add it successfully',
-                     icon: 'success',
-                     type: "success",
-                      button: 'Verify Subscriber'
-                 }).then(function() {
-                   window.location = '/subscribe/verify'
-                 });
-             }, 200)
+    addZLevel() {
+        axios
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/zlevels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
+        .then(response => {
+            this.zlevels = response.data
+            if(this.zlevels.length === 0) {
+                  this.message = "Threre's no carpark";
             }
-
-
         })
-        .catch(error => {
-            if(error.message == 'Request failed with status code 401') {
-                 setTimeout(() => {
-                    swal({
-                        title: 'Your or password is wrong',
-                        icon: 'error'
-                    })
-                }, 1000)
-            }
+        this.carpark.forEach((el) => {
+           if(el.id === this.carparkID) {
+             this.carparkName = el.name
+           }
+        })
+    },
+    ViewZone() {
+            axios
+                .get(
+                    `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`, {
+                        headers: {
+                            "x-access-token": JSON.parse(this.token)
+                        }
+                    }
+                )
+                .then(response => {
+                    this.zone = response.data;
+                    if (this.zone.length === 0) {
+                        this.message = "Threre's no carpark";
+                    }
+                });
+        },
+    viewZLevel(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zlevels/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedLevel = response.data;
+                if (this.selectedLevel.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
 
-        });
-      }
     },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
     }
+
   },
+  mounted () {
+
+    axios
+      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
+      .then(response => {
+        this.carpark = response.data
+        this.carparkID = response.data[0].id;
+        this.ViewZone()
+      })
+
+
+  }
+
 
 }
+
 </script>
-<style scoped>
-    input-placeholder {
-        font-style: italic;
-    }
-</style>
