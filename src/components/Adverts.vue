@@ -379,6 +379,8 @@ export default {
       })
       .then(response => {
         this.carpark = response.data;
+        this.carparkID = response.data[0].id;
+        this.addAdverts()
       });
   }
 };

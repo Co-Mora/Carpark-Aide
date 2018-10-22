@@ -23,13 +23,13 @@
                                 CP+
                             </div>
                         </li>
-                        <li class="active">
+                        <li>
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
                                  <li>
                                     <a href="/carparks">All Carparks</a>
                                 </li>
-                                <li class="active">
+                                <li>
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li >

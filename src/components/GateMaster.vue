@@ -247,7 +247,7 @@
                           </div>
 
                           <div class="input-group">
-                            <select v-model="carparkID" class="form-control m-b" @change="addZone">
+                            <select v-model="carparkID" class="form-control m-b" @change="addGateMaster">
                                 <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                 <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                             </select>
@@ -332,7 +332,7 @@ export default {
     };
   },
   methods: {
-    addZone() {
+    addGateMaster() {
       axios
         .get(
           ` https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters`,
@@ -379,6 +379,8 @@ export default {
       })
       .then(response => {
         this.carpark = response.data;
+        this.carparkID = response.data[0].id;
+        this.addGateMaster()
       });
   }
 };

@@ -144,7 +144,7 @@
                     <li>
                         <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li class="active">
+                            <li>
                                 <a href="#">City<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
@@ -379,6 +379,8 @@ export default {
       .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
+        this.carparkID = response.data[0].id;
+        this.addMaster()
       })
 
      //

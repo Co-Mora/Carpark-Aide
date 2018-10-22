@@ -260,7 +260,7 @@
 
                     <div class="input-group">
                         <select v-model="carparkID" class="form-control m-b" @change="addZone">
-                            <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                            <option disabled  value="null" key="null">Please Select Carpark Name</option>
                             <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                         </select>
                     </div>
@@ -402,6 +402,9 @@ export default {
             })
             .then(response => {
                 this.carpark = response.data;
+                this.carparkID = response.data[0].id;
+                this.addZone()
+
             });
 
     },

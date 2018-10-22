@@ -261,7 +261,7 @@
                             </div>
                             <div class="input-group" style="margin-bottom: 20px">
                                 <select v-model="zoneID" class="form-control m-b" @change="filterZoneByStreet">
-                                    <option disabled  selected value="null" key="null">{{carparkID !== 'null' ? zone[0].name : 'Please Select Zone Name'}}</option>
+                                    <option disabled  selected value="null" key="null">Please Select Zone Name</option>
                                     <option v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
                                 </select>
                             </div>
@@ -329,7 +329,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Zone',
+  name: 'Street',
   data () {
     return {
       carpark: null,
@@ -397,6 +397,8 @@ export default {
       .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
+        this.carparkID = response.data[0].id;
+        this.filterZone()
       })
     }
 }

@@ -310,6 +310,6 @@ export default {
             });
     }
 };
-//heroku ps:scale web=0
+//heroku ps:scale web=1
 
 </script>

@@ -370,6 +370,7 @@ export default {
                     })
                     .then(response => {
                         this.zone = response.data
+                        this.zoneID = response.data[0].id;
                         console.log(this.zone)
                     })
             },
@@ -438,7 +439,15 @@ export default {
             })
             .then(response => {
                 this.carpark = response.data
+                this.carparkID = response.data[0].id;
+                this.filterZone()
+
             })
+            setTimeout(() => {
+              this.filterZoneByStreet()
+            }, 800)
+
+
     }
 
 

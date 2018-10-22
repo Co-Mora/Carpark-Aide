@@ -387,6 +387,8 @@ export default {
       .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
+        this.carparkID = response.data[0].id;
+        this.addLevel()
       })
 
 
