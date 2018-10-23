@@ -7,6 +7,11 @@
                             <h5>CarParks</h5>
                         </div>
                         <div class="ibox-content">
+                          <div class="col-lg-6">
+                              <div class="input-group" style="margin-bottom: 20px">
+                                <a href="/carparks/add" class="btn btn-w-m btn-success">Add Carpark</a>
+                              </div>
+                        </div>
                             <div class="table-responsive">
                               <table class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>

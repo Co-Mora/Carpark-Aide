@@ -11,12 +11,16 @@ import Street from '../components/Street'
 import Bay from '../components/Bay'
 import Voucher from '../components/Voucher'
 
+import AddCarpark from '../components/AddCarpark'
 import CarparkFees from '../components/CarparkFees'
 import Auth from '../components/Auth'
 
 import Master from '../components/Master'
 import Lock from '../components/Lock'
 import Pole from '../components/Pole'
+
+import Country from '../components/Country'
+import State from '../components/State'
 import City from '../components/City'
 
 import AddSubscribe from '../components/AddSubscribe'
@@ -45,6 +49,9 @@ import Customer from '../components/Customer'
 import CustomerCP from '../components/CustomerCP'
 import AddCustomer from '../components/AddCustomer'
 
+import PassType from '../components/PassType'
+import Staff from '../components/Staff'
+
 Vue.use(Router)
 export function createRouter () {
   return new Router({
@@ -55,6 +62,10 @@ export function createRouter () {
         name: 'CarparkFees',
         path: '/fees',
         component: CarparkFees
+      },
+      {
+        path: '/carparks/add',
+        component: AddCarpark
       },
       {
         name: 'Index',
@@ -81,12 +92,20 @@ export function createRouter () {
         component: MainChart,
       },
       {
-        path:'/cities',
+        path:'/location/cities',
         component: City,
       },
       {
-        path:'/cities/add',
+        path:'/location/cities/add',
         component: AddCity,
+      },
+      {
+        path:'/location/countries',
+        component: Country,
+      },
+      {
+        path:'/location/states',
+        component: State,
       },
       {
         path:'/carparks/level',
@@ -203,6 +222,14 @@ export function createRouter () {
           query: route.query.q
         })
 
+      },
+      {
+        path:'/passtype',
+        component: PassType,
+      },
+      {
+        path:'/staff',
+        component: Staff,
       },
 
     ]

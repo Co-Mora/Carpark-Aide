@@ -100,14 +100,30 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="active">
-                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
+                    <li>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Location</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li class="active">
+                            <li>
+                                <a href="#">Country<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/location/countries">View Country</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">State<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/location/states">View State</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
                                 <a href="#">City<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li class="active">
-                                            <a href="/cities">View City</a>
+                                        <li>
+                                            <a href="/location/cities">View City</a>
                                         </li>
                                     </ul>
                             </li>
@@ -177,6 +193,22 @@
                                         </li>
                                     </ul>
                             </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/passtype">View PassType</a>
+                          </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/staff">View Staff</a>
+                          </li>
                         </ul>
                     </li>
                     </ul>

@@ -110,13 +110,29 @@
                         </ul>
                     </li>
                     <li class="active">
-                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Cities</span><span class="fa arrow"></span></a>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Location</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li class="active">
+                            <li>
+                                <a href="#">Country<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/location/countries">View Country</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li>
+                                <a href="#">State<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/location/states">View State</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li  class="active">
                                 <a href="#">City<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li class="active">
-                                            <a href="/cities">View City</a>
+                                            <a href="/location/cities">View City</a>
                                         </li>
                                     </ul>
                             </li>
@@ -188,6 +204,22 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/passtype">View PassType</a>
+                          </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/staff">View Staff</a>
+                          </li>
+                        </ul>
+                    </li>
                   </ul>
 
                 </div>
@@ -213,13 +245,19 @@
 
                 <div class="ibox-content">
 
-                      <div class="col-lg-6">
-                          <div class="input-group" style="margin-bottom: 20px">
+                      <div class="col-lg-12">
+                          <!-- <div class="input-group" style="margin-bottom: 20px">
                             <a href="/cities/add" class="btn btn-w-m btn-success">Add City</a>
-                          </div>
+                          </div> -->
 
+                          <div class="input-group" style="margin-bottom: 20px;">
+                            <select v-model="countryID" class="form-control m-b" @change="filterByState">
+                                <option disabled selected value="null" key="null">Please Select Country Name</option>
+                                <option v-for="cout in country" :value="cout.id" :key="cout">{{cout.name}}</option>
+                            </select>
+                          </div>
                           <div class="input-group">
-                            <select v-model="stateID" class="form-control m-b" @change="filterByState">
+                            <select v-model="stateID" class="form-control m-b" @change="getCity">
                                 <option disabled selected value="null" key="null">Please Select State Name</option>
                                 <option v-for="s in state" :value="s.id" :key="s">{{s.name}}</option>
                             </select>
@@ -235,7 +273,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>City (Carpark)</h5>
+                            <h5>City</h5>
                         </div>
                         <div class="ibox-content">
                             <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
@@ -291,8 +329,10 @@ export default {
   data() {
     return {
       state: null,
-      stateID: null,
-      cityID: null,
+      stateID: 'null',
+      countryID: null,
+      country: null,
+      cityID: 'null',
       city: null,
       carparkID: 'null',
       token: localStorage.getItem("token"),
@@ -302,23 +342,25 @@ export default {
     };
   },
   methods: {
-    filterByState1() {
+    filterByState() {
       axios
         .get(
-          `https://sys2.parkaidemobile.com/api/state`,
+          `https://sys2.parkaidemobile.com/api/country/${this.countryID}/state`,
           { headers: { "x-access-token": JSON.parse(this.token) } }
         )
         .then(response => {
           this.state = response.data;
+          this.stateID = response.data[0].id
+          this.getCity()
           if (this.state.length === 0) {
             this.message = "Threre's no carpark";
           }
         });
     },
-    filterByState() {
+    getCity() {
       axios
         .get(
-          `https://sys2.parkaidemobile.com/api/state/${this.stateID}/city`,
+          `https://sys2.parkaidemobile.com/api/country/${this.countryID}/state/${this.stateID}/city`,
           { headers: { "x-access-token": JSON.parse(this.token) } }
         )
         .then(response => {
@@ -336,17 +378,20 @@ export default {
   mounted() {
     axios
       .get(
-        `https://sys2.parkaidemobile.com/api/state`,
+        `https://sys2.parkaidemobile.com/api/country`,
         { headers: { "x-access-token": JSON.parse(this.token) } }
       )
       .then(response => {
-        this.state = response.data;
-        this.stateID = response.data[0].id
+        this.country = response.data;
+        this.countryID = response.data[0].id
         this.filterByState()
-        if (this.state.length === 0) {
+        if (this.country.length === 0) {
           this.message = "Threre's no carpark";
         }
       });
-  }
+
+
+  },
+
 };
 </script>

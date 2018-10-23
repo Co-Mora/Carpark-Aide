@@ -1,48 +1,7 @@
 <template>
     <div v-show="isLoggedIn">
          <div id="wrapper">
-           <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
-               <div class="modal-dialog modal-lg">
-                   <div class="modal-content">
-                       <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                           <h4 class="modal-title">{{carparkName}}</h4>
-                       </div>
-                       <div class="modal-body">
-                           <div class="table-responsive">
-                               <table class="table table-striped table-bordered table-hover dataTables-example">
-                                   <thead>
-                                       <tr>
-                                           <th data-hide="phone,tablet">Carpark Name</th>
-                                           <th data-hide="phone,tablet">name</th>
-                                       </tr>
-                                   </thead>
-                                   <tbody>
-                                       <span v-show="selectedMaster == 0" style="font-size: 20px;">{{message}}</span>
-                                       <tr v-for="master in selectedMaster" :key="z" class="gradeX">
-                                           <td class="center">{{carparkName || 'Unknown'}}</td>
-                                           <td class="center">{{master.name || 'Unknown'}}</td>
-                                       </tr>
-                                   </tbody>
-                                   <tfoot>
-                                       <tr>
-                                           <td colspan="5">
-                                               <ul class="pagination float-right"></ul>
-                                           </td>
-                                       </tr>
-                                   </tfoot>
-                               </table>
-                           </div>
-
-                       </div>
-
-                       <div class="modal-footer">
-                           <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                       </div>
-                   </div>
-               </div>
-           </div>
-            <nav class="navbar-default navbar-static-side" role="navigation">
+             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
                         <li class="nav-header">
@@ -57,20 +16,21 @@
                                     <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
                                     <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
                                     <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/">Logout</a></li>
                                 </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
                             </div>
                         </li>
-                        <li >
+                        <li>
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
                                  <li>
                                     <a href="/carparks">All Carparks</a>
                                 </li>
                                 <li>
+
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -102,7 +62,7 @@
                                             </li>
                                         </ul>
                                 </li>
-                                <li >
+                                <li>
                                     <a href="#">Bay<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -120,13 +80,13 @@
                             </li>
                             </ul>
                         </li>
-                          <li class="active">
+                    <li>
                         <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li  class="active">
+                            <li>
                                 <a href="#">Master<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li  class="active">
+                                        <li>
                                             <a href="/wheel/master">View Master</a>
                                         </li>
                                     </ul>
@@ -252,19 +212,19 @@
                           </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="active">
                         <a  href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                          <li>
+                          <li class="active">
                               <a href="/staff">View Staff</a>
                           </li>
                         </ul>
                     </li>
-                    </ul>
+                  </ul>
 
                 </div>
             </nav>
-             <div id="page-wrapper" class="gray-bg">
+            <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -282,63 +242,54 @@
                 </ul>
             </nav>
             </div>
-                <div class="ibox-content">
-                    <div class="col-lg-12">
-                         <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/wheel/master/add" class="btn btn-w-m btn-success">Add Master</a>
+
+                <!-- <div class="ibox-content">
+
+                      <div class="col-lg-6">
+                          <div class="input-group" style="margin-bottom: 20px">
+                            <a href="/cities/add" class="btn btn-w-m btn-success">Add Country</a>
                           </div>
-                        <div class="input-group">
-                            <select v-model="carparkID" class="form-control m-b" @change="addMaster">
-                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="col-lg-2">
 
                     </div>
-                </div>
-        <div class="wrapper wrapper-content animated fadeInRight">
+                </div> -->
+         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>Wheel Master</h5>
+                            <h5>Staffs</h5>
                         </div>
                         <div class="ibox-content">
-                            <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
-                                  <thead>
-                                  <tr>
-                                      <th data-hide="phone,tablet">id(s)</th>
-                                      <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">remark</th>
-                                      <th data-hide="phone,tablet">Carpark Name</th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>
-                                       <span v-show="masters == 0" style="font-size: 20px;">{{message}}</span>
-                                      <tr v-for="master in masters" :key="master" class="gradeX">
-                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewMaster(master.id)">{{'Master: ' + master.id || 'Unknown'}}</a></td>
-                                          <td>{{master.name || 'Unknown'}}</td>
-                                          <td>{{master.remark || 'Unknown'}}</td>
-                                          <td>{{carparkName || 'Unknown'}}</td>
-                                      </tr>
-                                  </tbody>
-                                  <tfoot>
-                                  <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr>
-                                  </tfoot>
-                              </table>
-                            </div>
+                             <table class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                <tr>
+                                    <th data-hide="phone,tablet">id(s)</th>
+                                    <th data-hide="phone,tablet">name</th>
+                                    <th data-hide="phone,tablet">Address</th>
 
+                                </tr>
+                                </thead>
+                                <tbody>
+                                     <span v-show="staff == 0" style="font-size: 20px;">{{message}}</span>
+                                    <tr v-for="s in staff" :key="s" class="gradeU">
+                                        <td class="center">{{s.id || 'Unknown'}}</td>
+                                        <td class="center">{{s.name || 'Unknown'}}</td>
+                                        <td class="center">{{s.address || 'Unknown'}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <ul class="pagination float-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
             <div class="footer">
@@ -351,82 +302,43 @@
             </div>
 
         </div>
-         </div>
+    </div>
     </div>
 </template>
-
 <script>
-import axios from 'axios'
-import NavSide from './NavSide'
-export default {
-  name: 'Master',
+import axios from "axios";
 
-  data () {
+export default {
+  name: "Zone",
+  data() {
     return {
-      carpark: null,
-      masters: null,
-      carparkID: 'null',
-      carparkName: null,
-      selectedMaster: null,
-      message: null,
-      token: localStorage.getItem('token'),
-      isLoggedIn: localStorage.getItem('isLogged'),
-    }
+      staff: null,
+      staffID: null,
+      token: localStorage.getItem("token"),
+      isLoggedIn: localStorage.getItem("isLogged"),
+      carparkID: null,
+      message: null
+    };
   },
   methods: {
-    addMaster() {
-        axios
-        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
-        .then(response => {
-            this.masters = response.data
-            if(this.masters.length === 0) {
-                  this.message = "Threre's no carpark";
-            }
-        })
-        this.carpark.forEach((el) => {
-           if(el.id === this.carparkID) {
-             this.carparkName = el.name
-           }
-        })
-    },
-    viewMaster(value) {
-        axios
-            .get(
-                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${value}`, {
-                    headers: {
-                        "x-access-token": JSON.parse(this.token)
-                    }
-                }
-            )
-            .then(response => {
-                this.selectedMaster = response.data;
-                if (this.selectedMaster.length === 0) {
-                    this.message = "Threre's no carpark";
-                }
-            });
-
-    },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
     }
-
   },
-  mounted () {
-
-
+  mounted() {
     axios
-      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
+      .get(
+        `https://sys2.parkaidemobile.com/api/staffs`,
+        { headers: { "x-access-token": JSON.parse(this.token) } }
+      )
       .then(response => {
-        this.carpark = response.data
-        this.carparkID = response.data[0].id;
-        this.addMaster()
-      })
-
-     //
+        this.staff = response.data;
+        this.staffID = response.data[0].id
+        if (this.staff.length === 0) {
+          this.message = "Threre's no carpark";
+        }
+      });
   }
-
-
-}
-
+};
 </script>
