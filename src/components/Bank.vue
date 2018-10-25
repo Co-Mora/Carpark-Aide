@@ -3,45 +3,41 @@
 <template>
 
 <div v-show="isLoggedIn">
-    <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">{{streetName}}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                            <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">Carpark Name</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                    <th data-hide="phone,tablet">Delete</th>
-                                    <th data-hide="phone,tablet">Update</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <span v-show="selectedBay == 0" style="font-size: 20px;">{{message}}</span>
-                                <tr v-for="bay in selectedBay" :key="z" class="gradeX">
-                                    <td class="center">{{streetName || 'Unknown'}}</td>
-                                    <td class="center">{{bay.name || 'Unknown'}}</td>
-                                    <td><button class="pull-right btn btn-danger btn-sm" :value="bay.id" @click="deleteBay(bay.id)">Delete</button></td>
-                                    <td><button class="pull-right btn btn-primary btn-sm" :value="bay.id" @click="updateCarpark(bay.id)">Update</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="wrapper">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{bankName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">Created Date</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedBank == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="bank in selectedBank" :key="z" class="gradeX">
+                                      <td class="center">{{bank.name || 'Unknown'}}</td>
+                                      <td class="center">{{bankDate || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu">
@@ -64,13 +60,14 @@
                             IN+
                         </div>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="/carparks">All Carparks</a>
                             </li>
                             <li>
+
                                 <a href="#">Zone<span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
                                     <li>
@@ -102,10 +99,10 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="active">
+                            <li>
                                 <a href="#">Bay<span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li class="active">
+                                    <li>
                                         <a href="/carparks/bay">View Bay</a>
                                     </li>
                                 </ul>
@@ -268,6 +265,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li class="active">
+                        <a  href="#"><i class="fa fa-university"></i> <span class="nav-label">Bank</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li  class="active">
+                              <a href="/bank">View Bank</a>
+                          </li>
+                        </ul>
+                    </li>
                 </ul>
 
             </div>
@@ -288,44 +293,20 @@
                             </a>
                         </li>
                     </ul>
-
                 </nav>
             </div>
-            <div class="ibox-content">
 
                 <div class="col-lg-12">
-                    <div class="input-group" style="margin-bottom: 20px">
-                        <a href="/carparks/bay/add" class="btn btn-w-m btn-success">Add Bay</a>
-                    </div>
-                    <div class="input-group" style="margin-bottom: 20px">
-                        <select v-model="carparkID" class="form-control m-b" @change="filterZone">
-                            <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="margin-bottom: 20px">
-                        <select v-model="zoneID" class="form-control m-b" @change="filterZoneByStreet">
-                            <option disabled :value="null" :key="null">Please Select Zone Name</option>
-                            <option selected v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="margin-bottom: 20px">
-                        <select v-model="streetID" class="form-control m-b" @change="filterZoneByBay">
-                            <option disabled selected value="null" key="null">Please Select Street Name</option>
-                            <option v-for="s in streets" :value="s.id" :key="s">{{s.name}}</option>
-                        </select>
-                    </div>
+                    <!-- <div class="input-group" style="margin-bottom: 20px">
+                        <a href="/customers/add" class="btn btn-w-m btn-success">Add Customer</a>
+                    </div> -->
                 </div>
-                <div class="col-lg-2">
-
-                </div>
-            </div>
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
                             <div class="ibox-title">
-                                <h5>Bay (Carpark)</h5>
+                                <h5>Banks</h5>
                             </div>
                             <div class="ibox-content">
                                 <div class="table-responsive">
@@ -333,35 +314,18 @@
                                         <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet">id(s)</th>
-                                                <th data-hide="phone,tablet">image</th>
-                                                <th data-hide="phone,tablet">Street Name</th>
-                                                <th data-hide="phone,tablet">name</th>
-                                                <th data-hide="phone,tablet">Lat</th>
-                                                <th data-hide="phone,tablet">Lon</th>
-
+                                                <th data-hide="phone,tablet">Name</th>
+                                                <th data-hide="phone,tablet">Image</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <span v-show="bays == 0" style="font-size: 20px;">{{message}}</span>
-                                            <tr v-for="b in bays" :key="b" class="gradeU">
-                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBay(b.id)">{{'Bay: ' + b.id || 'Unknown'}}</a></td>
-                                                <td class="center">
-                                                    <a :href="b.image"><img style="width: 10%" :src="b.image"></a>
-                                                </td>
-                                                <td class="center">{{streetName || 'Unknown'}}</td>
+                                            <span v-show="banks == 0" style="font-size: 20px;">{{message}}</span>
+                                            <tr v-for="b in banks" :key="cus" class="gradeX">
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBank(b.id)">{{'Bank: ' + b.id || 'Unknown'}}</a></td>
                                                 <td class="center">{{b.name || 'Unknown'}}</td>
-                                                <td class="center">{{b.lat || 'Unknown'}}</td>
-                                                <td class="center">{{b.lon || 'Unknown'}}</td>
-
+                                                <td class="center">{{b.image || 'Unknown'}}</td>
                                             </tr>
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <ul class="pagination float-right"></ul>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
 
@@ -387,142 +351,81 @@
 
 <script>
 
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-    name: 'Zone',
+    name: "Customer",
     data() {
         return {
-            carpark: null,
-            zone: null,
-            streets: null,
-            streetID: null,
-            bays: null,
-            zoneID: 'null',
-            streetName: null,
-            carparkID: 'null',
-            selectedBay: null,
-            token: localStorage.getItem('token'),
-            isLoggedIn: localStorage.getItem('isLogged'),
+            banks: null,
+            bankName: null,
+            bankDate: null,
+            selectedBank: null,
+            token: localStorage.getItem("token"),
+            isLoggedIn: localStorage.getItem("isLogged"),
             message: null
-        }
+        };
     },
     methods: {
-        filterZone() {
-                axios
-                    .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`, {
-                        headers: {
-                            'x-access-token': JSON.parse(this.token)
-                        }
-                    })
-                    .then(response => {
-                        this.zone = response.data
-                        this.zoneID = response.data[0].id;
-                        this.filterZoneByStreet()
-                        console.log(this.zone)
-                    })
-            },
-            filterZoneByStreet() {
-                axios
-                    .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets`, {
-                        headers: {
-                            'x-access-token': JSON.parse(this.token)
-                        }
-                    })
-                    .then(response => {
-                        this.streets = response.data
-                        this.streetID = response.data[0].id
-                        this.filterZoneByBay()
-                        if (this.streets.length === 0) {
-                            this.message = "Threre's no carpark";
-                        }
-                    })
-            },
-            filterZoneByBay() {
-                axios
-                    .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays`, {
-                        headers: {
-                            'x-access-token': JSON.parse(this.token)
-                        }
-                    })
-                    .then(response => {
-                        this.bays = response.data
-                        if (this.bays.length === 0) {
-                            this.message = "Threre's no carpark";
-                        }
-                    })
+      viewBank(value) {
+          axios
+              .get(
+                  `https://sys2.parkaidemobile.com/api/banks/${value}`, {
+                      headers: {
+                          "x-access-token": JSON.parse(this.token)
+                      }
+                  }
+              )
+              .then(response => {
+                  this.selectedBank = response.data;
 
-                this.streets.forEach((el) => {
-                    if (el.id === this.streetID) {
-                        this.streetName = el.name
+                  if (this.selectedBank.length === 0) {
+                      this.message = "Banks Not Found";
+                  }
+              });
+              var date;
+              var hours;
+              var minutes;
+              var seconds;
+              var formattedTime;
+              this.banks.forEach((el) => {
+                 if(el.id === value) {
+                   date = new Date(el.createDate*1000);
+                   hours = date.getHours();
+                   minutes = "0" + date.getMinutes();
+                   seconds = "0" + date.getSeconds();
+                   formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                   this.bankDate = formattedTime
+                 }
+              })
+              this.banks.forEach((el) => {
+                    if(value === el.id) {
+                      this.bankName = el.name
                     }
-                })
-            },
-            viewBay(value) {
-                axios
-                    .get(
-                        `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays/${value}`, {
-                            headers: {
-                                "x-access-token": JSON.parse(this.token)
-                            }
-                        }
-                    )
-                    .then(response => {
-                        this.selectedBay = response.data;
-                        if (this.selectedBay.length === 0) {
-                            this.message = "Threre's no carpark";
-                        }
-                    });
-
-            },
-            deleteBay(value) {
-              axios
-                  .delete(
-                      `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays/${value}`, {
-                          headers: {
-                              "x-access-token": JSON.parse(this.token)
-                          }
-                      }
-                  )
-                  .then(response => {
-                      if(response.status == 200) {
-                         document.getElementById('myModal5').style.display = "none";
-                        setTimeout(() => {
-                            swal({
-                                title: 'Delete it successfully',
-                                icon: 'success'
-                            })
-                        }, 200)
-                        setTimeout(() => {
-                             window.location.href = '/carparks/bay'
-                        }, 1000)
-                      }
-                  });
-            },
-            logout() {
-                localStorage.removeItem('isLogged');
-                localStorage.removeItem('token');
-            }
+              })
+      },
+      logout() {
+        localStorage.removeItem('isLogged');
+        localStorage.removeItem('token');
+      }
     },
     mounted() {
-        axios
-            .get('https://sys2.parkaidemobile.com/api/carparks/', {
-                headers: {
-                    'x-access-token': JSON.parse(this.token)
-                }
-            })
-            .then(response => {
-                this.carpark = response.data
-                this.carparkID = response.data[0].id;
-                this.filterZone()
+      axios
+          .get(
+              `https://sys2.parkaidemobile.com/api/banks`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              this.banks = response.data;
 
-            })
-
+              if (this.banks.length === 0) {
+                  this.message = "Banks Are Not Found";
+              }
+          });
     }
-
-
-
-
-}
+};
 
 </script>

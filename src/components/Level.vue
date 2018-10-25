@@ -12,19 +12,23 @@
                           <table class="table table-striped table-bordered table-hover dataTables-example">
                               <thead>
                                   <tr>
-                                      <th data-hide="phone,tablet">image</th>
                                       <th data-hide="phone,tablet">Carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">ReservedCount</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
                                   </tr>
                               </thead>
                               <tbody>
                                   <span v-show="selectedLevel == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="level in selectedLevel" :key="z" class="gradeX">
-                                      <td class="center">
-                                          <a :href="level.image"><img style="width: 10%" :src="level.image"></a>
-                                      </td>
                                       <td class="center">{{carparkName || 'Unknown'}}</td>
                                       <td class="center">{{level.name || 'Unknown'}}</td>
+                                      <td class="center">{{level.ReservedCount || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="level.id" @click="deleteLevel(level.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="updateCarpark(level.id)">Update</button></td>
+
+
                                   </tr>
                               </tbody>
                               <tfoot>
@@ -264,6 +268,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -321,6 +333,9 @@
                                       <th data-hide="phone,tablet">image</th>
                                       <th data-hide="phone,tablet">carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">TandemCount</th>
+                                      <th data-hide="phone,tablet">NonReservedCount</th>
+                                      <th data-hide="phone,tablet">MotorcycleCount</th>
                                   </tr>
                                   </thead>
                                   <tbody>
@@ -330,6 +345,9 @@
                                           <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
                                           <td class="center">{{carparkName || 'Unknown'}}</td>
                                            <td class="center">{{level.name || 'Unknown'}}</td>
+                                           <td class="center">{{level.TandemCount || 'Unknown'}}</td>
+                                           <td class="center">{{level.NonReservedCount || 'Unknown'}}</td>
+                                           <td class="center">{{level.MotorcycleCount || 'Unknown'}}</td>
                                       </tr>
                                   </tbody>
                                   <tfoot>
@@ -413,6 +431,30 @@ export default {
                 }
             });
 
+    },
+    deleteLevel(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/level'
+                }, 1000)
+              }
+          });
     },
     logout() {
       localStorage.removeItem('isLogged');

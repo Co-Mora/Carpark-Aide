@@ -12,22 +12,23 @@
                           <table class="table table-striped table-bordered table-hover dataTables-example">
                               <thead>
                                   <tr>
-                                      <th data-hide="phone,tablet">Carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">qrcode</th>
                                       <th data-hide="phone,tablet">Bay ID</th>
                                       <th data-hide="phone,tablet">mac</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
 
                                   </tr>
                               </thead>
                               <tbody>
                                   <span v-show="selectedPole == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="pole in selectedPole" :key="z" class="gradeX">
-                                      <td class="center">{{wheelMastersName || 'Unknown'}}</td>
                                       <td class="center">{{pole.name || 'Unknown'}}</td>
-                                      <td>{{pole.qrcode || 'Unknown'}}</td>
                                       <td>{{pole.bayID || 'Unknown'}}</td>
                                       <td>{{pole.mac || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="pole.id" @click="deletePole(pole.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="pole.id" @click="updateCarpark(pole.id)">Update</button></td>
+
                                   </tr>
                               </tbody>
                           </table>
@@ -260,6 +261,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -398,6 +407,8 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.wheelMasters = response.data
+            this.wheelMastersID = response.data[0].id
+            this.filterMasterPole()
             console.log(response)
         })
     },
@@ -432,6 +443,30 @@ export default {
                 }
             });
 
+    },
+    deletePole(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheelpoles/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/wheel/pole'
+                }, 1000)
+              }
+          });
     },
     logout() {
       localStorage.removeItem('isLogged');

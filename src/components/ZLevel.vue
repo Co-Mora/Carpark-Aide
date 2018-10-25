@@ -15,25 +15,26 @@
                                       <th data-hide="phone,tablet">image</th>
                                       <th data-hide="phone,tablet">Carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">ReservedCount</th>
+                                      <th data-hide="phone,tablet">TandemCount</th>
+                                      <th data-hide="phone,tablet">NonReservedCount</th>
+                                      <th data-hide="phone,tablet">MotorcycleCount</th>
                                   </tr>
                               </thead>
                               <tbody>
                                   <span v-show="selectedLevel == 0" style="font-size: 20px;">{{message}}</span>
-                                  <tr v-for="level in selectedLevel" :key="z" class="gradeX">
+                                  <tr v-for="level in selectedLevel" :key="level" class="gradeX">
                                       <td class="center">
-                                          <a :href="level.image"><img style="width: 10%" :src="level.image"></a>
+                                          <a :href="level.image"><img style="width: 100%" :src="level.image"></a>
                                       </td>
                                       <td class="center">{{carparkName || 'Unknown'}}</td>
                                       <td class="center">{{level.name || 'Unknown'}}</td>
+                                      <td class="center">{{level.ReservedCount || 'Unknown'}}</td>
+                                      <td class="center">{{level.TandemCount || 'Unknown'}}</td>
+                                      <td class="center">{{level.NonReservedCount || 'Unknown'}}</td>
+                                      <td class="center">{{level.MotorcycleCount || 'Unknown'}}</td>
                                   </tr>
                               </tbody>
-                              <tfoot>
-                                  <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr>
-                              </tfoot>
                           </table>
                       </div>
 
@@ -264,6 +265,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -416,6 +425,8 @@ export default {
                 )
                 .then(response => {
                     this.zone = response.data;
+                    this.zoneID = response.data[0].id
+                    this.addZLevel()
                     if (this.zone.length === 0) {
                         this.message = "Threre's no carpark";
                     }

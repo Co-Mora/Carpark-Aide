@@ -34,7 +34,7 @@ import NavSide from './NavSide'
 import Carpark from './Carpark'
 export default {
   name: 'Level',
-  
+
   data () {
     return {
       isLoggedIn: false,
@@ -68,9 +68,10 @@ export default {
                 localStorage.setItem('token', parsed);
                  let loggedIn = JSON.stringify(this.isLoggedIn)
                 localStorage.setItem('isLogged', loggedIn);
+                localStorage.setItem('email', this.email);
                 window.location.href = '/'
             }
-            
+
         })
         .catch(error => {
             if(error.message == 'Request failed with status code 401') {
@@ -81,13 +82,13 @@ export default {
                     })
                 }, 1000)
             }
-           
+
         });
     },
   },
 
   mounted() {
-       
+
     },
 }
 

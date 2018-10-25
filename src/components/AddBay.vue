@@ -219,6 +219,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                   </ul>
 
                 </div>
@@ -297,6 +305,14 @@
                                     <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Bay Lat</label>
+                                    <div class="col-sm-10"><input v-model="lat"  placeholder="Lat" type="text" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">Bay Lon</label>
+                                    <div class="col-sm-10"><input v-model="lon"  placeholder="Lon" type="text" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
                                  <div class="form-group row"><label class="col-sm-2 col-form-label">Bay Image</label>
                                     <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control">
                                       <img style="width: 10%" :src="image" />
@@ -349,6 +365,8 @@ export default {
       file:null,
       name: null,
       image: null,
+      lat: null,
+      lon: null,
       errors: [],
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
@@ -457,6 +475,8 @@ export default {
         data: qs.stringify({
             name: this.name,
             image: this.image,
+            lat: this.lat,
+            lon: this.lon,
         }),
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

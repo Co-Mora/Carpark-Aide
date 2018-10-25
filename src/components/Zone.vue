@@ -15,28 +15,23 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
-                                    <th data-hide="phone,tablet">image</th>
                                     <th data-hide="phone,tablet">Carpark Name</th>
-                                    <th data-hide="phone,tablet">name</th>
+                                    <th data-hide="phone,tablet">ReservedCount</th>
+                                    <th data-hide="phone,tablet">Delete</th>
+                                    <th data-hide="phone,tablet">Update</th>
+
                                 </tr>
                             </thead>
                             <tbody>
                                 <span v-show="selectedZone == 0" style="font-size: 20px;">{{message}}</span>
                                 <tr v-for="z in selectedZone" :key="z" class="gradeX">
-                                    <td class="center">
-                                        <a :href="z.image"><img style="width: 10%" :src="z.image"></a>
-                                    </td>
                                     <td class="center">{{carparkName || 'Unknown'}}</td>
-                                    <td class="center">{{z.name || 'Unknown'}}</td>
+                                    <td class="center">{{z.ReservedCount || 'Unknown'}}</td>
+                                    <td><button class="pull-right btn btn-danger btn-sm" :value="z.id" @click="deleteZone(z.id)">Delete</button></td>
+                                    <td><button class="pull-right btn btn-primary btn-sm" :value="z.id" @click="updateZone(z.id)">Update</button></td>
+
                                 </tr>
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
 
@@ -268,6 +263,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                 </ul>
 
             </div>
@@ -326,6 +329,9 @@
                                                 <th data-hide="phone,tablet">image</th>
                                                 <th data-hide="phone,tablet">Carpark Name</th>
                                                 <th data-hide="phone,tablet">name</th>
+                                                <th data-hide="phone,tablet">TandemCount</th>
+                                                <th data-hide="phone,tablet">NonReservedCount</th>
+                                                <th data-hide="phone,tablet">MotorcycleCount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -337,18 +343,13 @@
                                                 </td>
                                                 <td class="center">{{carparkName || 'Unknown'}}</td>
                                                 <td class="center">{{z.name || 'Unknown'}}</td>
+                                                <td class="center">{{z.TandemCount || 'Unknown'}}</td>
+                                                <td class="center">{{z.NonReservedCount || 'Unknown'}}</td>
+                                                <td class="center">{{z.MotorcycleCount || 'Unknown'}}</td>
                                             </tr>
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <ul class="pagination float-right"></ul>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -401,7 +402,7 @@ export default {
                     .then(response => {
                         this.zone = response.data;
                         if (this.zone.length === 0) {
-                            this.message = "Threre's no carpark";
+                            this.message = "No Zone Found";
                         }
                     });
 
@@ -423,10 +424,34 @@ export default {
                     .then(response => {
                         this.selectedZone = response.data;
                         if (this.selectedZone.length === 0) {
-                            this.message = "Threre's no carpark";
+                            this.message = "No Zone Found";
                         }
                     });
 
+            },
+            deleteZone(value) {
+              axios
+                  .delete(
+                      `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`, {
+                          headers: {
+                              "x-access-token": JSON.parse(this.token)
+                          }
+                      }
+                  )
+                  .then(response => {
+                      if(response.status == 200) {
+                         document.getElementById('myModal5').style.display = "none";
+                        setTimeout(() => {
+                            swal({
+                                title: 'Delete it successfully',
+                                icon: 'success'
+                            })
+                        }, 200)
+                        setTimeout(() => {
+                             window.location.href = '/carparks/zone'
+                        }, 1000)
+                      }
+                  });
             },
             logout() {
                 localStorage.removeItem('isLogged');

@@ -211,6 +211,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -260,7 +268,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Zone Name</label>
-                                    <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
+                                    <div class="col-sm-10"><input v-model="name"  placeholder="" type="text" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">MotorcycleCount</label>
+                                    <div class="col-sm-10"><input v-model="motorcycleCount"  placeholder="" type="text" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">ReservedCount</label>
+                                    <div class="col-sm-10"><input v-model="reservedCount"  placeholder="" type="text" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">NonReservedCount</label>
+                                    <div class="col-sm-10"><input v-model="nonReservedCount"  placeholder="" type="text" class="form-control"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                  <div class="form-group row"><label class="col-sm-2 col-form-label">Zone Image</label>
@@ -311,6 +331,10 @@ export default {
       name: null,
       file: null,
       image: null,
+      reservedCount: null,
+      tandemCount: null,
+      nonReservedCount: null,
+      motorcycleCount: null,
       validated: false,
       errors: [],
       data: [{
@@ -359,11 +383,18 @@ export default {
         return false
       } if (!this.name) {
         this.errors.push('Please fill up the Level Name')
-      } if (!this.file) {
+      } if (!this.reservedCount) {
+        this.errors.push('Please fill up the reservedCount')
+      } if (!this.tandemCount) {
+        this.errors.push('Please fill up the tandemCount')
+      } if (!this.nonReservedCount) {
+        this.errors.push('Please fill up the nonReservedCount')
+      } if (!this.motorcycleCount) {
+        this.errors.push('Please fill up the motorcycleCount')
+      }if (!this.file) {
         this.errors.push('Please fill up the level image')
       } else {
         this.errors = []
-        this.$emit('destroy', this.data);
         this.validated = true;
         axios({
         method: 'post',
@@ -371,6 +402,10 @@ export default {
         data: qs.stringify({
             name: this.name,
             image: this.image,
+            ReservedCount: this.reservedCount,
+            TandemCount: this.tandemCount,
+            NonReservedCount: this.nonReservedCount,
+            MotorcycleCount: this.motorcycleCount
         }),
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

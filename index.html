@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>CarPark Aide</title>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -64,12 +64,23 @@
 
  <!-- Toastr -->
  <script src="/static/js/plugins/toastr/toastr.min.js"></script>
-
+ <script src="/static/js/plugins/dataTables/datatables.min.js"></script>
+  <script src="/static/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 
 
 
 
 <div id="app"></div>
+<script>
+        $(document).ready(function(){
+            $('.dataTables-example').DataTable({
+                responsive: true,
+                pagination: true,
+                dom: '<"html5buttons"B>lTfgitp',
+            });
 
+        });
+
+    </script>
 </body>
 </html>

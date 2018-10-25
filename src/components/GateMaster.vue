@@ -13,15 +13,17 @@
                               <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">Remark</th>
-
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
                                   </tr>
                               </thead>
                               <tbody>
                                   <span v-show="selectedMaster == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="master in selectedMaster" :key="z" class="gradeX">
                                       <td class="center">{{master.name || 'Unknown'}}</td>
-                                      <td class="center">{{master.remark || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="master.id" @click="deleteGateMaster(master.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="updateCarpark(master.id)">Update</button></td>
+
 
                                   </tr>
                               </tbody>
@@ -256,6 +258,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -406,6 +416,30 @@ export default {
                 }
             });
 
+    },
+    deleteGateMaster(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/get-master'
+                }, 1000)
+              }
+          });
     },
     logout() {
       localStorage.removeItem('isLogged');

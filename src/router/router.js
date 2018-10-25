@@ -52,7 +52,14 @@ import AddCustomer from '../components/AddCustomer'
 import PassType from '../components/PassType'
 import Staff from '../components/Staff'
 
+import Parker from '../components/Parker'
+import AddParker from '../components/AddParker'
+
+import Bank from '../components/Bank'
+
 Vue.use(Router)
+
+
 export function createRouter () {
   return new Router({
     mode: 'history',
@@ -68,7 +75,7 @@ export function createRouter () {
         component: AddCarpark
       },
       {
-        name: 'Index',
+        name: 'auth',
         path: '/login',
         component: Auth
       },
@@ -84,7 +91,11 @@ export function createRouter () {
         name: 'Index',
         path: '/carparks',
         component: Index,
-        active: false
+        active: false,
+        meta: {
+              requiresAuth: true
+        }
+
       },
       {
         name: 'MainChart',
@@ -230,6 +241,18 @@ export function createRouter () {
       {
         path:'/staff',
         component: Staff,
+      },
+      {
+        path:'/parker',
+        component: Parker,
+      },
+      {
+        path:'/parker/add',
+        component: AddParker,
+      },
+      {
+        path:'/bank',
+        component: Bank,
       },
 
     ]

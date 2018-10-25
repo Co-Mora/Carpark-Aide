@@ -208,6 +208,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -290,7 +298,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addWheelMasterLock">Add by Wheel Master</button>
+                                        <button class="btn btn-primary btn-sm" :disabled="validated == true" @click="addWheelMasterLock">Add by Wheel Master</button>
                                     </div>
                                 </div>
                         </div>
@@ -332,6 +340,7 @@ export default {
       remark: null,
       bayID: null,
       errors: [],
+      validated: false,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
@@ -354,6 +363,7 @@ export default {
         this.errors.push('Please fill up the level remark')
       } else {
         this.errors = []
+        this.validated = true
         axios({
         method: 'post',
         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMasterID}/wheelpoles`,

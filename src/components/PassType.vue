@@ -220,6 +220,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                   </ul>
 
                 </div>
@@ -251,7 +259,7 @@
                           </div> -->
                           <div class="input-group">
                             <select v-model="passTypeID" class="form-control m-b" @change="getPasscard">
-                                <option disabled selected value="null" key="null">Please Select State Name</option>
+                                <option disabled selected value="null" key="null">Please Select Pass Type</option>
                                 <option v-for="pass in passType" :value="pass.id" :key="pass">{{pass.name}}</option>
                             </select>
                           </div>
@@ -262,7 +270,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>Countries</h5>
+                            <h5>PassTypes</h5>
                         </div>
                         <div class="ibox-content">
                             <input type="text" class="form-control form-control-sm m-b-xs" id="filter"

@@ -14,10 +14,10 @@
                                   <tr>
                                       <th data-hide="phone,tablet">Carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">qrcode</th>
                                       <th data-hide="phone,tablet">Bay ID</th>
-
                                       <th data-hide="phone,tablet">mac</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
 
                                   </tr>
                               </thead>
@@ -26,18 +26,12 @@
                                   <tr v-for="lock in selectedLock" :key="z" class="gradeX">
                                       <td class="center">{{wheelMastersName || 'Unknown'}}</td>
                                       <td class="center">{{lock.name || 'Unknown'}}</td>
-                                      <td>{{lock.qrcode || 'Unknown'}}</td>
                                       <td>{{lock.bayID || 'Unknown'}}</td>
                                       <td>{{lock.mac || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="lock.id" @click="deleteLock(lock.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="lock.id" @click="updateCarpark(lock.id)">Update</button></td>
                                   </tr>
                               </tbody>
-                              <tfoot>
-                                  <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr>
-                              </tfoot>
                           </table>
                       </div>
 
@@ -268,6 +262,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -423,6 +425,8 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.wheelMasters = response.data
+            this.wheelMastersID = response.data[0].id
+            this.filterLock()
             console.log(response)
         })
     },
@@ -464,6 +468,30 @@ export default {
             });
 
     },
+    deleteLock(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/wheel/lock'
+                }, 1000)
+              }
+          });
+    },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
@@ -471,7 +499,6 @@ export default {
 
   },
   mounted () {
-
 
     axios
       .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})

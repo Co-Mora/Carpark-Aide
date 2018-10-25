@@ -1,5 +1,46 @@
 <template>
-    <div>
+    <div v-show="isLoggedIn">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{zoneName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                    <th data-hide="phone,tablet">subscriberID</th>
+                                    <th data-hide="phone,tablet">customerID</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedParker == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="parker in selectedParker" :key="parker" class="gradeX">
+                                      <td class="center">{{parker.subscriberID || 'Unknown'}}</td>
+                                      <td class="center">{{parker.customerID || 'Unknown'}}</td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="5">
+                                          <ul class="pagination float-right"></ul>
+                                      </td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
               <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -16,28 +57,28 @@
                                     <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
                                     <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
                                     <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/">Logout</a></li>
+                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
                                 </ul>
                             </div>
                             <div class="logo-element">
-                                CP+
+                                IN+
                             </div>
                         </li>
-                        <li class="active">
+                        <li>
                             <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" >
-                                 <li class="active">
+                                 <li>
                                     <a href="/carparks">All Carparks</a>
                                 </li>
-                                <li>
+                                <li >
                                     <a href="#">Zone<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <li >
+                                            <li>
                                                 <a href="/carparks/zone">View Zone</a>
                                             </li>
                                         </ul>
                                 </li>
-                                <li>
+                                <li >
                                     <a href="#">Level<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
@@ -69,10 +110,18 @@
                                             </li>
                                         </ul>
                                 </li>
+                                <li>
+                                <a href="#">Voucher<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/carparks/voucher">View Voucher</a>
+                                        </li>
+                                    </ul>
+                            </li>
                             </ul>
                         </li>
-                          <li>
-                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
+                         <li>
+                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                             <li>
                                 <a href="#">Master<span class="fa arrow"></span></a>
@@ -211,11 +260,19 @@
                           </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="active">
                         <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                          <li>
+                          <li class="active">
                               <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-university"></i> <span class="nav-label">Bank</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/bank">View Bank</a>
                           </li>
                         </ul>
                     </li>
@@ -223,14 +280,14 @@
 
                 </div>
             </nav>
-             <div id="page-wrapper" class="gray-bg">
+            <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
            <div class="navbar-header">
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message">Welcome to Carpark Aide.</span>
+                        <span class="m-r-sm text-muted welcome-message">Welcome to {{username}}</span>
                     </li>
 
                     <li>
@@ -239,54 +296,76 @@
                         </a>
                     </li>
                 </ul>
+
             </nav>
             </div>
-        <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="ibox-content">
+
+                      <div class="col-lg-12">
+                           <div class="input-group" style="margin-bottom: 20px">
+                            <a href="/parker/add" class="btn btn-w-m btn-success">Add Parker</a>
+                          </div>
+                           <div class="input-group" style="margin-bottom: 20px">
+                                <select v-model="customerID" class="form-control m-b" @change="filterByParker">
+                                    <option disabled value="null" key="null">Please Select Customer Name</option>
+                                    <option v-for="cus in customer" :value="cus.id" :key="cus">{{cus.name}}</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="margin-bottom: 20px">
+                                <select v-model="customerParkerID" class="form-control m-b" @change="getParker">
+                                    <option disabled  selected value="null" key="null">Please Select Parker Name</option>
+                                    <option v-for="p in customerParker" :value="p.id" :key="p">{{p.name}}</option>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
-                <div class="col-md-12">
-                <div class="col-md-6" v-for="error in errors" :key="error">
-                <div class=" alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{error}}
-                </div>
-                </div>
-            </div>
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h4>Add Zone</h4>
+                            <h5>Parkers</h5>
                         </div>
                         <div class="ibox-content">
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Carpark Name</label>
-                                    <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Lat Name</label>
-                                    <div class="col-sm-10"><input v-model="lat"  placeholder="Lat Name" type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Lon Name</label>
-                                    <div class="col-sm-10"><input v-model="lon"  placeholder="Lon Name" type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Carpark Image</label>
-                                    <div class="col-sm-10"><input placeholder="Image" type="file" ref="file" @change="handleFileUpload()" class="form-control">
-                                      <img style="width: 10%" :src="image" />
-                                    </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addCarpark()" :disabled="validated == true">Add by Carpark</button>
-                                    </div>
-                                </div>
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                 <thead>
+                                 <tr>
+                                     <th data-hide="phone,tablet">id(s)</th>
+                                     <th data-hide="phone,tablet">name</th>
+                                     <th data-hide="phone,tablet">createDate</th>
+                                     <th data-hide="phone,tablet">car1</th>
+                                     <th data-hide="phone,tablet">car2</th>
+                                     <th data-hide="phone,tablet">mobile</th>
+                                     <th data-hide="phone,tablet">email</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                      <span v-show="parker == 0" style="font-size: 20px;">{{message}}</span>
+                                     <tr v-for="p in parker" :key="s" class="gradeX">
+                                         <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewParker(p.id)">{{'Parker: ' + p.id || 'Unknown'}}</a></td>
+                                         <td class="center">{{p.name || 'Unknown'}}</td>
+                                         <td class="center">{{parkerDate || 'Unknown'}}</td>
+                                         <td class="center">{{p.car1 || 'Unknown'}}</td>
+                                         <td class="center">{{p.car2 || 'Unknown'}}</td>
+                                         <td class="center">{{p.mobile || 'Unknown'}}</td>
+                                         <td class="center">{{p.email || 'Unknown'}}</td>
+                                     </tr>
+                                 </tbody>
+                                 <tfoot>
+                                 <tr>
+                                     <td colspan="5">
+                                         <ul class="pagination float-right"></ul>
+                                     </td>
+                                 </tr>
+                                 </tfoot>
+                             </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
             <div class="footer">
                 <div class="float-right">
@@ -297,130 +376,83 @@
                 </div>
             </div>
 
-            </div>
-         </div>
-
+        </div>
+    </div>
     </div>
 </template>
-
 <script>
 import axios from 'axios'
-import NavSide from './NavSide'
-import Zone from './Zone'
 
-import qs from 'qs'
 export default {
-  name: 'AddCarpark',
+  name: 'Parker',
   data () {
     return {
-
-
-      lat: null,
-      lon: null,
-      name: null,
-      file: null,
-      image: null,
-      validated: false,
-      errors: [],
-      data: [{
-        name: this.name,
-        image: this.image,
-        lat: this.lat,
-        lon: this.lon
-      }],
+      parker: null,
+      customerParkerID: 'null',
+      customerParker: null,
+      customer: null,
+      parkerDate: null,
+      customerID: null,
+      selectedParker: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
+      username: localStorage.getItem('email'),
+      message: null,
     }
   },
-  components: {
-    Zone
-  },
   methods: {
-    processFile() {
-      let formData = new FormData();
-      formData.append('imgUploader', this.file);
-      axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
-                formData,
-                {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'x-access-token': JSON.parse(this.token)
+    filterByParker() {
+        axios
+        .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers`,{headers: { 'x-access-token': JSON.parse(this.token)}})
+        .then(response => {
+            this.customerParker = response.data
+            this.customerParkerID = response.data[0].id
+            this.getParker()
+            if(this.customerParker.length === 0) {
+                  this.message = "Threre's no carpark";
+            }
+        })
+    },
+    getParker() {
+        axios
+        .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers/${this.customerParkerID}`,{headers: { 'x-access-token': JSON.parse(this.token)}})
+        .then(response => {
+            this.parker = response.data
+            var date;
+            var hours;
+            var minutes;
+            var seconds;
+            var formattedTime;
+            this.parker.forEach((el) => {
+               if(el.id === this.customerParkerID) {
+                 date = new Date(el.createDate*1000);
+                 hours = date.getHours();
+                 minutes = "0" + date.getMinutes();
+                 seconds = "0" + date.getSeconds();
+                 formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                 this.parkerDate = formattedTime
+               }
+            })
+            if(this.parker.length === 0) {
+                  this.message = "Threre's no carpark";
+            }
+        })
+    },
+    viewParker(value) {
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
                 }
-              }
-            ).then(response => {
-              this.image = response.data
-              console.log('SUCCESS!!', response.data);
-        })
-        .catch(function(ex){
-          console.log(ex);
-        });
-
-    },
-    handleFileUpload() {
-       this.file = this.$refs.file.files[0];
-       console.log("File:", this.file)
-       this.processFile();
-    },
-    addCarpark() {
-         setTimeout(() => {
-        $('.alert').alert('close')
-      }, 2000)
-         if (!this.name && !this.image && !this.lon && !this.lat) {
-        this.errors.push('Please fill up the forms')
-        return false
-      } if (!this.name) {
-        this.errors.push('Please fill up the Level Name')
-      } if (!this.lon) {
-        this.errors.push('Please fill up the Lon Name')
-      } if (!this.lat) {
-        this.errors.push('Please fill up the Lat Name')
-      } if (!this.file) {
-        this.errors.push('Please fill up the Carpark image')
-      } else {
-        this.errors = []
-        this.validated = true;
-        axios({
-        method: 'post',
-        url: `https://sys2.parkaidemobile.com/api/carparks/`,
-        data: qs.stringify({
-          name: this.name,
-          image: this.image,
-          lat: this.lat,
-          lon: this.lon
-        }),
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'x-access-token': JSON.parse(this.token)
-        },
-        }).then(response => {
-          console.log(response.data)
-           if(response.status == 200) {
-                setTimeout(() => {
-                    swal({
-                        title: 'Add it successfully',
-                        icon: 'success'
-                    })
-                }, 200)
-                setTimeout(() => {
-                     window.location.href = '/carparks'
-                }, 1000)
-            }
-
-
-        })
-        .catch(error => {
-            if(error.message == 'Request failed with status code 401') {
-                 setTimeout(() => {
-                    swal({
-                        title: 'Your or password is wrong',
-                        icon: 'error'
-                    })
-                }, 1000)
-            }
-
-        });
-
-      }
+            )
+            .then(response => {
+                this.selectedParker = response.data;
+                if (this.selectedParker.length === 0) {
+                    this.message = "Threre's no carpark";
+                }
+            });
 
     },
     logout() {
@@ -428,23 +460,16 @@ export default {
       localStorage.removeItem('token');
     }
   },
- mounted () {
 
+  mounted () {
 
     axios
-      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
+      .get('https://sys2.parkaidemobile.com/api/customers',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
-        this.carpark = response.data
+        this.customer   = response.data
+        this.customerID = response.data[0].id;
+        this.filterByParker()
       })
-
-
-  }
-}
-
-
-</script>
-<style scoped>
-    input-placeholder {
-        font-style: italic;
     }
-</style>
+}
+</script>

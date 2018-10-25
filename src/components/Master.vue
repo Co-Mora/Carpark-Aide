@@ -15,6 +15,8 @@
                                        <tr>
                                            <th data-hide="phone,tablet">Carpark Name</th>
                                            <th data-hide="phone,tablet">name</th>
+                                           <th data-hide="phone,tablet">Delete</th>
+                                           <th data-hide="phone,tablet">Update</th>
                                        </tr>
                                    </thead>
                                    <tbody>
@@ -22,15 +24,11 @@
                                        <tr v-for="master in selectedMaster" :key="z" class="gradeX">
                                            <td class="center">{{carparkName || 'Unknown'}}</td>
                                            <td class="center">{{master.name || 'Unknown'}}</td>
+                                           <td><button class="pull-right btn btn-danger btn-sm" :value="master.id" @click="deleteMaster(master.id)">Delete</button></td>
+                                           <td><button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="updateCarpark(master.id)">Update</button></td>
+
                                        </tr>
                                    </tbody>
-                                   <tfoot>
-                                       <tr>
-                                           <td colspan="5">
-                                               <ul class="pagination float-right"></ul>
-                                           </td>
-                                       </tr>
-                                   </tfoot>
                                </table>
                            </div>
 
@@ -260,6 +258,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -405,6 +411,30 @@ export default {
                 }
             });
 
+    },
+    deleteMaster(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/wheel/master'
+                }, 1000)
+              }
+          });
     },
     logout() {
       localStorage.removeItem('isLogged');

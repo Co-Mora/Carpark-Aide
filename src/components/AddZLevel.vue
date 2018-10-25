@@ -219,6 +219,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                   </ul>
 
                 </div>
@@ -426,13 +434,21 @@ export default {
 
         })
         .catch(error => {
+          console.log(error.message)
             if(error.message == 'Request failed with status code 401') {
                  setTimeout(() => {
                     swal({
-                        title: 'Your or password is wrong',
+                        title: 'Data is wrong',
                         icon: 'error'
                     })
-                }, 1000)
+                }, 400)
+            } else if (error.message == 'Request failed with status code 500') {
+              setTimeout(() => {
+                 swal({
+                     title: 'No data found.',
+                     icon: 'error'
+                 })
+             }, 400)
             }
 
         });

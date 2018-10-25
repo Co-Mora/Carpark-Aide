@@ -13,7 +13,8 @@
                               <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">Remark</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
 
                                   </tr>
                               </thead>
@@ -21,7 +22,9 @@
                                   <span v-show="selectedGate == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="gate in selectedGate" :key="z" class="gradeX">
                                       <td class="center">{{gate.name || 'Unknown'}}</td>
-                                      <td class="center">{{gate.remark || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="gate.id" @click="deleteGate(gate.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="gate.id" @click="updateCarpark(gate.id)">Update</button></td>
+
                                   </tr>
                               </tbody>
                           </table>
@@ -255,6 +258,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -282,7 +293,7 @@
 
                       <div class="col-lg-12">
                           <!-- <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/get-master/add" class="btn btn-w-m btn-success">Add GetMaster</a>
+                            <a href="/gate/add" class="btn btn-w-m btn-success">Add Gate</a>
                           </div> -->
 
                           <div class="input-group" style="margin-bottom: 20px">
@@ -387,6 +398,8 @@ export default {
         )
         .then(response => {
           this.gateMaster = response.data;
+          this.gateMasterID = response.data[0].id
+          this.addGates()
           if (this.gateMaster.length === 0) {
             this.message = "Threre's no carpark";
           }
@@ -427,6 +440,30 @@ export default {
             });
 
     },
+    deleteGate(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${this.gateMasterID}/gates/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/gates'
+                }, 1000)
+              }
+          });
+    },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
@@ -439,7 +476,7 @@ export default {
       })
       .then(response => {
         this.carpark = response.data;
-        this.carparkID = response.data[1].id;
+        this.carparkID = response.data[0].id;
         this.addGateMaster()
       });
   }

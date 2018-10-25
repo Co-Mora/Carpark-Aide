@@ -13,7 +13,8 @@
                               <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">Image</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
 
                                   </tr>
                               </thead>
@@ -21,7 +22,9 @@
                                   <span v-show="selectedAdverts == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="ad in selectedAdverts" :key="z" class="gradeX">
                                       <td class="center">{{ad.name || 'Unknown'}}</td>
-                                      <td class="center">{{ad.image || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="ad.id" @click="deleteAdverts(ad.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="ad.id" @click="updateCarpark(ad.id)">Update</button></td>
+
 
                                   </tr>
                               </tbody>
@@ -256,6 +259,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                   </ul>
 
                 </div>
@@ -380,6 +391,7 @@ export default {
         )
         .then(response => {
           this.adverts = response.data;
+          console.log(this.adverts)
           if (this.adverts.length === 0) {
             this.message = "Threre's no carpark";
           }
@@ -407,6 +419,30 @@ export default {
             });
 
     },
+    deleteAdverts(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/adverts'
+                }, 1000)
+              }
+          });
+    },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
@@ -414,7 +450,7 @@ export default {
   },
   mounted() {
     axios
-      .get("https://sys2.parkaidemobile.com/api/carparks/", {
+      .get("https://sys2.parkaidemobile.com/api/carparks", {
         headers: { "x-access-token": JSON.parse(this.token) }
       })
       .then(response => {

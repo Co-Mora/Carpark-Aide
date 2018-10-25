@@ -9,7 +9,7 @@
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message">Welcome to Carpark Aide.</span>
+                        <span class="m-r-sm text-muted welcome-message">Welcome {{email}}</span>
                     </li>
 
                     <li>
@@ -47,6 +47,7 @@ export default {
     return {
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
+      email: localStorage.getItem('email')
     }
   },
   methods: {

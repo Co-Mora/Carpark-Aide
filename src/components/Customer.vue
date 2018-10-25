@@ -4,6 +4,43 @@
 
 <div v-show="isLoggedIn">
     <div id="wrapper">
+      <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{customerName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="table-responsive">
+                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <span v-show="selectedCustomer == 0" style="font-size: 20px;">{{message}}</span>
+                                  <tr v-for="cus in selectedCustomer" :key="z" class="gradeX">
+                                      <td class="center">{{cus.name || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="cus.id" @click="deleteCustomer(cus.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="cus.id" @click="updateCarpark(cus.id)">Update</button></td>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu">
@@ -223,6 +260,14 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                 </ul>
 
             </div>
@@ -272,7 +317,7 @@
                                         <tbody>
                                             <span v-show="customers == 0" style="font-size: 20px;">{{message}}</span>
                                             <tr v-for="cus in customers" :key="cus" class="gradeX">
-                                                <td class="center">{{cus.id}}</td>
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewCustomer(cus.id)">{{'Customer: ' + cus.id || 'Unknown'}}</a></td>
                                                 <td class="center">{{cus.name || 'Unknown'}}</td>
                                                 <td class="center">{{cus.contact1 || 'Unknown'}}</td>
                                                 <td class="center">{{cus.nationalID || 'Unknown'}}</td>
@@ -317,6 +362,7 @@ export default {
     data() {
         return {
             customers: null,
+            customerName: null,
             selectedCustomer: null,
             token: localStorage.getItem("token"),
             isLoggedIn: localStorage.getItem("isLogged"),
@@ -324,13 +370,54 @@ export default {
         };
     },
     methods: {
-        addCustomer() {
+      viewCustomer(value) {
+          axios
+              .get(
+                  `https://sys2.parkaidemobile.com/api/customers/${value}`, {
+                      headers: {
+                          "x-access-token": JSON.parse(this.token)
+                      }
+                  }
+              )
+              .then(response => {
+                  this.selectedCustomer = response.data;
+                  if (this.selectedCustomer.length === 0) {
+                      this.message = "Customer NOt Found";
+                  }
+              });
+              this.customers.forEach((el) => {
+                   this.customerName = el.name
+              })
 
-            },
-            logout() {
-                localStorage.removeItem('isLogged');
-                localStorage.removeItem('token');
-            }
+      },
+      deleteCustomer(value) {
+        axios
+            .delete(
+                `https://sys2.parkaidemobile.com/api/customers/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                if(response.status == 200) {
+                   document.getElementById('myModal5').style.display = "none";
+                  setTimeout(() => {
+                      swal({
+                          title: 'Delete it successfully',
+                          icon: 'success'
+                      })
+                  }, 200)
+                  setTimeout(() => {
+                       window.location.href = '/customers'
+                  }, 1000)
+                }
+            });
+      },
+      logout() {
+        localStorage.removeItem('isLogged');
+        localStorage.removeItem('token');
+      }
     },
     mounted() {
       axios
@@ -344,7 +431,7 @@ export default {
           .then(response => {
               this.customers = response.data;
               if (this.customers.length === 0) {
-                  this.message = "Threre's no carpark";
+                  this.message = "Customer NOt Found";
               }
           });
     }

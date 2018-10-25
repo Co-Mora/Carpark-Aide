@@ -15,6 +15,8 @@
                                       <th data-hide="phone,tablet">image</th>
                                       <th data-hide="phone,tablet">Carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -25,6 +27,9 @@
                                       </td>
                                       <td class="center">{{zoneName || 'Unknown'}}</td>
                                       <td class="center">{{street.name || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="street.id" @click="deleteStreet(street.id)">Delete</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="street.id" @click="updateCarpark(street.id)">Update</button></td>
+
                                   </tr>
                               </tbody>
                               <tfoot>
@@ -264,6 +269,22 @@
                           </li>
                         </ul>
                     </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" >
+                          <li>
+                              <a href="/parker">View Parker</a>
+                          </li>
+                        </ul>
+                    </li>
                     </ul>
 
                 </div>
@@ -390,6 +411,8 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.zone = response.data
+            this.zoneID = response.data[0].id
+            this.filterZoneByStreet()
         })
         console.log('worked')
     },
@@ -424,6 +447,30 @@ export default {
                 }
             });
 
+    },
+    deleteStreet(value) {
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                 document.getElementById('myModal5').style.display = "none";
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/street'
+                }, 1000)
+              }
+          });
     },
     logout() {
       localStorage.removeItem('isLogged');

@@ -7,7 +7,7 @@
             </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message">Welcome to Carpark Aide.</span>
+                        <span class="m-r-sm text-muted welcome-message">Welcome to {{username}}</span>
                     </li>
 
                     <li>
@@ -44,7 +44,9 @@ export default {
   data () {
     return {
       biz: null,
-      selected: ''
+      selected: '',
+      username: localStorage.getItem('email')
+
     }
   },
   methods: {
