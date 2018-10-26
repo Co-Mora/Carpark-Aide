@@ -1,5 +1,45 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content animated bounceInRight">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                          <label>Level Name</label>
+                          <input type="text" v-model="name" placeholder="Enter Zone Name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Reserved Count</label>
+                          <input type=" text"  v-model="reservedCount" placeholder="Enter Reserved Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Non Reserved Count</label>
+                          <input type=" text" v-model="nonReservedCount" placeholder="Enter NonReserved Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Tandem Count</label>
+                          <input type=" text" v-model="tandemCount" placeholder="Enter Tandem Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Motorcycle Count</label>
+                          <input type=" text" v-model="motorcycleCount" placeholder="Enter Motorcycle Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Image Name</label>
+                          <input type="file" ref="file" @change="handleFileUpload()"  class="form-control">
+                          <img style="width: 10%" :src="image" />
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" @click="updateLevel(levelID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
       <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -26,18 +66,13 @@
                                       <td class="center">{{level.name || 'Unknown'}}</td>
                                       <td class="center">{{level.ReservedCount || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="level.id" @click="deleteLevel(level.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="updateCarpark(level.id)">Update</button></td>
-
+                                      <td>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="viewLevelUpdate(level.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                      </td>
 
                                   </tr>
                               </tbody>
-                              <tfoot>
-                                  <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr>
-                              </tfoot>
+
                           </table>
                       </div>
 
@@ -350,13 +385,6 @@
                                            <td class="center">{{level.MotorcycleCount || 'Unknown'}}</td>
                                       </tr>
                                   </tbody>
-                                  <tfoot>
-                                  <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr>
-                                  </tfoot>
                               </table>
                             </div>
 
@@ -382,6 +410,8 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
+
 import NavSide from './NavSide'
 import Zone from './Zone'
 export default {
@@ -394,19 +424,47 @@ export default {
       selectedLevel: null,
       carparkID: 'null',
       carparkName: null,
+      validated: false,
+      levelID: null,
+
       message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
   methods: {
+    processFile() {
+      let formData = new FormData();
+      formData.append('imgUploader', this.file);
+      axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'x-access-token': JSON.parse(this.token)
+                }
+              }
+            ).then(response => {
+              this.image = response.data
+              console.log('SUCCESS!!', response.data);
+        })
+        .catch(function(ex){
+          console.log(ex);
+        });
+
+    },
+    handleFileUpload() {
+       this.file = this.$refs.file.files[0];
+       console.log("File:", this.file)
+       this.processFile();
+    },
     addLevel() {
         axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.levels = response.data
             if(this.levels.length === 0) {
-                  this.message = "Threre's no carpark";
+                this.message = "No Levels Found";
             }
         })
         this.carpark.forEach((el) => {
@@ -427,7 +485,7 @@ export default {
             .then(response => {
                 this.selectedLevel = response.data;
                 if (this.selectedLevel.length === 0) {
-                    this.message = "Threre's no carpark";
+                    this.message = "No Levels Found";
                 }
             });
 
@@ -455,6 +513,82 @@ export default {
                 }, 1000)
               }
           });
+    },
+    viewLevelUpdate(value) {
+      document.getElementById('myModal5').style.display = "none";
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedLevel = response.data;
+                this.showSelectedLevel()
+            });
+
+    },
+    updateLevel(value) {
+        this.validated = true;
+        document.getElementById('myModalUpdate').style.display = "none";
+        axios({
+                method: 'put',
+                url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels/${value}`,
+                data: qs.stringify({
+                    name: this.name,
+                    image: this.image,
+                    ReservedCount: this.reservedCount,
+                    TandemCount: this.tandemCount,
+                    NonReservedCount: this.nonReservedCount,
+                    MotorcycleCount: this.motorcycleCount,
+                    carparkID: this.carparkID
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token': JSON.parse(this.token)
+                },
+            }).then(response => {
+                if (response.status == 200) {
+                    console.log(response.data)
+                    setTimeout(() => {
+                        swal({
+                            title: 'Update it successfully',
+                            icon: 'success'
+                        })
+                    }, 200)
+                    setTimeout(() => {
+                        window.location.href = '/carparks/level'
+                    }, 1000)
+                }
+
+
+            })
+            .catch(error => {
+                if (error.message == 'Request failed with status code 401') {
+                    setTimeout(() => {
+                        swal({
+                            title: 'Your or password is wrong',
+                            icon: 'error'
+                        })
+                    }, 1000)
+                }
+
+            });
+
+    },
+    showSelectedLevel() {
+      this.selectedLevel.forEach((el) => {
+          this.name = el.name;
+          this.motorcycleCount = el.MotorcycleCount;
+          this.tandemCount = el.TandemCount;
+          this.reservedCount = el.ReservedCount;
+          this.nonReservedCount = el.NonReservedCount
+          this.image = el.image;
+          this.levelID = el.id;
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');

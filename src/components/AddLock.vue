@@ -272,11 +272,10 @@
                         <div class="ibox-content">
                                 <div class="col-lg-12">
                                     <div class="input-group">
-                                        <select v-model="carparkID" class="form-control m-b" >
+                                        <select v-model="carparkID" class="form-control m-b" @change="filterByWheelMaster">
                                             <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                             <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                                         </select>
-                                        <button class="btn btn-primary btn-sm" @click="filterByWheelMaster">Filter by Master</button>
                                     </div>
                                     <div class="input-group" style="margin: 20px 0">
                                         <select v-model="wheelMasterID" class="form-control m-b" >

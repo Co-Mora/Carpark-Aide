@@ -1,5 +1,45 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content animated bounceInRight">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                          <label>Level Name</label>
+                          <input type="text" v-model="name" placeholder="Enter Zone Name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Reserved Count</label>
+                          <input type=" text" v-model="reservedCount" placeholder="Enter Reserved Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Non Reserved Count</label>
+                          <input type=" text" v-model="nonReservedCount" placeholder="Enter NonReserved Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Tandem Count</label>
+                          <input type=" text" v-model="tandemCount" placeholder="Enter Tandem Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Motorcycle Count</label>
+                          <input type=" text" v-model="motorcycleCount" placeholder="Enter Motorcycle Count" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Image Name</label>
+                          <input type="file" ref="file" @change="handleFileUpload()"  class="form-control">
+                          <img style="width: 20%" :src="image" />
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" @click="updateZLevel(zlevelID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
       <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -12,29 +52,26 @@
                           <table class="table table-striped table-bordered table-hover dataTables-example">
                               <thead>
                                   <tr>
-                                      <th data-hide="phone,tablet">image</th>
                                       <th data-hide="phone,tablet">Carpark Name</th>
-                                      <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">ReservedCount</th>
-                                      <th data-hide="phone,tablet">TandemCount</th>
                                       <th data-hide="phone,tablet">NonReservedCount</th>
                                       <th data-hide="phone,tablet">MotorcycleCount</th>
+                                      <th data-hide="phone,tablet">Delete</th>
+                                      <th data-hide="phone,tablet">Update</th>
                                   </tr>
                               </thead>
                               <tbody>
                                   <span v-show="selectedLevel == 0" style="font-size: 20px;">{{message}}</span>
-                                  <tr v-for="level in selectedLevel" :key="level" class="gradeX">
-                                      <td class="center">
-                                          <a :href="level.image"><img style="width: 100%" :src="level.image"></a>
-                                      </td>
+                                  <tr v-for="level in selectedLevel" :key="z" class="gradeX">
                                       <td class="center">{{carparkName || 'Unknown'}}</td>
-                                      <td class="center">{{level.name || 'Unknown'}}</td>
-                                      <td class="center">{{level.ReservedCount || 'Unknown'}}</td>
-                                      <td class="center">{{level.TandemCount || 'Unknown'}}</td>
                                       <td class="center">{{level.NonReservedCount || 'Unknown'}}</td>
                                       <td class="center">{{level.MotorcycleCount || 'Unknown'}}</td>
+                                      <td><button class="pull-right btn btn-danger btn-sm" :value="level.id" @click="deleteZLevel(level.id)">Delete</button></td>
+                                      <td>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="viewZLevelUpdate(level.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                      </td>
                                   </tr>
                               </tbody>
+
                           </table>
                       </div>
 
@@ -53,17 +90,6 @@
                         <li class="nav-header">
                             <div class="dropdown profile-element">
                                 <img alt="image" class="rounded-circle" :src="Image" />
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <span class="block m-t-xs font-bold">Admin</span>
-                                    <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
-                                </a>
-                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                    <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                    <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/">Logout</a></li>
-                                </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
@@ -336,6 +362,9 @@
                                       <th data-hide="phone,tablet">image</th>
                                       <th data-hide="phone,tablet">carpark Name</th>
                                       <th data-hide="phone,tablet">name</th>
+                                      <th data-hide="phone,tablet">ReservedCount</th>
+                                      <th data-hide="phone,tablet">TandemCount</th>
+
                                   </tr>
                                   </thead>
                                   <tbody>
@@ -345,6 +374,9 @@
                                           <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
                                           <td class="center">{{carparkName || 'Unknown'}}</td>
                                            <td class="center">{{level.name || 'Unknown'}}</td>
+                                           <td class="center">{{level.ReservedCount || 'Unknown'}}</td>
+                                           <td class="center">{{level.TandemCount || 'Unknown'}}</td>
+
                                       </tr>
                                   </tbody>
                                   <tfoot>
@@ -379,6 +411,8 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
+
 import NavSide from './NavSide'
 import Zone from './Zone'
 export default {
@@ -392,6 +426,7 @@ export default {
       carparkID: 'null',
       zone: null,
       zoneID: null,
+      zlevelID: null,
       carparkName: null,
       message: null,
       token: localStorage.getItem('token'),
@@ -399,13 +434,38 @@ export default {
     }
   },
   methods: {
+    processFile() {
+      let formData = new FormData();
+      formData.append('imgUploader', this.file);
+      axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'x-access-token': JSON.parse(this.token)
+                }
+              }
+            ).then(response => {
+              this.image = response.data
+              console.log('SUCCESS!!', response.data);
+        })
+        .catch(function(ex){
+          console.log(ex);
+        });
+
+    },
+    handleFileUpload() {
+       this.file = this.$refs.file.files[0];
+       console.log("File:", this.file)
+       this.processFile();
+    },
     addZLevel() {
         axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/zlevels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.zlevels = response.data
             if(this.zlevels.length === 0) {
-                  this.message = "Threre's no carpark";
+              this.message = "No Zone Level Found";
             }
         })
         this.carpark.forEach((el) => {
@@ -428,7 +488,7 @@ export default {
                     this.zoneID = response.data[0].id
                     this.addZLevel()
                     if (this.zone.length === 0) {
-                        this.message = "Threre's no carpark";
+                      this.message = "No Zone Level Found";
                     }
                 });
         },
@@ -444,10 +504,110 @@ export default {
             .then(response => {
                 this.selectedLevel = response.data;
                 if (this.selectedLevel.length === 0) {
-                    this.message = "Threre's no carpark";
+                    this.message = "No Zone Level Found";
                 }
             });
 
+    },
+    deleteZLevel(value) {
+      document.getElementById('myModal5').style.display = "none";
+      axios
+          .delete(
+              `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zlevels/${value}`, {
+                  headers: {
+                      "x-access-token": JSON.parse(this.token)
+                  }
+              }
+          )
+          .then(response => {
+              if(response.status == 200) {
+                setTimeout(() => {
+                    swal({
+                        title: 'Delete it successfully',
+                        icon: 'success'
+                    })
+                }, 200)
+                setTimeout(() => {
+                     window.location.href = '/carparks/zlevel'
+                }, 1000)
+              }
+          });
+    },
+    viewZLevelUpdate(value) {
+      document.getElementById('myModal5').style.display = "none";
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zlevels/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedLevel = response.data;
+                this.showSelectedZLevel()
+            });
+
+    },
+    updateZLevel(value) {
+        this.validated = true;
+        document.getElementById('myModalUpdate').style.display = "none";
+        axios({
+                method: 'put',
+                url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zlevels/${value}`,
+                data: qs.stringify({
+                    name: this.name,
+                    image: this.image,
+                    ReservedCount: this.reservedCount,
+                    TandemCount: this.tandemCount,
+                    NonReservedCount: this.nonReservedCount,
+                    MotorcycleCount: this.motorcycleCount,
+                    carparkID: this.carparkID
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token': JSON.parse(this.token)
+                },
+            }).then(response => {
+                if (response.status == 200) {
+                    console.log(response.data)
+                    setTimeout(() => {
+                        swal({
+                            title: 'Update it successfully',
+                            icon: 'success'
+                        })
+                    }, 200)
+                    setTimeout(() => {
+                        window.location.href = '/carparks/zlevel'
+                    }, 1000)
+                }
+
+
+            })
+            .catch(error => {
+                if (error.message == 'Request failed with status code 401') {
+                    setTimeout(() => {
+                        swal({
+                            title: 'Your or password is wrong',
+                            icon: 'error'
+                        })
+                    }, 1000)
+                }
+
+            });
+
+    },
+    showSelectedZLevel() {
+      this.selectedLevel.forEach((el) => {
+          this.name = el.name;
+          this.motorcycleCount = el.MotorcycleCount;
+          this.tandemCount = el.TandemCount;
+          this.reservedCount = el.ReservedCount;
+          this.nonReservedCount = el.NonReservedCount
+          this.image = el.image;
+          this.zlevelID = el.id;
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');

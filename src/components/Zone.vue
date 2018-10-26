@@ -1,8 +1,46 @@
 
-
 <template>
-
 <div v-show="isLoggedIn">
+    <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">{{carparkName}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Zone Name</label>
+                        <input type="text" v-model="name" placeholder="Enter Zone Name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Reserved Count</label>
+                        <input type=" text"  v-model="reservedCount" placeholder="Enter Reserved Count" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Non Reserved Count</label>
+                        <input type=" text" v-model="nonReservedCount" placeholder="Enter NonReserved Count" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Tandem Count</label>
+                        <input type=" text" v-model="tandemCount" placeholder="Enter Tandem Count" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Motorcycle Count</label>
+                        <input type=" text" v-model="motorcycleCount" placeholder="Enter Motorcycle Count" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Image Name</label>
+                        <input type="file" ref="file" @change="handleFileUpload()"  class="form-control">
+                        <img style="width: 10%" :src="image" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @click="updateZone(zoneID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -26,10 +64,13 @@
                                 <span v-show="selectedZone == 0" style="font-size: 20px;">{{message}}</span>
                                 <tr v-for="z in selectedZone" :key="z" class="gradeX">
                                     <td class="center">{{carparkName || 'Unknown'}}</td>
-                                    <td class="center">{{z.ReservedCount || 'Unknown'}}</td>
-                                    <td><button class="pull-right btn btn-danger btn-sm" :value="z.id" @click="deleteZone(z.id)">Delete</button></td>
-                                    <td><button class="pull-right btn btn-primary btn-sm" :value="z.id" @click="updateZone(z.id)">Update</button></td>
-
+                                    <td class="center">{{z.ReservedCount || 0}}</td>
+                                    <td>
+                                        <button class="pull-right btn btn-danger btn-sm" :value="z.id" @click="deleteZone(z.id)">Delete</button>
+                                    </td>
+                                    <td>
+                                        <button class="pull-right btn btn-primary btn-sm" :value="z.id" @click="viewZoneUpdate(z.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -91,11 +132,11 @@
                             </li>
                             <li>
                                 <a href="#">Zone Level<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/zlevel">View ZLevel</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="/carparks/zlevel">View ZLevel</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="#">Street<span class="fa arrow"></span></a>
@@ -153,31 +194,31 @@
                         </ul>
                     </li>
                     <li>
-                        <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Location</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
+                        <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">Location</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="#">Country<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/location/countries">View Country</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="/location/countries">View Country</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="#">State<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/location/states">View State</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="/location/states">View State</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="#">City<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/location/cities">View City</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="/location/cities">View City</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -229,46 +270,46 @@
                         </ul>
                     </li>
                     <li>
-                        <a  href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
+                        <a href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="/customers">All</a>
                             </li>
                             <li>
                                 <a href="#">Branch<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/customers/company?q=1">View Company</a>
-                                        </li>
-                                        <li>
-                                            <a href="/customers/personal?q=0">View Perosnal</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="/customers/company?q=1">View Company</a>
+                                    </li>
+                                    <li>
+                                        <a href="/customers/personal?q=0">View Perosnal</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a  href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
-                          <li>
-                              <a href="/passtype">View PassType</a>
-                          </li>
+                        <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="/passtype">View PassType</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
-                        <a  href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
-                          <li>
-                              <a href="/staff">View Staff</a>
-                          </li>
+                        <a href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="/staff">View Staff</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
-                        <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
-                          <li>
-                              <a href="/parker">View Parker</a>
-                          </li>
+                        <a href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="/parker">View Parker</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -303,7 +344,7 @@
 
                     <div class="input-group">
                         <select v-model="carparkID" class="form-control m-b" @change="addZone">
-                            <option disabled  value="null" key="null">Please Select Carpark Name</option>
+                            <option disabled value="null" key="null">Please Select Carpark Name</option>
                             <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                         </select>
                     </div>
@@ -343,9 +384,9 @@
                                                 </td>
                                                 <td class="center">{{carparkName || 'Unknown'}}</td>
                                                 <td class="center">{{z.name || 'Unknown'}}</td>
-                                                <td class="center">{{z.TandemCount || 'Unknown'}}</td>
-                                                <td class="center">{{z.NonReservedCount || 'Unknown'}}</td>
-                                                <td class="center">{{z.MotorcycleCount || 'Unknown'}}</td>
+                                                <td class="center">{{z.TandemCount || 0}}</td>
+                                                <td class="center">{{z.NonReservedCount || 0}}</td>
+                                                <td class="center">{{z.MotorcycleCount || 0}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -373,16 +414,25 @@
 <script>
 
 import axios from "axios";
+import qs from 'qs'
 
 export default {
     name: "Zone",
-    props: [''],
     data() {
         return {
             carpark: null,
             zone: null,
+            name: null,
+            image: null,
+            file: null,
+            reservedCount: null,
+            tandemCount: null,
+            nonReservedCount: null,
+            motorcycleCount: null,
+            validated: false,
             selectedZone: null,
             carparkID: 'null',
+            zoneID: null,
             carparkName: null,
             token: localStorage.getItem("token"),
             isLoggedIn: localStorage.getItem("isLogged"),
@@ -390,6 +440,31 @@ export default {
         };
     },
     methods: {
+      processFile() {
+        let formData = new FormData();
+        formData.append('imgUploader', this.file);
+        axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+                  formData,
+                  {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                      'x-access-token': JSON.parse(this.token)
+                  }
+                }
+              ).then(response => {
+                this.image = response.data
+                console.log('SUCCESS!!', response.data);
+          })
+          .catch(function(ex){
+            console.log(ex);
+          });
+
+      },
+      handleFileUpload() {
+         this.file = this.$refs.file.files[0];
+         console.log("File:", this.file)
+         this.processFile();
+      },
         addZone() {
                 axios
                     .get(
@@ -430,28 +505,104 @@ export default {
 
             },
             deleteZone(value) {
-              axios
-                  .delete(
-                      `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`, {
-                          headers: {
-                              "x-access-token": JSON.parse(this.token)
-                          }
-                      }
-                  )
-                  .then(response => {
-                      if(response.status == 200) {
-                         document.getElementById('myModal5').style.display = "none";
-                        setTimeout(() => {
-                            swal({
-                                title: 'Delete it successfully',
-                                icon: 'success'
-                            })
-                        }, 200)
-                        setTimeout(() => {
-                             window.location.href = '/carparks/zone'
-                        }, 1000)
-                      }
-                  });
+                axios
+                    .delete(
+                        `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`, {
+                            headers: {
+                                "x-access-token": JSON.parse(this.token)
+                            }
+                        }
+                    )
+                    .then(response => {
+                        if (response.status == 200) {
+                            document.getElementById('myModal5').style.display = "none";
+                            setTimeout(() => {
+                                swal({
+                                    title: 'Delete it successfully',
+                                    icon: 'success'
+                                })
+                            }, 200)
+                            setTimeout(() => {
+                                window.location.href = '/carparks/zone'
+                            }, 1000)
+                        }
+                    });
+            },
+            viewZoneUpdate(value) {
+              document.getElementById('myModal5').style.display = "none";
+                axios
+                    .get(
+                        `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`, {
+                            headers: {
+                                "x-access-token": JSON.parse(this.token)
+                            }
+                        }
+                    )
+                    .then(response => {
+                        this.selectedZone = response.data;
+                        this.showSelectedZone()
+                    });
+
+            },
+            updateZone(value) {
+                this.validated = true;
+                document.getElementById('myModalUpdate').style.display = "none";
+                axios({
+                        method: 'put',
+                        url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`,
+                        data: qs.stringify({
+                            name: this.name,
+                            image: this.image,
+                            ReservedCount: this.reservedCount,
+                            TandemCount: this.tandemCount,
+                            NonReservedCount: this.nonReservedCount,
+                            MotorcycleCount: this.motorcycleCount,
+                            carparkID: this.carparkID
+                        }),
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'x-access-token': JSON.parse(this.token)
+                        },
+                    }).then(response => {
+                        if (response.status == 200) {
+                            console.log(response.data)
+                            setTimeout(() => {
+                                swal({
+                                    title: 'Update it successfully',
+                                    icon: 'success'
+                                })
+                            }, 200)
+                            setTimeout(() => {
+                                window.location.href = '/carparks/zone'
+                            }, 1000)
+                        }
+
+
+                    })
+                    .catch(error => {
+                        if (error.message == 'Request failed with status code 401') {
+                            setTimeout(() => {
+                                swal({
+                                    title: 'Your or password is wrong',
+                                    icon: 'error'
+                                })
+                            }, 1000)
+                        }
+
+                    });
+
+            },
+            showSelectedZone() {
+              this.selectedZone.forEach((el) => {
+                  this.name = el.name;
+                  this.motorcycleCount = el.MotorcycleCount;
+                  this.tandemCount = el.TandemCount;
+                  this.reservedCount = el.ReservedCount;
+                  this.nonReservedCount = el.NonReservedCount
+                  this.image = el.image;
+                  this.zoneID = el.id;
+
+              })
             },
             logout() {
                 localStorage.removeItem('isLogged');

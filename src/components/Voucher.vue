@@ -1,5 +1,29 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content animated bounceInRight">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                          <label>Voucher Name</label>
+                          <input type=" text" v-model="name" placeholder="Enter Voucher Name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Image Name</label>
+                          <input type="file" ref="file" @change="handleFileUpload()"  class="form-control">
+                          <img style="width: 10%" :src="image" />
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" @click="updateVoucher(voucherID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
       <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -25,8 +49,9 @@
                                       <td class="center">{{carparkName || 'Unknown'}}</td>
                                       <td class="center">{{voucher.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="voucher.id" @click="deleteVoucher(voucher.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="voucher.id" @click="updateCarpark(voucher.id)">Update</button></td>
-
+                                      <td>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="voucher.id" @click="viewVoucherUpdate(voucher.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                      </td>
                                   </tr>
                               </tbody>
                           </table>
@@ -367,13 +392,20 @@
 </template>
 <script>
 import axios from "axios";
+import qs from 'qs'
 
 export default {
   name: "Zone",
   data() {
     return {
+
       carpark: null,
       voucher: null,
+      voucherID: null,
+      file: null,
+      image: null,
+      name: null,
+
       carparkID: 'null',
       carparkName: null,
       selectedVoucher: null,
@@ -384,6 +416,31 @@ export default {
     };
   },
   methods: {
+    processFile() {
+      let formData = new FormData();
+      formData.append('imgUploader', this.file);
+      axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'x-access-token': JSON.parse(this.token)
+                }
+              }
+            ).then(response => {
+              this.image = response.data
+              console.log('SUCCESS!!', response.data);
+        })
+        .catch(function(ex){
+          console.log(ex);
+        });
+
+    },
+    handleFileUpload() {
+       this.file = this.$refs.file.files[0];
+       console.log("File:", this.file)
+       this.processFile();
+    },
     addVocuher() {
       axios
         .get(
@@ -442,6 +499,72 @@ export default {
                 }, 1000)
               }
           });
+    },
+    viewVoucherUpdate(value) {
+      document.getElementById('myModal5').style.display = "none";
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/vouchers/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedVoucher = response.data;
+                this.showSelectedVoucher()
+            });
+    },
+    updateVoucher(value) {
+        this.validated = true;
+        document.getElementById('myModalUpdate').style.display = "none";
+        axios({
+                method: 'put',
+                url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/vouchers/${value}`,
+                data: qs.stringify({
+                    name: this.name,
+                    image: this.image,
+                    carparkID: this.carparkID
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token': JSON.parse(this.token)
+                },
+            }).then(response => {
+                if (response.status == 200) {
+                    setTimeout(() => {
+                        swal({
+                            title: 'Update it successfully',
+                            icon: 'success'
+                        })
+                    }, 200)
+                    setTimeout(() => {
+                        window.location.href = '/carparks/voucher'
+                    }, 1000)
+                }
+
+
+            })
+            .catch(error => {
+                if (error.message == 'Request failed with status code 401') {
+                    setTimeout(() => {
+                        swal({
+                            title: 'Your or password is wrong',
+                            icon: 'error'
+                        })
+                    }, 1000)
+                }
+
+            });
+
+    },
+    showSelectedVoucher() {
+      this.selectedVoucher.forEach((el) => {
+          this.name = el.name;
+          this.image = el.image;
+          this.voucherID = el.id;
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');

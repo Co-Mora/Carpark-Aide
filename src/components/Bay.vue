@@ -1,8 +1,40 @@
 
 
 <template>
-
 <div v-show="isLoggedIn">
+  <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content animated bounceInRight">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  <h4 class="modal-title">{{streetName}}</h4>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group">
+                      <label>Bay Name</label>
+                      <input type=" text" v-model="name" placeholder="Enter Bay Name" class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label>Lat Name</label>
+                      <input type=" text" v-model="lat" placeholder="Enter Lat Name" class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label>Lon Name</label>
+                      <input type=" text" v-model="lon" placeholder="Enter Lon Name" class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label>Image Name</label>
+                      <input type="file" ref="file" @change="handleFileUpload()"  class="form-control">
+                      <img style="width: 10%" :src="image" />
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" @click="updateBay(bayID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
     <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -27,7 +59,9 @@
                                     <td class="center">{{streetName || 'Unknown'}}</td>
                                     <td class="center">{{bay.name || 'Unknown'}}</td>
                                     <td><button class="pull-right btn btn-danger btn-sm" :value="bay.id" @click="deleteBay(bay.id)">Delete</button></td>
-                                    <td><button class="pull-right btn btn-primary btn-sm" :value="bay.id" @click="updateCarpark(bay.id)">Update</button></td>
+                                    <td>
+                                        <button class="pull-right btn btn-primary btn-sm" :value="bay.id" @click="viewBayUpdate(bay.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,17 +82,6 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                             <img alt="image" class="rounded-circle" :src="Image" />
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="block m-t-xs font-bold">Admin</span>
-                                <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
-                            </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/">Logout</a></li>
-                            </ul>
                         </div>
                         <div class="logo-element">
                             IN+
@@ -352,7 +375,6 @@
                                                 <td class="center">{{b.name || 'Unknown'}}</td>
                                                 <td class="center">{{b.lat || 'Unknown'}}</td>
                                                 <td class="center">{{b.lon || 'Unknown'}}</td>
-
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -388,6 +410,7 @@
 <script>
 
 import axios from 'axios'
+import qs from 'qs'
 
 export default {
     name: 'Zone',
@@ -397,7 +420,15 @@ export default {
             zone: null,
             streets: null,
             streetID: null,
+
+            lat: null,
+            lon: null,
+            name: null,
+            image: null,
+            file: null,
+
             bays: null,
+            bayID: null,
             zoneID: 'null',
             streetName: null,
             carparkID: 'null',
@@ -408,6 +439,31 @@ export default {
         }
     },
     methods: {
+        processFile() {
+          let formData = new FormData();
+          formData.append('imgUploader', this.file);
+          axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+                    formData,
+                    {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'x-access-token': JSON.parse(this.token)
+                    }
+                  }
+                ).then(response => {
+                  this.image = response.data
+                  console.log('SUCCESS!!', response.data);
+            })
+            .catch(function(ex){
+              console.log(ex);
+            });
+
+        },
+        handleFileUpload() {
+           this.file = this.$refs.file.files[0];
+           console.log("File:", this.file)
+           this.processFile();
+        },
         filterZone() {
                 axios
                     .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`, {
@@ -422,7 +478,7 @@ export default {
                         console.log(this.zone)
                     })
             },
-            filterZoneByStreet() {
+        filterZoneByStreet() {
                 axios
                     .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets`, {
                         headers: {
@@ -498,6 +554,76 @@ export default {
                         }, 1000)
                       }
                   });
+            },
+            viewBayUpdate(value) {
+              document.getElementById('myModal5').style.display = "none";
+                axios
+                    .get(
+                        `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays/${value}`, {
+                            headers: {
+                                "x-access-token": JSON.parse(this.token)
+                            }
+                        }
+                    )
+                    .then(response => {
+                        this.selectedBay = response.data;
+                        this.showSelectedBay()
+                    });
+            },
+            updateBay(value) {
+                this.validated = true;
+                document.getElementById('myModalUpdate').style.display = "none";
+                axios({
+                        method: 'put',
+                        url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays/${value}`,
+                        data: qs.stringify({
+                            name: this.name,
+                            image: this.image,
+                            lon: this.lon,
+                            lat: this.lat,
+                            streetID: this.streetID
+                        }),
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'x-access-token': JSON.parse(this.token)
+                        },
+                    }).then(response => {
+                        if (response.status == 200) {
+                            setTimeout(() => {
+                                swal({
+                                    title: 'Update it successfully',
+                                    icon: 'success'
+                                })
+                            }, 200)
+                            setTimeout(() => {
+                                window.location.href = '/carparks/bay'
+                            }, 1000)
+                        }
+
+
+                    })
+                    .catch(error => {
+                        if (error.message == 'Request failed with status code 401') {
+                            setTimeout(() => {
+                                swal({
+                                    title: 'Your or password is wrong',
+                                    icon: 'error'
+                                })
+                            }, 1000)
+                        }
+
+                    });
+
+            },
+            showSelectedBay() {
+              this.selectedBay.forEach((el) => {
+                  this.name = el.name;
+                  this.lat = el.lat
+                  this.lon = el.lon
+                  this.image = el.image;
+                  this.bayID = el.id;
+
+              })
             },
             logout() {
                 localStorage.removeItem('isLogged');

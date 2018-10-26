@@ -1,5 +1,32 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content animated bounceInRight">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{wheelMastersName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                          <label>Pole Name</label>
+                          <input type="text" v-model="name" placeholder="Enter Pole Name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Remark Name</label>
+                          <input type=" text" v-model="remark" placeholder="Enter Remark Name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>BayID</label>
+                          <input type=" text" v-model="bayID" placeholder="Enter BayID" class="form-control">
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" @click="updatePole(poleID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
       <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -27,8 +54,9 @@
                                       <td>{{pole.bayID || 'Unknown'}}</td>
                                       <td>{{pole.mac || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="pole.id" @click="deletePole(pole.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="pole.id" @click="updateCarpark(pole.id)">Update</button></td>
-
+                                      <td>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="pole.id" @click="viewPoleUpdate(pole.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                      </td>
                                   </tr>
                               </tbody>
                           </table>
@@ -388,6 +416,12 @@ export default {
       selectedPole: null,
       Istrigger: null,
       poles: null,
+      poleID: null,
+
+      name: null,
+      remark: null,
+      bayID: null,
+
       poleMasters: null,
       selected: null,
       carparkID: null,
@@ -467,6 +501,74 @@ export default {
                 }, 1000)
               }
           });
+    },
+    viewPoleUpdate(value) {
+      document.getElementById('myModal5').style.display = "none";
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheelpoles/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedPole = response.data;
+                this.showSelectedPole()
+            });
+
+    },
+    updatePole(value) {
+        this.validated = true;
+        document.getElementById('myModalUpdate').style.display = "none";
+        axios({
+                method: 'put',
+                url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks/${value}`,
+                data: qs.stringify({
+                    name: this.name,
+                    remark: this.remark,
+                    wheelmasterID: this.wheelmasterID
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token': JSON.parse(this.token)
+                },
+            }).then(response => {
+                if (response.status == 200) {
+                    console.log(response.data)
+                    setTimeout(() => {
+                        swal({
+                            title: 'Update it successfully',
+                            icon: 'success'
+                        })
+                    }, 200)
+                    setTimeout(() => {
+                        window.location.href = '/wheel/pole'
+                    }, 1000)
+                }
+
+
+            })
+            .catch(error => {
+                if (error.message == 'Request failed with status code 401') {
+                    setTimeout(() => {
+                        swal({
+                            title: 'Your or password is wrong',
+                            icon: 'error'
+                        })
+                    }, 1000)
+                }
+            });
+
+    },
+    showSelectedPole() {
+      this.selectedPole.forEach((el) => {
+          this.name = el.name;
+          this.remark = el.remark;
+          this.poleID = el.id;
+          this.bayID = el.bayID
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');

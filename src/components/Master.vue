@@ -1,5 +1,28 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content animated bounceInRight">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">{{carparkName}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                          <label>Master Name</label>
+                          <input type="text" v-model="name" placeholder="Enter Master Name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label>Remark Count</label>
+                          <input type=" text"  v-model="remark" placeholder="Enter Remark Name" class="form-control">
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" @click="updateMaster(masterID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
          <div id="wrapper">
            <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
                <div class="modal-dialog modal-lg">
@@ -25,8 +48,9 @@
                                            <td class="center">{{carparkName || 'Unknown'}}</td>
                                            <td class="center">{{master.name || 'Unknown'}}</td>
                                            <td><button class="pull-right btn btn-danger btn-sm" :value="master.id" @click="deleteMaster(master.id)">Delete</button></td>
-                                           <td><button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="updateCarpark(master.id)">Update</button></td>
-
+                                           <td>
+                                               <button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="viewMasterUpdate(master.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                           </td>
                                        </tr>
                                    </tbody>
                                </table>
@@ -363,6 +387,8 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
+
 import NavSide from './NavSide'
 export default {
   name: 'Master',
@@ -371,6 +397,11 @@ export default {
     return {
       carpark: null,
       masters: null,
+
+      masterID: null,
+      name: null,
+      remark: null,
+
       carparkID: 'null',
       carparkName: null,
       selectedMaster: null,
@@ -435,6 +466,74 @@ export default {
                 }, 1000)
               }
           });
+    },
+    viewMasterUpdate(value) {
+      document.getElementById('myModal5').style.display = "none";
+        axios
+            .get(
+                `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${value}`, {
+                    headers: {
+                        "x-access-token": JSON.parse(this.token)
+                    }
+                }
+            )
+            .then(response => {
+                this.selectedMaster = response.data;
+                this.showSelectedMaster()
+            });
+
+    },
+    updateMaster(value) {
+        this.validated = true;
+        document.getElementById('myModalUpdate').style.display = "none";
+        axios({
+                method: 'put',
+                url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${value}`,
+                data: qs.stringify({
+                    name: this.name,
+                    remark: this.remark,
+                    carparkID: this.carparkID
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token': JSON.parse(this.token)
+                },
+            }).then(response => {
+                if (response.status == 200) {
+                    console.log(response.data)
+                    setTimeout(() => {
+                        swal({
+                            title: 'Update it successfully',
+                            icon: 'success'
+                        })
+                    }, 200)
+                    setTimeout(() => {
+                        window.location.href = '/wheel/master'
+                    }, 1000)
+                }
+
+
+            })
+            .catch(error => {
+                if (error.message == 'Request failed with status code 401') {
+                    setTimeout(() => {
+                        swal({
+                            title: 'Your or password is wrong',
+                            icon: 'error'
+                        })
+                    }, 1000)
+                }
+
+            });
+
+    },
+    showSelectedMaster() {
+      this.selectedMaster.forEach((el) => {
+          this.name = el.name;
+          this.remark = el.remark;
+          this.masterID = el.id;
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');
