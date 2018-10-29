@@ -333,29 +333,6 @@
 
             </nav>
             </div>
-                <div class="ibox-content">
-
-                      <div class="col-lg-12">
-                           <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/carparks/street/add" class="btn btn-w-m btn-success">Add Street</a>
-                          </div>
-                           <div class="input-group" style="margin-bottom: 20px">
-                                <select v-model="carparkID" class="form-control m-b" @change="filterZone">
-                                    <option disabled value="null" key="null">Please Select Carpark Name</option>
-                                    <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                                </select>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 20px">
-                                <select v-model="zoneID" class="form-control m-b" @change="filterZoneByStreet">
-                                    <option disabled  selected value="null" key="null">Please Select Zone Name</option>
-                                    <option v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
-                                </select>
-                            </div>
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -364,6 +341,28 @@
                             <h5>Street (Carpark)</h5>
                         </div>
                         <div class="ibox-content">
+                            <div class="row">
+                              <div class="input-group" style="margin: 0 0 20px 16px">
+                                  <a href="/carparks/street/add" class="btn btn-w-m btn-success" style="border-radius: 6px">Add Street</a>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="carparkID" class="form-control m-b" @change="filterZone">
+                                    <option disabled value="null" key="null">Please Select Carpark Name</option>
+                                    <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="zoneID" class="form-control m-b" @change="filterZoneByStreet">
+                                    <option disabled  selected value="null" key="null">Please Select Zone Name</option>
+                                    <option v-for="z in zone" :value="z.id" :key="z">{{z.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="input-group"><input :value="searchResult" ref="my_search" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                    <button type="button"  @click.prevent="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                             </div>
+                            </div>
                             <div class="table-responsive">
                               <table class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
@@ -371,25 +370,24 @@
                                      <th data-hide="phone,tablet">id(s)</th>
                                      <th data-hide="phone,tablet">image</th>
                                      <th data-hide="phone,tablet">Zone Name</th>
-                                     <th data-hide="phone,tablet">name</th>
+                                     <th data-hide="phone,tablet">Street Name</th>
                                  </tr>
                                  </thead>
                                  <tbody>
-                                      <span v-show="streets == 0" style="font-size: 20px;">{{message}}</span>
-                                     <tr v-for="s in streets" :key="s" class="gradeX">
+                                     <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                     <tr v-for="s in streets" :key="s" class="gradeX" v-if="result == false && errorResult === false">
                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewStreet(s.id)">{{'Level: ' + s.id || 'Unknown'}}</a></td>
                                          <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
                                          <td class="center">{{zoneName || 'Unknown'}}</td>
                                          <td class="center">{{s.name || 'Unknown'}}</td>
                                      </tr>
+                                     <tr v-for="search in mySearch" :key="search" class="gradeX" v-show="mySearch.length > 0">
+                                         <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewStreet(search.id)">{{'Level: ' + search.id || 'Unknown'}}</a></td>
+                                         <td class="center"><a :href="search.image"><img style="width: 10%" :src="search.image"></a></td>
+                                         <td class="center">{{zoneName || 'Unknown'}}</td>
+                                         <td class="center">{{search.name || 'Unknown'}}</td>
+                                     </tr>
                                  </tbody>
-                                 <tfoot>
-                                 <tr>
-                                     <td colspan="5">
-                                         <ul class="pagination float-right"></ul>
-                                     </td>
-                                 </tr>
-                                 </tfoot>
                              </table>
                             </div>
 
@@ -431,12 +429,57 @@ export default {
       carparkID: 'null',
       validated: false,
       zoneName: null,
+
+      result: false,
+      message: '',
+      searchResult: null,
+      errorResult: false,
+      mySearch: [],
+
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
-      message: null,
     }
   },
   methods: {
+    getSearchResult() {
+      this.searchResult = this.$refs.my_search.value
+      if(!this.searchResult) {
+        this.result = false;
+        this.mySearch = [];
+        this.errorResult = false;
+        this.message = ''
+        return false
+      }
+      console.log(this.levels)
+      this.streets.forEach((el) => {
+        if(this.searchResult.length === 0) {
+            return false
+        }
+        if(this.searchResult.toLowerCase() === el.name.toLowerCase() || this.searchResult.toUpperCase() === el.name.toUpperCase()) {
+          this.mySearch.push(el)
+          console.log(this.mySearch)
+          this.result = true;
+          this.errorResult = false;
+          //window.location.href=`/carparks?search=${this.searchResult}`
+
+        } else {
+          this.errorResult = true;
+          this.message = 'No Avaliable Data'
+          return false;
+        }
+      })
+      this.mySearch.forEach((el) => {
+        if(this.searchResult.toLowerCase() !== el.name.toLowerCase() || this.searchResult.toUpperCase() !== el.name.toUpperCase()) {
+          this.mySearch = [];
+          this.errorResult = true;
+          this.message = "No Avaliable Data"
+        } else {
+          this.message = ""
+          this.errorResult = false;
+        }
+      })
+
+    },
     processFile() {
       let formData = new FormData();
       formData.append('imgUploader', this.file);
@@ -477,9 +520,9 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.streets = response.data
-            if(this.streets.length === 0) {
-                  this.message = "Threre's no carpark";
-            }
+            // if(this.streets.length === 0) {
+            //       this.message = "Threre's no carpark";
+            // }
         })
         this.zone.forEach((el) => {
            if(el.id === this.zoneID) {
@@ -498,9 +541,9 @@ export default {
             )
             .then(response => {
                 this.selectedStreet = response.data;
-                if (this.selectedStreet.length === 0) {
-                    this.message = "Threre's no carpark";
-                }
+                // if (this.selectedStreet.length === 0) {
+                //     this.message = "Threre's no carpark";
+                // }
             });
 
     },

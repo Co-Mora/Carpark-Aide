@@ -91,17 +91,6 @@
                         <li class="nav-header">
                             <div class="dropdown profile-element">
                                 <img alt="image" class="rounded-circle" :src="Image" />
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <span class="block m-t-xs font-bold">Admin</span>
-                                    <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
-                                </a>
-                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                    <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                    <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/">Logout</a></li>
-                                </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
@@ -334,23 +323,6 @@
 
             </nav>
             </div>
-                <div class="ibox-content">
-                    <div class="col-lg-12">
-                        <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/carparks/level/add" class="btn btn-w-m btn-success">Add Level</a>
-                        </div>
-                        <div class="input-group">
-                            <select v-model="carparkID" class="form-control m-b" @change="addLevel">
-                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                            </select>
-                        </div>
-
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -359,7 +331,22 @@
                             <h5>Levels</h5>
                         </div>
                         <div class="ibox-content">
-
+                            <div class="row">
+                              <div class="input-group" style="margin: 0 0 20px 16px">
+                                  <a href="/carparks/level/add" class="btn btn-w-m btn-success" style="border-radius: 6px">Add Level</a>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="carparkID" class="form-control m-b" @change="addLevel">
+                                    <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                    <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="input-group"><input :value="searchResult" ref="my_search" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                    <button type="button"  @click.prevent="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                             </div>
+                            </div>
                             <div class="table-responsive">
                               <table class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
@@ -374,8 +361,8 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                       <span v-show="levels == 0" style="font-size: 20px;">{{message}}</span>
-                                      <tr v-for="level in levels" :key="level" class="gradeU">
+                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                      <tr v-for="level in levels" :key="level" class="gradeU" v-if="result == false && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(level.id)">{{'Level: ' + level.id || 'Unknown'}}</a></td>
                                           <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
                                           <td class="center">{{carparkName || 'Unknown'}}</td>
@@ -384,14 +371,21 @@
                                            <td class="center">{{level.NonReservedCount || 'Unknown'}}</td>
                                            <td class="center">{{level.MotorcycleCount || 'Unknown'}}</td>
                                       </tr>
+                                      <tr v-for="search in mySearch" :key="search" class="gradeU" v-show="mySearch.length > 0">
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(search.id)">{{'Level: ' + search.id || 'Unknown'}}</a></td>
+                                          <td class="center"><a :href="search.image"><img style="width: 10%" :src="search.image"></a></td>
+                                          <td class="center">{{carparkName || 'Unknown'}}</td>
+                                           <td class="center">{{search.name || 'Unknown'}}</td>
+                                           <td class="center">{{search.TandemCount || 'Unknown'}}</td>
+                                           <td class="center">{{search.NonReservedCount || 'Unknown'}}</td>
+                                           <td class="center">{{search.MotorcycleCount || 'Unknown'}}</td>
+                                      </tr>
                                   </tbody>
                               </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
             <div class="footer">
@@ -427,12 +421,56 @@ export default {
       validated: false,
       levelID: null,
 
-      message: null,
+      result: false,
+      message: '',
+      searchResult: null,
+      errorResult: false,
+      mySearch: [],
+
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
   methods: {
+    getSearchResult() {
+      this.searchResult = this.$refs.my_search.value
+      if(!this.searchResult) {
+        this.result = false;
+        this.mySearch = [];
+        this.errorResult = false;
+        this.message = ''
+        return false
+      }
+      console.log(this.levels)
+      this.levels.forEach((el) => {
+        if(this.searchResult.length === 0) {
+            return false
+        }
+        if(this.searchResult.toLowerCase() === el.name.toLowerCase() || this.searchResult.toUpperCase() === el.name.toUpperCase()) {
+          this.mySearch.push(el)
+          console.log(this.mySearch)
+          this.result = true;
+          this.errorResult = false;
+          //window.location.href=`/carparks?search=${this.searchResult}`
+
+        } else {
+          this.errorResult = true;
+          this.message = 'No Avaliable Data'
+          return false;
+        }
+      })
+      this.mySearch.forEach((el) => {
+        if(this.searchResult.toLowerCase() !== el.name.toLowerCase() || this.searchResult.toUpperCase() !== el.name.toUpperCase()) {
+          this.mySearch = [];
+          this.errorResult = true;
+          this.message = "No Avaliable Data"
+        } else {
+          this.message = ""
+          this.errorResult = false;
+        }
+      })
+
+    },
     processFile() {
       let formData = new FormData();
       formData.append('imgUploader', this.file);

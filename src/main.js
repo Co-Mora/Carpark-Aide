@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import VueSwal from 'vue-swal'
 import VueResource from 'vue-resource'
 import { createRouter } from './router/router'
+import VueSelect from 'vue-cool-select'
 
 
 const router = createRouter()
@@ -12,6 +13,10 @@ new Vue({
   render: h => h(App)
 
 }).$mount('#app')
+
+Vue.use(VueSelect, {
+  theme: 'bootstrap' // or 'material-design'
+})
 
 Vue.use(VueRouter)
 Vue.use(VueSwal)

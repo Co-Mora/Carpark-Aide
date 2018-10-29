@@ -334,36 +334,34 @@
                     </ul>
                 </nav>
             </div>
-
-            <div class="ibox-content">
-
-                <div class="col-lg-12">
-                    <div class="input-group" style="margin-bottom: 20px">
-                        <a href="/carparks/zone/add" class="btn btn-w-m btn-success">Add Zone</a>
-                    </div>
-
-                    <div class="input-group">
-                        <select v-model="carparkID" class="form-control m-b" @change="addZone">
-                            <option disabled value="null" key="null">Please Select Carpark Name</option>
-                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                        </select>
-                    </div>
-
-                </div>
-                <div class="col-lg-2">
-
-                </div>
-            </div>
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="ibox ">
+                        <div class="ibox-content">
                             <div class="ibox-title">
-                                <h5>Zone (Carpark)</h5>
+                                <h5>Zone {{$route.query.search}}</h5>
                             </div>
                             <div class="ibox-content">
+                                <div class="row">
+                                  <div class="input-group" style="margin: 0 0 20px 16px">
+                                      <a href="/carparks/zone/add" class="btn btn-w-m btn-success" style="border-radius: 6px">Add Zone</a>
+                                  </div>
+                                   <div class="col-sm-9 m-b-xs">
+                                     <select v-model="carparkID" class="form-control m-b" @change="addZone">
+                                         <option disabled value="null" key="null">Please Select Carpark Name</option>
+                                         <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                                     </select>
+                                   </div>
+                                   <div class="col-sm-3">
+
+                                       <div class="input-group"><input :value="searchResult" ref="my_search" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                         <button type="button"  @click.prevent="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                       </div>
+
+                                  </div>
+                                </div>
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover dataTables-example">
+                                    <table class="table table-striped">
                                         <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet">id(s)</th>
@@ -376,8 +374,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <span v-show="zone == 0" style="font-size: 20px;">{{message}}</span>
-                                            <tr v-for="z in zone" :key="z" class="gradeX">
+                                            <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                            <tr v-for="z in zone" :key="z" class="gradeX" v-if="result == false && errorResult === false">
                                                 <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZone(z.id)">{{'Zone: ' + z.id || 'Unknown'}}</a></td>
                                                 <td class="center">
                                                     <a :href="z.image"><img style="width: 10%" :src="z.image"></a>
@@ -387,6 +385,17 @@
                                                 <td class="center">{{z.TandemCount || 0}}</td>
                                                 <td class="center">{{z.NonReservedCount || 0}}</td>
                                                 <td class="center">{{z.MotorcycleCount || 0}}</td>
+                                            </tr>
+                                            <tr v-for="search in mySearch" :key="z" class="gradeX" v-show="mySearch.length > 0">
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZone(search.id)">{{'Zone: ' + search.id || 0}}</a></td>
+                                                <td class="center">
+                                                    <a :href="search.image"><img style="width: 10%" :src="search.image"></a>
+                                                </td>
+                                                <td class="center">{{carparkName || 'Unknown'}}</td>
+                                                <td class="center">{{search.name || 'Unknown'}}</td>
+                                                <td class="center">{{search.TandemCount || 0}}</td>
+                                                <td class="center">{{search.NonReservedCount || 0}}</td>
+                                                <td class="center">{{search.MotorcycleCount || 0}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -415,6 +424,8 @@
 
 import axios from "axios";
 import qs from 'qs'
+import { CoolSelect } from 'vue-cool-select'
+
 
 export default {
     name: "Zone",
@@ -430,16 +441,60 @@ export default {
             nonReservedCount: null,
             motorcycleCount: null,
             validated: false,
+
             selectedZone: null,
             carparkID: 'null',
             zoneID: null,
             carparkName: null,
             token: localStorage.getItem("token"),
             isLoggedIn: localStorage.getItem("isLogged"),
-            message: null
+
+            result: false,
+            message: '',
+            searchResult: null,
+            errorResult: false,
+            mySearch: []
         };
     },
     methods: {
+      getSearchResult() {
+        this.searchResult = this.$refs.my_search.value
+        if(!this.searchResult) {
+          this.result = false;
+          this.mySearch = [];
+          this.errorResult = false;
+          this.message = ''
+          return false
+        }
+        this.zone.forEach((el) => {
+          if(this.searchResult.length === 0) {
+              return false
+          }
+          if(this.searchResult.toLowerCase() === el.name || this.searchResult.toUpperCase() === el.name) {
+            this.mySearch.push(el)
+            console.log(this.mySearch)
+            this.result = true;
+            this.errorResult = false;
+            //window.location.href=`/carparks?search=${this.searchResult}`
+
+          } else {
+            this.errorResult = true;
+            this.message = 'No Avaliable Data'
+            return false;
+          }
+        })
+        this.mySearch.forEach((el) => {
+          if(this.searchResult.toLowerCase() !== el.name.toLowerCase() || this.searchResult.toUpperCase() !== el.name.toUpperCase()) {
+            this.mySearch = [];
+            this.errorResult = true;
+            this.message = "No Avaliable Data"
+          } else {
+            this.message = ""
+            this.errorResult = false;
+          }
+        })
+
+      },
       processFile() {
         let formData = new FormData();
         formData.append('imgUploader', this.file);
@@ -477,7 +532,6 @@ export default {
                     .then(response => {
                         this.zone = response.data;
                         if (this.zone.length === 0) {
-                            this.message = "No Zone Found";
                         }
                     });
 
@@ -499,7 +553,7 @@ export default {
                     .then(response => {
                         this.selectedZone = response.data;
                         if (this.selectedZone.length === 0) {
-                            this.message = "No Zone Found";
+                            //this.message = "No Zone Found";
                         }
                     });
 
@@ -625,5 +679,7 @@ export default {
 
     },
 };
+
+
 
 </script>

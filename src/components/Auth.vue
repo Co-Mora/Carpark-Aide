@@ -65,7 +65,7 @@ export default {
                 this.token = response.data.token
                 this.isLoggedIn = true
                  const parsed = JSON.stringify(this.token)
-                localStorage.setItem('token', parsed);
+                 localStorage.setItem('token', parsed);
                  let loggedIn = JSON.stringify(this.isLoggedIn)
                 localStorage.setItem('isLogged', loggedIn);
                 localStorage.setItem('email', this.email);

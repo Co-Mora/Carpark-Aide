@@ -317,29 +317,6 @@
                 </ul>
             </nav>
             </div>
-                <div class="ibox-content">
-                    <div class="col-lg-12">
-                         <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/wheel/lock/add" class="btn btn-w-m btn-success">Add Lock</a>
-                          </div>
-                        <div class="input-group" style="margin-bottom: 20px">
-                            <select v-model="carparkID" class="form-control m-b" @change="filterMaster">
-                                <option disabled selected value="null" key="null">Please Select Carpark name</option>
-                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                            </select>
-                        </div>
-                        <div class="input-group" style="margin-bottom: 20px">
-                            <select v-model="wheelMastersID" class="form-control m-b" @change="filterLock">
-                            <option disabled selected value="null" key="null">Please select your wheel master</option>
-                            <option v-for="wheel in wheelMasters" :value="wheel.id" :key="wheel">{{wheel.name}}</option>
-                        </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-
-                    </div>
-                </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -348,6 +325,31 @@
                             <h5>Wheel Lock</h5>
                         </div>
                         <div class="ibox-content">
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <div class="input-group" style="margin-bottom: 20px">
+                                      <a href="/wheel/lock/add" class="btn btn-w-m btn-success">Add Lock</a>
+                                  </div>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="carparkID" class="form-control m-b" @change="addMaster">
+                                    <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                    <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="wheelMastersID" class="form-control m-b" @change="filterLock">
+                                  <option disabled selected value="null" key="null">Please select your wheel master</option>
+                                  <option v-for="wheel in wheelMasters" :value="wheel.id" :key="wheel">{{wheel.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="input-group">
+                                      <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                              </div>
+                          </div>
                             <div class="table-responsive">
                               <table class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
@@ -361,7 +363,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                       <span v-show="locks == 0" style="font-size: 20px;">{{message}}</span>
+                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                       <tr v-for="lock in locks" :key="lock" class="gradeX">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLock(lock.id)">{{'Lock: ' + lock.id || 'Unknown'}}</a></td>
                                           <td>{{lock.name || 'Unknown'}}</td>
@@ -427,14 +429,39 @@ export default {
       carparkID: null,
       wheelMastersID: null,
       wheelMastersName: null,
-      message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
+
+      result: false,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
+
     }
   },
 
   methods: {
-
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false
+        this.message = "";
+        this.filterLock();
+      }
+      axios
+          .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters?search=${this.searchResult}`, {
+              headers: {
+                  'x-access-token': JSON.parse(this.token)
+              }
+          })
+          .then(response => {
+              this.locks = response.data
+              if (this.locks.length === 0) {
+                      this.errorResult = true
+                      this.message = "No Data Avaliable";
+              }
+          })
+    },
     addTrigger(value) {
             axios
         .post(`https://sys2.parkaidemobile.com/api/wheellocks/${value}/trigger`, {
@@ -467,9 +494,6 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.locks = response.data
-            if(this.locks.length === 0) {
-                  this.message = "Threre's no carpark";
-            }
             if(this.Istrigger == 200 && this.locks.length > 0) {
 
 
@@ -493,9 +517,6 @@ export default {
             )
             .then(response => {
                 this.selectedLock = response.data;
-                if (this.selectedLock.length === 0) {
-                    this.message = "Threre's no carpark";
-                }
             });
 
     },

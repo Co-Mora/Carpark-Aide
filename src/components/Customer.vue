@@ -301,7 +301,7 @@
                     <div class="col-lg-12">
                         <div class="ibox ">
                             <div class="ibox-title">
-                                <h5>Customers</h5>
+                                <h5>Customers{{query}}</h5>
                             </div>
                             <div class="ibox-content">
                                 <div class="table-responsive">
