@@ -3,13 +3,11 @@
          <div class="middle-box text-center loginscreen animated fadeInDown">
         <div>
             <div>
-
                 <h1 class="logo-name">CA</h1>
 
             </div>
             <h3>Welcome to IN+</h3>
             <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
-                <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
             </p>
             <p>Login in. To see it in action.</p>
                 <div class="form-group">
@@ -22,7 +20,6 @@
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
         </div>
     </div>
-        <Carpark v-show="false" :loggedIn="loggedIn" />
     </div>
 </template>
 
@@ -30,8 +27,6 @@
 import axios from 'axios'
 import qs from 'qs'
 
-import NavSide from './NavSide'
-import Carpark from './Carpark'
 export default {
   name: 'Level',
 
@@ -44,9 +39,7 @@ export default {
       message: null,
     }
   },
-  components: {
-      Carpark
-  },
+
   methods: {
 
     auth() {
@@ -64,7 +57,7 @@ export default {
             if(response.data.auth == true) {
                 this.token = response.data.token
                 this.isLoggedIn = true
-                 const parsed = JSON.stringify(this.token)
+                 const parsed = JSON.stringify(this.token);
                  localStorage.setItem('token', parsed);
                  let loggedIn = JSON.stringify(this.isLoggedIn)
                 localStorage.setItem('isLogged', loggedIn);
@@ -87,9 +80,7 @@ export default {
     },
   },
 
-  mounted() {
 
-    },
 }
 
 </script>

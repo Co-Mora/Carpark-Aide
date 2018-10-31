@@ -336,10 +336,10 @@
                                 </select>
                               </div>
                               <div class="col-sm-3">
-                                  <div class="input-group">
-                                      <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
-                                  </div>
+                                <div class="input-group" style="margin-bottom: 20px">
+                                  <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                </div>
                               </div>
                           </div>
                             <div class="table-responsive">
@@ -354,7 +354,7 @@
                                  </thead>
                                  <tbody>
                                     <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                     <tr v-for="v in voucher" :key="v" class="gradeX" v-if="result == false && errorResult === false">
+                                     <tr v-for="v in voucher" :key="v" class="gradeX" v-if="result == true && errorResult === false">
                                        <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewVoucher(v.id)">{{'Voucher: ' + v.id || 'Unknown'}}</a></td>
                                          <td class="center"><a :href="v.image"><img style="width: 10%" :src="v.image"></a></td>
                                          <td class="center">{{carparkName || 'Unknown'}}</td>
@@ -410,9 +410,8 @@ export default {
       selectedVoucher: null,
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
-      carparkID: null,
 
-      result: false,
+      result: true,
       message: '',
       searchResult: '',
       errorResult: false,
@@ -422,23 +421,28 @@ export default {
   methods: {
     getSearchResult() {
       if(this.searchResult.length === 0) {
-        this.errorResult = false
+        this.errorResult = false;
         this.message = "";
         this.addVocuher()
       }
       axios
-          .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/vouchers?search=${this.searchResult}`, {
-              headers: {
-                  'x-access-token': JSON.parse(this.token)
-              }
-          })
-          .then(response => {
-              this.voucher = response.data
-              if (this.voucher.length === 0) {
-                      this.errorResult = true
-                      this.message = "No Data Avaliable";
-              }
-          })
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/vouchers?search=${this.searchResult}`, {
+          headers: {
+            'x-access-token': JSON.parse(this.token)
+          }
+        })
+        .then(response => {
+          this.voucher = response.data;
+          this.errorResult = false
+          this.message = "";
+          this.result = true;
+          if (this.voucher.length === 0) {
+            this.errorResult = true;
+            this.result = true;
+            this.message = "No Data Available";
+          }
+        })
+
     },
     processFile() {
       let formData = new FormData();

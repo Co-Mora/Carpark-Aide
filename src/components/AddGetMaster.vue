@@ -327,8 +327,8 @@ export default {
       } if (!this.remark) {
         this.errors.push('Please fill up the level image')
       } else {
-        this.errors = []
-        this.validated = true
+        this.errors = [];
+        this.validated = true;
         axios({
         method: 'post',
         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters`,

@@ -342,9 +342,10 @@
                                 </select>
                               </div>
                               <div class="col-sm-3">
-                                  <div class="input-group"><input :value="searchResult" ref="my_search" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                    <button type="button"  @click.prevent="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
-                                  </div>
+                                <div class="input-group" style="margin-bottom: 20px">
+                                  <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                </div>
                              </div>
                             </div>
                             <div class="table-responsive">
@@ -362,7 +363,7 @@
                                   </thead>
                                   <tbody>
                                       <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                      <tr v-for="level in levels" :key="level" class="gradeU" v-if="result == false && errorResult === false">
+                                      <tr v-for="level in levels" :key="level" class="gradeU" v-if="result == true && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(level.id)">{{'Level: ' + level.id || 'Unknown'}}</a></td>
                                           <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
                                           <td class="center">{{carparkName || 'Unknown'}}</td>
@@ -370,15 +371,6 @@
                                            <td class="center">{{level.TandemCount || 'Unknown'}}</td>
                                            <td class="center">{{level.NonReservedCount || 'Unknown'}}</td>
                                            <td class="center">{{level.MotorcycleCount || 'Unknown'}}</td>
-                                      </tr>
-                                      <tr v-for="search in mySearch" :key="search" class="gradeU" v-show="mySearch.length > 0">
-                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(search.id)">{{'Level: ' + search.id || 'Unknown'}}</a></td>
-                                          <td class="center"><a :href="search.image"><img style="width: 10%" :src="search.image"></a></td>
-                                          <td class="center">{{carparkName || 'Unknown'}}</td>
-                                           <td class="center">{{search.name || 'Unknown'}}</td>
-                                           <td class="center">{{search.TandemCount || 'Unknown'}}</td>
-                                           <td class="center">{{search.NonReservedCount || 'Unknown'}}</td>
-                                           <td class="center">{{search.MotorcycleCount || 'Unknown'}}</td>
                                       </tr>
                                   </tbody>
                               </table>
@@ -421,9 +413,9 @@ export default {
       validated: false,
       levelID: null,
 
-      result: false,
+      result: true,
       message: '',
-      searchResult: null,
+      searchResult: '',
       errorResult: false,
       mySearch: [],
 
@@ -433,42 +425,28 @@ export default {
   },
   methods: {
     getSearchResult() {
-      this.searchResult = this.$refs.my_search.value
-      if(!this.searchResult) {
-        this.result = false;
-        this.mySearch = [];
+      if(this.searchResult.length === 0) {
         this.errorResult = false;
-        this.message = ''
-        return false
+        this.message = "";
+        this.addLevel()
       }
-      console.log(this.levels)
-      this.levels.forEach((el) => {
-        if(this.searchResult.length === 0) {
-            return false
-        }
-        if(this.searchResult.toLowerCase() === el.name.toLowerCase() || this.searchResult.toUpperCase() === el.name.toUpperCase()) {
-          this.mySearch.push(el)
-          console.log(this.mySearch)
+      axios
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels?search=${this.searchResult}`, {
+          headers: {
+            'x-access-token': JSON.parse(this.token)
+          }
+        })
+        .then(response => {
+          this.levels = response.data;
+          this.errorResult = false
+          this.message = "";
           this.result = true;
-          this.errorResult = false;
-          //window.location.href=`/carparks?search=${this.searchResult}`
-
-        } else {
-          this.errorResult = true;
-          this.message = 'No Avaliable Data'
-          return false;
-        }
-      })
-      this.mySearch.forEach((el) => {
-        if(this.searchResult.toLowerCase() !== el.name.toLowerCase() || this.searchResult.toUpperCase() !== el.name.toUpperCase()) {
-          this.mySearch = [];
-          this.errorResult = true;
-          this.message = "No Avaliable Data"
-        } else {
-          this.message = ""
-          this.errorResult = false;
-        }
-      })
+          if (this.levels.length === 0) {
+            this.errorResult = true;
+            this.result = true;
+            this.message = "No Data Available";
+          }
+        })
 
     },
     processFile() {

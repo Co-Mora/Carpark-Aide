@@ -270,30 +270,41 @@
                             <h5>Countries</h5>
                         </div>
                         <div class="ibox-content">
-                             <table class="table table-striped table-bordered table-hover dataTables-example">
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="country == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="s in country" :key="s" class="gradeU">
-                                        <td class="center">{{s.id || 'Unknown'}}</td>
-                                        <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
-                                        <td class="center">{{s.name || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <div class="input-group" style="margin-bottom: 20px">
+                                      <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                              </div>
+                          </div>
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                 <thead>
+                                 <tr>
+                                     <th data-hide="phone,tablet">id(s)</th>
+                                     <th data-hide="phone,tablet">image</th>
+                                     <th data-hide="phone,tablet">name</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                     <tr v-for="s in country" :key="s" class="gradeU" v-if="result == true && errorResult === false">
+                                         <td class="center">{{s.id || 'Unknown'}}</td>
+                                         <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
+                                         <td class="center">{{s.name || 'Unknown'}}</td>
+                                     </tr>
+                                 </tbody>
+                                 <tfoot>
+                                 <tr>
+                                     <td colspan="5">
+                                         <ul class="pagination float-right"></ul>
+                                     </td>
+                                 </tr>
+                                 </tfoot>
+                             </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -327,10 +338,52 @@ export default {
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       carparkID: null,
-      message: null
+
+      result: true,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
     };
   },
   methods: {
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false
+        this.message = "";
+        axios
+          .get(
+            `https://sys2.parkaidemobile.com/api/country`,
+            { headers: { "x-access-token": JSON.parse(this.token) } }
+          )
+          .then(response => {
+            this.country = response.data;
+            this.countryID = response.data[0].id
+            if (this.country.length === 0) {
+              this.message = "No Data Found";
+            }
+          });
+      }
+        axios
+            .get(`https://sys2.parkaidemobile.com/api/country?search=${this.searchResult}`, {
+                headers: {
+                    'x-access-token': JSON.parse(this.token)
+                }
+            })
+            .then(response => {
+                this.country = response.data
+                this.errorResult = false
+                this.message = "";
+                this.result = true;
+                if (this.country.length === 0) {
+                        this.errorResult = true;
+                        this.result = true;
+                        this.message = "No Data Avaliable";
+                }
+            })
+
+
+    },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');

@@ -1,5 +1,28 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title">{{gateMasterName}}</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Pole Name</label>
+                <input type="text" v-model="name" placeholder="Enter Pole Name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Remark Name</label>
+                <input type=" text" v-model="remark" placeholder="Enter Remark Name" class="form-control">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" @click="updateGate(gateID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -23,7 +46,7 @@
                                   <tr v-for="gate in selectedGate" :key="z" class="gradeX">
                                       <td class="center">{{gate.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="gate.id" @click="deleteGate(gate.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="gate.id" @click="updateCarpark(gate.id)">Update</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="gate.id" @click="viewUpdateGate(gate.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button></td>
 
                                   </tr>
                               </tbody>
@@ -371,11 +394,18 @@
 </template>
 <script>
 import axios from "axios";
+import qs from 'qs'
 
 export default {
   name: "Zone",
   data() {
     return {
+
+      gateID: null,
+      validated: false,
+      name: null,
+      remark: null,
+
       carpark: null,
       gates: null,
       gateMaster: null,
@@ -385,7 +415,6 @@ export default {
       carparkID: 'null',
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
-      carparkID: null,
       message: null
     };
   },
@@ -463,6 +492,74 @@ export default {
                 }, 1000)
               }
           });
+    },
+    viewUpdateGate(value) {
+      document.getElementById('myModal5').style.display = "none";
+      axios
+        .get(
+          `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${this.gateMasterID}/gates/${value}`, {
+            headers: {
+              "x-access-token": JSON.parse(this.token)
+            }
+          }
+        )
+        .then(response => {
+          this.selectedGate = response.data;
+          this.showSelectedGate()
+        });
+
+    },
+    updateGate(value) {
+      this.validated = true;
+      document.getElementById('myModalUpdate').style.display = "none";
+      axios({
+        method: 'put',
+        url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${this.gateMasterID}/gates/${value}`,
+        data: qs.stringify({
+          name: this.name,
+          remark: this.remark,
+          gatemasterID: this.gateMasterID
+        }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'x-access-token': JSON.parse(this.token)
+        },
+      }).then(response => {
+        if (response.status == 200) {
+          console.log(response.data)
+          setTimeout(() => {
+            swal({
+              title: 'Update it successfully',
+              icon: 'success'
+            })
+          }, 200);
+          setTimeout(() => {
+            window.location.href = '/gates'
+          }, 1000)
+        }
+      })
+        .catch(error => {
+          if (error.message == 'Request failed with status code 500') {
+            setTimeout(() => {
+              swal({
+                title: 'No Data Found',
+                icon: 'error'
+              })
+            }, 400);
+            setTimeout(() => {
+              window.location.href = '/gates'
+            }, 1000)
+          }
+        });
+
+    },
+    showSelectedGate() {
+      this.selectedGate.forEach((el) => {
+        this.name = el.name;
+        this.remark = el.remark;
+        this.gateID = el.id;
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');

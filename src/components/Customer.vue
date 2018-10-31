@@ -301,9 +301,17 @@
                     <div class="col-lg-12">
                         <div class="ibox ">
                             <div class="ibox-title">
-                                <h5>Customers{{query}}</h5>
+                                <h5>Customers {{query}}</h5>
                             </div>
                             <div class="ibox-content">
+                              <div class="row">
+                                <div class="col-sm-8">
+                                  <div class="input-group" style="margin-bottom: 20px">
+                                    <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                                </div>
+                              </div>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered table-hover dataTables-example">
                                         <thead>
@@ -315,8 +323,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <span v-show="customers == 0" style="font-size: 20px;">{{message}}</span>
-                                            <tr v-for="cus in customers" :key="cus" class="gradeX">
+                                            <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                            <tr v-for="cus in customers" :key="cus" class="gradeX"  v-if="result == true && errorResult === false">
                                                 <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewCustomer(cus.id)">{{'Customer: ' + cus.id || 'Unknown'}}</a></td>
                                                 <td class="center">{{cus.name || 'Unknown'}}</td>
                                                 <td class="center">{{cus.contact1 || 'Unknown'}}</td>
@@ -366,10 +374,52 @@ export default {
             selectedCustomer: null,
             token: localStorage.getItem("token"),
             isLoggedIn: localStorage.getItem("isLogged"),
-            message: null
+            result: true,
+            message: '',
+            searchResult: '',
+            errorResult: false,
+            mySearch: [],
         };
     },
     methods: {
+      getSearchResult() {
+        if(this.searchResult.length === 0) {
+          this.errorResult = false;
+          this.message = "";
+          axios
+            .get(
+              `https://sys2.parkaidemobile.com/api/customers`, {
+                headers: {
+                  "x-access-token": JSON.parse(this.token)
+                }
+              }
+            )
+            .then(response => {
+              this.customers = response.data;
+              if (this.customers.length === 0) {
+                this.message = "Customer NOt Found";
+              }
+            });
+        }
+        axios
+          .get(`https://sys2.parkaidemobile.com/api/customers?search=${this.searchResult}`, {
+            headers: {
+              'x-access-token': JSON.parse(this.token)
+            }
+          })
+          .then(response => {
+            this.customers = response.data;
+            this.errorResult = false;
+            this.message = "";
+            this.result = true;
+            if (this.customers.length === 0) {
+              this.errorResult = true;
+              this.result = true;
+              this.message = "No Data Available";
+            }
+          })
+
+      },
       viewCustomer(value) {
           axios
               .get(

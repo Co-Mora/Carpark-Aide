@@ -250,26 +250,6 @@
                 </ul>
             </nav>
             </div>
-
-                <div class="ibox-content">
-
-                      <div class="col-lg-6">
-                          <!-- <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/cities/add" class="btn btn-w-m btn-success">Add Country</a>
-                          </div> -->
-
-                          <div class="input-group">
-                            <select v-model="countryID" class="form-control m-b" @change="getState">
-                                <option disabled selected value="null" key="null">Please Select Country Name</option>
-                                <option v-for="cout in country" :value="cout.id" :key="s">{{cout.name}}</option>
-                            </select>
-                          </div>
-
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -278,33 +258,47 @@
                             <h5>States</h5>
                         </div>
                         <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="Search in table">
+                          <div class="row">
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="countryID" class="form-control m-b" @change="getState">
+                                    <option disabled selected value="null" key="null">Please Select Country Name</option>
+                                    <option v-for="cout in country" :value="cout.id" :key="s">{{cout.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="input-group">
+                                      <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                              </div>
+                          </div>
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                                 <thead>
+                                 <tr>
+                                     <th data-hide="phone,tablet">id(s)</th>
+                                     <th data-hide="phone,tablet">image</th>
+                                     <th data-hide="phone,tablet">name</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                     <tr v-for="s in state" :key="s" class="gradeU" v-if="result == true && errorResult === false">
+                                         <td class="center">{{s.id || 'Unknown'}}</td>
+                                         <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
+                                         <td class="center">{{s.name || 'Unknown'}}</td>
+                                     </tr>
+                                 </tbody>
+                                 <tfoot>
+                                 <tr>
+                                     <td colspan="5">
+                                         <ul class="pagination float-right"></ul>
+                                     </td>
+                                 </tr>
+                                 </tfoot>
+                              </table>
+                            </div>
 
-                             <table class="table table-striped table-bordered table-hover dataTables-example">
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">image</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="state == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="s in state" :key="s" class="gradeU">
-                                        <td class="center">{{s.id || 'Unknown'}}</td>
-                                        <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
-                                        <td class="center">{{s.name || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -338,10 +332,42 @@ export default {
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       carparkID: null,
-      message: null
+
+      result: true,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
+
     };
   },
   methods: {
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false
+        this.message = "";
+        this.getState()
+      }
+        axios
+            .get(`https://sys2.parkaidemobile.com/api/country/${this.countryID}/state?search=${this.searchResult}`, {
+                headers: {
+                    'x-access-token': JSON.parse(this.token)
+                }
+            })
+            .then(response => {
+                this.state = response.data
+                this.errorResult = false
+                this.message = "";
+                this.result = true;
+                if (this.state.length === 0) {
+                        this.errorResult = true;
+                        this.result = true;
+                        this.message = "No Data Avaliable";
+                }
+            })
+
+
+    },
     getState() {
       axios
         .get(

@@ -299,26 +299,6 @@
 
             </nav>
             </div>
-                <div class="ibox-content">
-
-                      <div class="col-lg-12">
-                           <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/parker/add" class="btn btn-w-m btn-success">Add Parker</a>
-                          </div>
-                           <div class="input-group" style="margin-bottom: 20px">
-                                <select v-model="customerID" class="form-control m-b" @change="filterByParker">
-                                    <option disabled value="null" key="null">Please Select Customer Name</option>
-                                    <option v-for="cus in customer" :value="cus.id" :key="cus">{{cus.name}}</option>
-                                </select>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 20px">
-                                <select v-model="customerParkerID" class="form-control m-b" @change="getParker">
-                                    <option disabled  selected value="null" key="null">Please Select Parker Name</option>
-                                    <option v-for="p in customerParker" :value="p.id" :key="p">{{p.name}}</option>
-                                </select>
-                            </div>
-                    </div>
-                </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -327,6 +307,31 @@
                             <h5>Parkers</h5>
                         </div>
                         <div class="ibox-content">
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <div class="input-group" style="margin-bottom: 20px">
+                                <a href="/parker/add" class="btn btn-w-m btn-success">Add Parker</a>
+                              </div>
+                            </div>
+                            <div class="col-sm-9 m-b-xs">
+                              <select v-model="customerID" class="form-control m-b" @change="filterByParker">
+                                <option disabled value="null" key="null">Please Select Customer Name</option>
+                                <option v-for="cus in customer" :value="cus.id" :key="cus">{{cus.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-9 m-b-xs">
+                              <select v-model="customerParkerID" class="form-control m-b" @change="getParker">
+                                <option disabled  selected value="null" key="null">Please Select Parker Name</option>
+                                <option v-for="p in customerParker" :value="p.id" :key="p">{{p.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="input-group">
+                                <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                              </div>
+                            </div>
+                          </div>
                             <div class="table-responsive">
                               <table class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
@@ -341,8 +346,8 @@
                                  </tr>
                                  </thead>
                                  <tbody>
-                                      <span v-show="parker == 0" style="font-size: 20px;">{{message}}</span>
-                                     <tr v-for="p in parker" :key="s" class="gradeX">
+                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                     <tr v-for="p in parker" :key="s" class="gradeX" v-if="result == true && errorResult === false">
                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewParker(p.id)">{{'Parker: ' + p.id || 'Unknown'}}</a></td>
                                          <td class="center">{{p.name || 'Unknown'}}</td>
                                          <td class="center">{{parkerDate || 'Unknown'}}</td>
@@ -397,20 +402,45 @@ export default {
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
       username: localStorage.getItem('email'),
-      message: null,
+
+      result: true,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
     }
   },
   methods: {
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false;
+        this.message = "";
+        this.getParker()
+      }
+      axios
+        .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers/${this.customerParkerID}?search=${this.searchResult}`, {
+          headers: {
+            'x-access-token': JSON.parse(this.token)
+          }
+        })
+        .then(response => {
+          this.parker = response.data;
+          this.errorResult = false;
+          this.message = "";
+          this.result = true;
+          if (this.parker.length === 0) {
+            this.errorResult = true;
+            this.message = "No Data Available";
+          }
+        })
+    },
     filterByParker() {
         axios
         .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.customerParker = response.data
-            this.customerParkerID = response.data[0].id
-            this.getParker()
-            if(this.customerParker.length === 0) {
-                  this.message = "Threre's no carpark";
-            }
+            this.customerParkerID = response.data[0].id;
+            this.getParker();
         })
     },
     getParker() {
@@ -432,10 +462,8 @@ export default {
                  formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                  this.parkerDate = formattedTime
                }
-            })
-            if(this.parker.length === 0) {
-                  this.message = "Threre's no carpark";
-            }
+            });
+
         })
     },
     viewParker(value) {
@@ -449,9 +477,7 @@ export default {
             )
             .then(response => {
                 this.selectedParker = response.data;
-                if (this.selectedParker.length === 0) {
-                    this.message = "Threre's no carpark";
-                }
+
             });
 
     },
@@ -466,7 +492,7 @@ export default {
     axios
       .get('https://sys2.parkaidemobile.com/api/customers',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
-        this.customer   = response.data
+        this.customer   = response.data;
         this.customerID = response.data[0].id;
         this.filterByParker()
       })

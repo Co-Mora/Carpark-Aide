@@ -251,17 +251,6 @@
             </nav>
             </div>
 
-                <!-- <div class="ibox-content">
-
-                      <div class="col-lg-6">
-                          <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/cities/add" class="btn btn-w-m btn-success">Add Country</a>
-                          </div>
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                </div> -->
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -270,31 +259,43 @@
                             <h5>Staffs</h5>
                         </div>
                         <div class="ibox-content">
-                             <table class="table table-striped table-bordered table-hover dataTables-example">
-                                <thead>
-                                <tr>
-                                    <th data-hide="phone,tablet">id(s)</th>
-                                    <th data-hide="phone,tablet">name</th>
-                                    <th data-hide="phone,tablet">Address</th>
+                          <div class="row">
+                            <div class="col-sm-8">
+                              <div class="input-group" style="margin-bottom: 20px">
+                                <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <thead>
+                              <tr>
+                                <th data-hide="phone,tablet">id(s)</th>
+                                <th data-hide="phone,tablet">name</th>
+                                <th data-hide="phone,tablet">Address</th>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <span v-show="staff == 0" style="font-size: 20px;">{{message}}</span>
-                                    <tr v-for="s in staff" :key="s" class="gradeU">
-                                        <td class="center">{{s.id || 'Unknown'}}</td>
-                                        <td class="center">{{s.name || 'Unknown'}}</td>
-                                        <td class="center">{{s.address || 'Unknown'}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                              <tr v-for="s in staff" :key="s" class="gradeU"  v-if="result == true && errorResult === false">
+                                <td class="center">{{s.id || 'Unknown'}}</td>
+                                <td class="center">{{s.name || 'Unknown'}}</td>
+                                <td class="center">{{s.address || 'Unknown'}}</td>
+                              </tr>
+                              </tbody>
+                              <tfoot>
+                              <tr>
+                                <td colspan="5">
+                                  <ul class="pagination float-right"></ul>
+                                </td>
+                              </tr>
+                              </tfoot>
                             </table>
+
+                          </div>
+
                         </div>
                     </div>
                 </div>
@@ -325,10 +326,53 @@ export default {
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       carparkID: null,
-      message: null
+      result: true,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
+
     };
   },
   methods: {
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false;
+        this.message = "";
+        axios
+          .get(
+            `https://sys2.parkaidemobile.com/api/staffs`, {
+              headers: {
+                "x-access-token": JSON.parse(this.token)
+              }
+            }
+          )
+          .then(response => {
+            this.staff = response.data;
+            if (this.staff.length === 0) {
+              this.message = "Customer NOt Found";
+            }
+          });
+      }
+      axios
+        .get(`https://sys2.parkaidemobile.com/api/staffs?search=${this.searchResult}`, {
+          headers: {
+            'x-access-token': JSON.parse(this.token)
+          }
+        })
+        .then(response => {
+          this.staff = response.data;
+          this.errorResult = false;
+          this.message = "";
+          this.result = true;
+          if (this.staff.length === 0) {
+            this.errorResult = true;
+            this.result = true;
+            this.message = "No Data Available";
+          }
+        })
+
+    },
     logout() {
       localStorage.removeItem('isLogged');
       localStorage.removeItem('token');
@@ -342,10 +386,7 @@ export default {
       )
       .then(response => {
         this.staff = response.data;
-        this.staffID = response.data[0].id
-        if (this.staff.length === 0) {
-          this.message = "Threre's no carpark";
-        }
+        this.staffID = response.data[0].id;
       });
   }
 };

@@ -16,10 +16,6 @@
                           <label>Remark Name</label>
                           <input type=" text" v-model="remark" placeholder="Enter Remark Name" class="form-control">
                       </div>
-                      <div class="form-group">
-                          <label>BayID</label>
-                          <input type=" text" v-model="bayID" placeholder="Enter BayID" class="form-control">
-                      </div>
                   </div>
                   <div class="modal-footer">
                       <button type="button" @click="updatePole(poleID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
@@ -40,7 +36,6 @@
                               <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">Bay ID</th>
                                       <th data-hide="phone,tablet">mac</th>
                                       <th data-hide="phone,tablet">Delete</th>
                                       <th data-hide="phone,tablet">Update</th>
@@ -51,7 +46,6 @@
                                   <span v-show="selectedPole == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="pole in selectedPole" :key="z" class="gradeX">
                                       <td class="center">{{pole.name || 'Unknown'}}</td>
-                                      <td>{{pole.bayID || 'Unknown'}}</td>
                                       <td>{{pole.mac || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="pole.id" @click="deletePole(pole.id)">Delete</button></td>
                                       <td>
@@ -319,29 +313,6 @@
                 </ul>
             </nav>
             </div>
-                <div class="ibox-content">
-                    <div class="col-lg-12">
-                         <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/wheel/pole/add" class="btn btn-w-m btn-success">Add Pole</a>
-                          </div>
-                         <div class="input-group" style="margin-bottom: 20px">
-                            <select v-model="carparkID" class="form-control m-b" @change="filterMaster">
-                            <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                            <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                        </select>
-                        </div>
-
-                       <div class="input-group">
-                            <select v-model="wheelMastersID" class="form-control m-b" @change="filterMasterPole">
-                                <option disabled selected value="null" key="null">Please Select wheel Master</option>
-                                <option v-for="wheel in wheelMasters" :value="wheel.id" :key="wheel">{{wheel.name}}</option>
-                            </select>
-                       </div>
-                    </div>
-                    <div class="col-lg-12">
-
-                    </div>
-                </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -350,6 +321,31 @@
                             <h5>Wheel Pole</h5>
                         </div>
                         <div class="ibox-content">
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <div class="input-group" style="margin-bottom: 20px">
+                                      <a href="/wheel/pole/add" class="btn btn-w-m btn-success">Add Pole</a>
+                                  </div>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="carparkID" class="form-control m-b" @change="filterMaster">
+                                  <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                  <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-9 m-b-xs">
+                                <select v-model="wheelMastersID" class="form-control m-b" @change="filterMasterPole">
+                                    <option disabled selected value="null" key="null">Please Select wheel Master</option>
+                                    <option v-for="wheel in wheelMasters" :value="wheel.id" :key="wheel">{{wheel.name}}</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="input-group">
+                                      <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
+                              </div>
+                          </div>
                             <div class="table-responsive">
                               <table class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
@@ -362,8 +358,8 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                       <span v-show="poleMasters == 0" style="font-size: 20px;">{{message}}</span>
-                                      <tr v-for="pole in poleMasters" :key="pole" class="gradeX">
+                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                      <tr v-for="pole in poleMasters" :key="pole" class="gradeX" v-if="result == true && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewPole(pole.id)">{{'Pole: ' + pole.id || 'Unknown'}}</a></td>
                                           <td>{{pole.name || 'Unknown'}}</td>
                                           <td>{{pole.remark || 'Unknown'}}</td>
@@ -371,13 +367,6 @@
                                           <td>{{wheelMastersName || 'Unknown'}}</td>
                                       </tr>
                                   </tbody>
-                                  <tfoot>
-                                  <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr>
-                                  </tfoot>
                               </table>
 
                             </div>
@@ -427,15 +416,42 @@ export default {
       carparkID: null,
       wheelMastersID: null,
       wheelMastersName: null,
-      message: null,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
+
+      result: true,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
     }
   },
 
   methods: {
 
-
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false
+        this.message = "";
+        this.filterMasterPole()
+      }
+      axios
+          .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheelpoles?search=${this.searchResult}`, {
+              headers: {
+                  'x-access-token': JSON.parse(this.token)
+              }
+          })
+          .then(response => {
+              this.poleMasters = response.data
+              this.errorResult = false
+              this.message = "";
+              this.result = true;
+              if (this.poleMasters.length === 0) {
+                      this.errorResult = true
+                      this.message = "No Data Avaliable";
+              }
+          })
+    },
     filterMaster() {
          axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
@@ -527,7 +543,7 @@ export default {
                 data: qs.stringify({
                     name: this.name,
                     remark: this.remark,
-                    wheelmasterID: this.wheelmasterID
+                    wheelmasterID: this.wheelMastersID
                 }),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -546,17 +562,18 @@ export default {
                         window.location.href = '/wheel/pole'
                     }, 1000)
                 }
-
-
             })
             .catch(error => {
-                if (error.message == 'Request failed with status code 401') {
+                if (error.message == 'Request failed with status code 500') {
                     setTimeout(() => {
                         swal({
-                            title: 'Your or password is wrong',
+                            title: 'No Data Found',
                             icon: 'error'
                         })
-                    }, 1000)
+                    }, 400);
+                  setTimeout(() => {
+                    window.location.href = '/wheel/pole'
+                  }, 1000)
                 }
             });
 

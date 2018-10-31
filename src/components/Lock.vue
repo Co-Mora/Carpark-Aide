@@ -16,6 +16,10 @@
                           <label>Remark Count</label>
                           <input type=" text"  v-model="remark" placeholder="Enter Remark Name" class="form-control">
                       </div>
+                      <div class="form-group">
+                        <label>Remark Count</label>
+                        <input type=" text"  v-model="bayID" placeholder="Enter BayID Name" class="form-control">
+                      </div>
                   </div>
                   <div class="modal-footer">
                       <button type="button" @click="updateLock(lockID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
@@ -364,14 +368,13 @@
                                   </thead>
                                   <tbody>
                                       <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                      <tr v-for="lock in locks" :key="lock" class="gradeX">
+                                      <tr v-for="lock in locks" :key="lock" class="gradeX" v-if="result == true && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLock(lock.id)">{{'Lock: ' + lock.id || 'Unknown'}}</a></td>
                                           <td>{{lock.name || 'Unknown'}}</td>
                                           <td>{{lock.remark || 'Unknown'}}</td>
                                           <td>{{lock.lastSeen || 'Unknown'}}</td>
                                           <td>{{wheelMastersName || 'Unknown'}}</td>
                                           <td><button class="pull-right btn btn-primary btn-sm" value="lock.id" @click="addTrigger(lock.id)">Trigger</button></td>
-
                                       </tr>
                                   </tbody>
                                   <tfoot>
@@ -408,7 +411,6 @@
 import axios from 'axios'
 import qs from 'qs'
 
-import NavSide from './NavSide'
 export default {
   name: 'Lock',
 
@@ -432,7 +434,7 @@ export default {
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
 
-      result: false,
+      result: true,
       message: '',
       searchResult: '',
       errorResult: false,
@@ -449,16 +451,21 @@ export default {
         this.filterLock();
       }
       axios
-          .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters?search=${this.searchResult}`, {
+          .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks?search=${this.searchResult}`, {
               headers: {
                   'x-access-token': JSON.parse(this.token)
               }
           })
           .then(response => {
               this.locks = response.data
+              console.log('Search Result: ', this.locks)
+              this.errorResult = false
+              this.message = "";
+              this.result = true;
               if (this.locks.length === 0) {
-                      this.errorResult = true
-                      this.message = "No Data Avaliable";
+                  this.errorResult = true;
+                  this.result = true;
+                  this.message = "No Data Avaliable";
               }
           })
     },
@@ -475,7 +482,7 @@ export default {
                         title: `Trigger is success ${response.status}`,
                         icon: 'success'
                     })
-                }, 400)
+                }, 300)
         })
     },
     filterMaster() {
@@ -570,7 +577,7 @@ export default {
                     name: this.name,
                     remark: this.remark,
                     bayID: this.bayID,
-                    wheelmasterID: this.wheelmasterID
+                    wheelmasterID: this.wheelMastersID
                 }),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

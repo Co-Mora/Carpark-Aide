@@ -328,7 +328,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="input-group" style="margin-bottom: 20px">
-                                            <a href="/carparks/add" class="btn btn-w-m btn-success">Add Carpark</a>
+                                            <a href="/carparks/bay/add" class="btn btn-w-m btn-success">Add Bay</a>
                                         </div>
                                     </div>
                                     <div class="col-sm-9 m-b-xs">
@@ -350,10 +350,10 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
-                                        <div class="input-group">
-                                            <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                        <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
-                                        </div>
+                                      <div class="input-group" style="margin-bottom: 20px">
+                                        <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      </div>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -366,11 +366,13 @@
                                                 <th data-hide="phone,tablet">name</th>
                                                 <th data-hide="phone,tablet">Lat</th>
                                                 <th data-hide="phone,tablet">Lon</th>
+                                              <th data-hide="phone,tablet">Trigger Bay</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                            <tr v-for="b in bays" :key="b" class="gradeU" v-if="result == false && errorResult === false">
+                                            <tr v-for="b in bays" :key="b" class="gradeU" v-if="result == true && errorResult === false">
                                                 <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBay(b.id)">{{'Bay: ' + b.id || 'Unknown'}}</a></td>
                                                 <td class="center">
                                                     <a :href="b.image"><img style="width: 10%" :src="b.image"></a>
@@ -379,6 +381,8 @@
                                                 <td class="center">{{b.name || 'Unknown'}}</td>
                                                 <td class="center">{{b.lat || 'Unknown'}}</td>
                                                 <td class="center">{{b.lon || 'Unknown'}}</td>
+                                                <td><button class="pull-right btn btn-primary btn-sm" :value="b.id" @click="addTrigger(b.id)">Trigger</button></td>
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -410,14 +414,14 @@ import axios from 'axios'
 import qs from 'qs'
 
 export default {
-    name: 'Zone',
+    name: 'Bay',
     data() {
         return {
             carpark: null,
             zone: null,
             streets: null,
             streetID: null,
-
+            Istrigger: null,
             lat: null,
             lon: null,
             name: null,
@@ -433,35 +437,67 @@ export default {
             token: localStorage.getItem('token'),
             isLoggedIn: localStorage.getItem('isLogged'),
 
-            result: false,
+            result: true,
             message: '',
             searchResult: '',
             errorResult: false,
             mySearch: [],
+
         }
     },
     methods: {
-            getSearchResult() {
-              console.log(this.searchResult.length)
-              if(this.searchResult.length === 0) {
-                this.errorResult = false
-                this.message = "";
-                this.filterZoneByBay()
-              }
-              axios
-                  .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays?search=${this.searchResult}`, {
-                      headers: {
-                          'x-access-token': JSON.parse(this.token)
-                      }
-                  })
-                  .then(response => {
-                      this.bays = response.data
-                      if (this.bays.length === 0) {
-                              this.errorResult = true
-                              this.message = "No Data Avaliable";
-                      }
-                  })
-            },
+      addTrigger(value) {
+        axios
+          .post(`https://sys2.parkaidemobile.com/api/bays/${value}/trigger`, {
+            fact: "test"
+          }, {headers: { 'x-access-token': JSON.parse(this.token), 'Content-Type': 'application/x-www-form-urlencoded',}})
+          .then(response => {
+            console.log(response)
+            this.Istrigger = response.status;
+            setTimeout(() => {
+              swal({
+                title: `Trigger is success ${this.Istrigger}`,
+                icon: 'success'
+              })
+            }, 300)
+          })
+          .catch(error => {
+            if (error.message == 'Request failed with status code 404') {
+              setTimeout(() => {
+                swal({
+                  title: 'No Data Found',
+                  icon: 'error'
+                })
+              }, 300)
+            }
+
+          });
+      },
+      getSearchResult() {
+        if(this.searchResult.length === 0) {
+          this.errorResult = false;
+          this.message = "";
+          this.filterZoneByBay()
+        }
+        axios
+          .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays?search=${this.searchResult}`, {
+            headers: {
+              'x-access-token': JSON.parse(this.token)
+            }
+          })
+          .then(response => {
+            this.bays = response.data;
+            this.errorResult = false
+            this.message = "";
+            this.result = true;
+            if (this.bays.length === 0) {
+              this.errorResult = true;
+              this.result = true;
+              this.message = "No Data Available";
+            }
+          })
+
+      },
             processFile() {
                 let formData = new FormData();
                 formData.append('imgUploader', this.file);

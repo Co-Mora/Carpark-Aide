@@ -1,5 +1,29 @@
 <template>
     <div v-show="isLoggedIn">
+      <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title">{{carparkName}}</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Pole Name</label>
+                <input type="text" v-model="name" placeholder="Enter Advert Name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Image Name</label>
+                <input type="file" ref="file" @change="handleFileUpload()"  class="form-control">
+                <img style="width: 10%" :src="image" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" @click="updateAdvert(advertID)" :disabled="validated == true" class="btn btn-primary">Update changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -23,7 +47,7 @@
                                   <tr v-for="ad in selectedAdverts" :key="z" class="gradeX">
                                       <td class="center">{{ad.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="ad.id" @click="deleteAdverts(ad.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="ad.id" @click="updateCarpark(ad.id)">Update</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="ad.id" @click="viewUpdateAdvert(ad.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button></td>
 
 
                                   </tr>
@@ -290,25 +314,6 @@
             </nav>
             </div>
 
-                <div class="ibox-content">
-
-                      <div class="col-lg-12">
-                          <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/adverts/add" class="btn btn-w-m btn-success">Add Adverts</a>
-                          </div>
-
-                          <div class="input-group">
-                            <select v-model="carparkID" class="form-control m-b" @change="addAdverts">
-                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                            </select>
-                          </div>
-
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
@@ -317,6 +322,25 @@
                             <h5>Adverts (Carpark)</h5>
                         </div>
                         <div class="ibox-content">
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <div class="input-group" style="margin-bottom: 20px">
+                                <a href="/adverts/add" class="btn btn-w-m btn-success">Add Adverts</a>
+                              </div>
+                            </div>
+                            <div class="col-sm-9 m-b-xs">
+                              <select v-model="carparkID" class="form-control m-b" @change="addAdverts">
+                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
+                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="input-group">
+                                <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                              </div>
+                            </div>
+                          </div>
                           <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover dataTables-example">
                                <thead>
@@ -328,8 +352,8 @@
                                </tr>
                                </thead>
                                <tbody>
-                                    <span v-show="adverts == 0" style="font-size: 20px;">{{message}}</span>
-                                   <tr v-for="ad in adverts" :key="ad" class="gradeX">
+                                   <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                   <tr v-for="ad in adverts" :key="ad" class="gradeX" v-if="result == true && errorResult === false">
                                      <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewAdverts(ad.id)">{{'Advert: ' + ad.id || 'Unknown'}}</a></td>
                                        <td class="center"><a :href="ad.image"><img style="width: 10%" :src="ad.image"></a></td>
                                        <td class="center">{{carparkName || 'Unknown'}}</td>
@@ -366,6 +390,7 @@
 </template>
 <script>
 import axios from "axios";
+import qs from 'qs'
 
 export default {
   name: "Adverts",
@@ -378,11 +403,72 @@ export default {
       selectedAdverts: null,
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
-      carparkID: null,
-      message: null
+
+      advertID: null,
+      name: null,
+      image: null,
+      file: null,
+      validated: false,
+
+      result: true,
+      message: '',
+      searchResult: '',
+      errorResult: false,
+      mySearch: [],
+
     };
   },
   methods: {
+    processFile() {
+      let formData = new FormData();
+      formData.append('imgUploader', this.file);
+      axios.post( 'https://sys2.parkaidemobile.com/api/images/upload',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-access-token': JSON.parse(this.token)
+          }
+        }
+      ).then(response => {
+        this.image = response.data
+        console.log('SUCCESS!!', response.data);
+      })
+        .catch(function(ex){
+          console.log(ex);
+        });
+
+    },
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+      console.log("File:", this.file)
+      this.processFile();
+    },
+    getSearchResult() {
+      if(this.searchResult.length === 0) {
+        this.errorResult = false;
+        this.message = "";
+        this.addAdverts();
+      }
+      axios
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts?search=${this.searchResult}`, {
+          headers: {
+            'x-access-token': JSON.parse(this.token)
+          }
+        })
+        .then(response => {
+          this.adverts = response.data;
+          this.errorResult = false;
+          this.message = "";
+          this.result = true;
+          if (this.adverts.length === 0) {
+            this.errorResult = true;
+            this.result = true;
+            this.message = "No Data Available";
+          }
+        })
+
+    },
     addAdverts() {
       axios
         .get(
@@ -442,6 +528,75 @@ export default {
                 }, 1000)
               }
           });
+    },
+
+    viewUpdateAdvert(value) {
+      document.getElementById('myModal5').style.display = "none";
+      axios
+        .get(
+          `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts/${value}`, {
+            headers: {
+              "x-access-token": JSON.parse(this.token)
+            }
+          }
+        )
+        .then(response => {
+          this.selectedAdverts = response.data;
+          this.showSelectedAdvert()
+        });
+
+    },
+    updateAdvert(value) {
+      this.validated = true;
+      document.getElementById('myModalUpdate').style.display = "none";
+      axios({
+        method: 'put',
+        url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts/${value}`,
+        data: qs.stringify({
+          name: this.name,
+          image: this.image,
+          carparkID: this.carparkID
+        }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'x-access-token': JSON.parse(this.token)
+        },
+      }).then(response => {
+        if (response.status == 200) {
+          console.log(response.data)
+          setTimeout(() => {
+            swal({
+              title: 'Update it successfully',
+              icon: 'success'
+            })
+          }, 200);
+          setTimeout(() => {
+            window.location.href = '/adverts'
+          }, 1000)
+        }
+      })
+        .catch(error => {
+          if (error.message == 'Request failed with status code 500') {
+            setTimeout(() => {
+              swal({
+                title: 'No Data Found',
+                icon: 'error'
+              })
+            }, 400);
+            setTimeout(() => {
+              window.location.href = '/adverts'
+            }, 1000)
+          }
+        });
+
+    },
+    showSelectedAdvert() {
+      this.selectedAdverts.forEach((el) => {
+        this.name = el.name;
+        this.image = el.image;
+        this.advertID = el.id;
+
+      })
     },
     logout() {
       localStorage.removeItem('isLogged');

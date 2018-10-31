@@ -358,9 +358,10 @@
                                 </select>
                               </div>
                               <div class="col-sm-3">
-                                  <div class="input-group"><input :value="searchResult" ref="my_search" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                    <button type="button"  @click.prevent="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
-                                  </div>
+                                <div class="input-group" style="margin-bottom: 20px">
+                                  <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                </div>
                              </div>
                             </div>
                             <div class="table-responsive">
@@ -375,17 +376,11 @@
                                  </thead>
                                  <tbody>
                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                     <tr v-for="s in streets" :key="s" class="gradeX" v-if="result == false && errorResult === false">
+                                     <tr v-for="s in streets" :key="s" class="gradeX"  v-if="result == true && errorResult === false">
                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewStreet(s.id)">{{'Level: ' + s.id || 'Unknown'}}</a></td>
                                          <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
                                          <td class="center">{{zoneName || 'Unknown'}}</td>
                                          <td class="center">{{s.name || 'Unknown'}}</td>
-                                     </tr>
-                                     <tr v-for="search in mySearch" :key="search" class="gradeX" v-show="mySearch.length > 0">
-                                         <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewStreet(search.id)">{{'Level: ' + search.id || 'Unknown'}}</a></td>
-                                         <td class="center"><a :href="search.image"><img style="width: 10%" :src="search.image"></a></td>
-                                         <td class="center">{{zoneName || 'Unknown'}}</td>
-                                         <td class="center">{{search.name || 'Unknown'}}</td>
                                      </tr>
                                  </tbody>
                              </table>
@@ -430,9 +425,9 @@ export default {
       validated: false,
       zoneName: null,
 
-      result: false,
+      result: true,
       message: '',
-      searchResult: null,
+      searchResult: '',
       errorResult: false,
       mySearch: [],
 
@@ -442,42 +437,28 @@ export default {
   },
   methods: {
     getSearchResult() {
-      this.searchResult = this.$refs.my_search.value
-      if(!this.searchResult) {
-        this.result = false;
-        this.mySearch = [];
+      if(this.searchResult.length === 0) {
         this.errorResult = false;
-        this.message = ''
-        return false
+        this.message = "";
+        this.filterZoneByStreet()
       }
-      console.log(this.levels)
-      this.streets.forEach((el) => {
-        if(this.searchResult.length === 0) {
-            return false
-        }
-        if(this.searchResult.toLowerCase() === el.name.toLowerCase() || this.searchResult.toUpperCase() === el.name.toUpperCase()) {
-          this.mySearch.push(el)
-          console.log(this.mySearch)
+      axios
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets?search=${this.searchResult}`, {
+          headers: {
+            'x-access-token': JSON.parse(this.token)
+          }
+        })
+        .then(response => {
+          this.streets = response.data;
+          this.errorResult = false
+          this.message = "";
           this.result = true;
-          this.errorResult = false;
-          //window.location.href=`/carparks?search=${this.searchResult}`
-
-        } else {
-          this.errorResult = true;
-          this.message = 'No Avaliable Data'
-          return false;
-        }
-      })
-      this.mySearch.forEach((el) => {
-        if(this.searchResult.toLowerCase() !== el.name.toLowerCase() || this.searchResult.toUpperCase() !== el.name.toUpperCase()) {
-          this.mySearch = [];
-          this.errorResult = true;
-          this.message = "No Avaliable Data"
-        } else {
-          this.message = ""
-          this.errorResult = false;
-        }
-      })
+          if (this.streets.length === 0) {
+            this.errorResult = true;
+            this.result = true;
+            this.message = "No Data Available";
+          }
+        })
 
     },
     processFile() {
