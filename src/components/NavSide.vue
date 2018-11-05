@@ -85,7 +85,7 @@
                       <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
                       <ul class="nav nav-second-level collapse" >
                         <li :class="{ active: classGateMaster }">
-                          <a href="/get-maste">Master</a>
+                          <a href="/get-master">Master</a>
                         </li>
                         <li :class="{ active: classGate }">
                           <a href="/gates">Gate</a>
