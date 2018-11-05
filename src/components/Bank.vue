@@ -306,7 +306,7 @@
                               <div class="row">
                                 <div class="col-sm-8">
                                   <div class="input-group" style="margin-bottom: 20px">
-                                    <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                    <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
                                       <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
                                   </div>
                                 </div>

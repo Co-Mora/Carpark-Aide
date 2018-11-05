@@ -256,9 +256,17 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h4>Add Zone</h4>
+                            <h4>Add Carpark</h4>
                         </div>
                         <div class="ibox-content">
+                          <div class="col-sm-9 m-b-xs">
+                            <select v-model="cityID" class="form-control m-b">
+                              <option disabled selected value="null" key="null">Please Select City Name</option>
+                              <option v-for="c in city" :value="c.id" :key="c">{{c.name}}</option>
+                            </select>
+                          </div>
+                          <div class="col-sm-3">
+                          </div>
                                 <div class="form-group row"><label class="col-sm-2 col-form-label">Carpark Name</label>
                                     <div class="col-sm-10"><input v-model="name"  placeholder="Name" type="text" class="form-control"></div>
                                 </div>
@@ -279,7 +287,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addCarpark()" :disabled="validated == true">Add by Carpark</button>
+                                        <button class="btn btn-primary btn-sm" @click="addCarpark()" :disabled="validated == true">Add</button>
                                     </div>
                                 </div>
                         </div>
@@ -305,7 +313,6 @@
 
 <script>
 import axios from 'axios'
-import NavSide from './NavSide'
 import Zone from './Zone'
 
 import qs from 'qs'
@@ -313,8 +320,6 @@ export default {
   name: 'AddCarpark',
   data () {
     return {
-
-
       lat: null,
       lon: null,
       name: null,
@@ -328,6 +333,8 @@ export default {
         lat: this.lat,
         lon: this.lon
       }],
+      city: null,
+      cityID: 'null',
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
     }
@@ -376,8 +383,10 @@ export default {
         this.errors.push('Please fill up the Lat Name')
       } if (!this.file) {
         this.errors.push('Please fill up the Carpark image')
-      } else {
-        this.errors = []
+      } if (!this.cityID) {
+        this.errors.push('Please Select City')
+      }else {
+        this.errors = [];
         this.validated = true;
         axios({
         method: 'post',
@@ -385,6 +394,7 @@ export default {
         data: qs.stringify({
           name: this.name,
           image: this.image,
+          cityID: this.cityID,
           lat: this.lat,
           lon: this.lon
         }),
@@ -393,29 +403,27 @@ export default {
             'x-access-token': JSON.parse(this.token)
         },
         }).then(response => {
-          console.log(response.data)
+          console.log(response.data);
            if(response.status == 200) {
                 setTimeout(() => {
                     swal({
                         title: 'Add it successfully',
                         icon: 'success'
                     })
-                }, 200)
+                }, 200);
                 setTimeout(() => {
                      window.location.href = '/carparks'
                 }, 1000)
             }
-
-
         })
         .catch(error => {
-            if(error.message == 'Request failed with status code 401') {
+            if(error) {
                  setTimeout(() => {
                     swal({
-                        title: 'Your or password is wrong',
+                        title: 'Error Found',
                         icon: 'error'
                     })
-                }, 1000)
+                }, 200)
             }
 
         });
@@ -432,9 +440,9 @@ export default {
 
 
     axios
-      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
+      .get('https://sys2.parkaidemobile.com/api/city',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
-        this.carpark = response.data
+        this.city = response.data
       })
 
 

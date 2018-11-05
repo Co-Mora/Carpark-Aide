@@ -267,7 +267,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addParker" :disabled="validated == true">Add Parker</button>
+                                        <button class="btn btn-primary btn-sm" @click="addParker" :disabled="validated == true">Add</button>
                                     </div>
                                 </div>
                         </div>

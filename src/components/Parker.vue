@@ -32,9 +32,7 @@
                               </tfoot>
                           </table>
                       </div>
-
                   </div>
-
                   <div class="modal-footer">
                       <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                   </div>
@@ -48,17 +46,6 @@
                         <li class="nav-header">
                             <div class="dropdown profile-element">
                                 <img alt="image" class="rounded-circle" :src="Image" />
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <span class="block m-t-xs font-bold">Admin</span>
-                                    <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
-                                </a>
-                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                    <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                    <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                                </ul>
                             </div>
                             <div class="logo-element">
                                 IN+
@@ -326,9 +313,9 @@
                               </select>
                             </div>
                             <div class="col-sm-3">
-                              <div class="input-group">
-                                <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                  <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                              <div class="input-group" style="margin-bottom: 20px">
+                                <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
                               </div>
                             </div>
                           </div>

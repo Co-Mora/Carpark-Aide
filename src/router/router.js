@@ -57,6 +57,8 @@ import AddParker from '../components/AddParker'
 
 import Bank from '../components/Bank'
 
+import VoucherBuy from '../components/VocuherBuy'
+
 Vue.use(Router)
 
 
@@ -65,6 +67,10 @@ export function createRouter () {
     mode: 'history',
     base: __dirname,
     routes: [
+      {
+        path: '/',
+        component: MainChart,
+      },
       {
         name: 'CarparkFees',
         path: '/fees',
@@ -88,20 +94,10 @@ export function createRouter () {
         component: VerifySubscribe,
       },
       {
-        name: 'Index',
         path: '/carparks',
         component: Index,
-        active: false,
-        meta: {
-              requiresAuth: true
-        }
+      },
 
-      },
-      {
-        name: 'MainChart',
-        path: '/',
-        component: MainChart,
-      },
       {
         path:'/location/cities',
         component: City,
@@ -253,6 +249,10 @@ export function createRouter () {
       {
         path:'/bank',
         component: Bank,
+      },
+      {
+        path:'/voucher/buy',
+        component: VoucherBuy,
       },
 
     ]

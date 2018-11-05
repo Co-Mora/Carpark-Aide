@@ -5,204 +5,132 @@
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <img alt="image" class="rounded-circle" :src="Image" />
+                            <img alt="image" class="-square-full" :width="40" :src="Image" />
                         </div>
                         <div class="logo-element">
-                            IN+
+                          <img alt="image" class="-square-full" :width="40" :src="Image" />
                         </div>
                     </li>
-                    <li v-bind:class="{ active: classZone }">
+                    <li>
+                      <a  href="#"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span><span class="fa arrow"></span></a>
+                      <ul class="nav nav-second-level collapse" >
+                        <li>
+                          <a href="/">View Dashboard</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li :class="{ active: carparkActive }">
                         <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                             <li>
-                                    <a href="/carparks">All Carparks</a>
+                              <a href="/carparks">Carparks</a>
                             </li>
-                            <li>
-                                <a href="#">Zone<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/zone">View Zone</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classZone }">
+                                <a href="/carparks/zone">Zone</a>
                             </li>
-                            <li>
-                                <a href="#">Level<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/level">View Level</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classLevel }">
+                              <a href="/carparks/level">Level</a>
                             </li>
-                            <li>
-                                <a href="#">Zone Level<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/zlevel">View ZLevel</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classZLevel }">
+                              <a href="/carparks/zlevel">ZLevel</a>
                             </li>
-                            <li>
-                                <a href="#">Street<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/street">View Street</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classStreet }">
+                              <a href="/carparks/street">Street</a>
                             </li>
-                            <li>
-                                <a href="#">Bay<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/bay">View Bay</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classBay }">
+                              <a href="/carparks/bay">Bay</a>
                             </li>
-                            <li>
-                                <a href="#">Voucher<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/carparks/voucher">View Voucher</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classVoucher }">
+                              <a href="/carparks/voucher">Vocuher</a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li :class="{ active: wheelMaster }">
                         <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li>
-                                <a href="#">Master<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/wheel/master">View Master</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classMaster }">
+                              <a href="/wheel/master">Master</a>
                             </li>
-                            <li>
-                                <a href="#">Lock<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/wheel/lock">View Lock</a>
-                                        </li>
-                                    </ul>
-                            </li>
-                            <li>
-                                <a href="#">Pole<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/wheel/pole">View Pole</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classLock }">
+                              <a href="/wheel/lock">Lock</a></li>
+                            <li :class="{ active: classPole }">
+                              <a href="/wheel/pole">Pole</a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+
+                    <li :class="{ active: location }">
                         <a  href="#"><i class="fa fa-globe"></i> <span class="nav-label">Location</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li>
-                                <a href="#">Country<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/location/countries">View Country</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classCountry }">
+                              <a href="/location/countries">Countries</a>
                             </li>
-                            <li>
-                                <a href="#">State<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/location/states">View State</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classState }">
+                              <a href="/location/states">States</a>
                             </li>
-                            <li>
-                                <a href="#">City<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/location/cities">View City</a>
-                                        </li>
-                                    </ul>
+                            <li :class="{ active: classCity }">
+                              <a href="/location/cities">Cities</a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li :class="{ active: subscriber }">
                         <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li>
-                                <a href="#">Subscriber<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/subscribe/add">Add User</a>
-                                        </li>
-                                    </ul>
-                            </li>
+                          <li :class="{ active: classAddSubscriber }">
+                            <a href="/subscribe/add">subscriber</a>
+                          </li>
                         </ul>
                     </li>
-                    <li>
-                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
-                            <li>
-                                <a href="#">Master<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/get-master">View Master</a>
-                                        </li>
-                                    </ul>
-                            </li>
-                            <li>
-                                <a href="#">Gates<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/gates">View Gates</a>
-                                        </li>
-                                    </ul>
-                            </li>
-                        </ul>
+                    <li :class="{ active: gateMaster }">
+                      <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
+                      <ul class="nav nav-second-level collapse" >
+                        <li :class="{ active: classGateMaster }">
+                          <a href="/get-maste">Master</a>
+                        </li>
+                        <li :class="{ active: classGate }">
+                          <a href="/gates">Gate</a>
+                        </li>
+                      </ul>
                     </li>
-                    <li>
-                        <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" >
-                            <li>
-                                <a href="#">Adverts<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="/adverts">View Adverts</a>
-                                        </li>
-                                    </ul>
-                            </li>
-                        </ul>
+                    <li :class="{ active: advert }">
+                      <a  href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
+                      <ul class="nav nav-second-level collapse" >
+                        <li :class="{ active: classAdvert }">
+                          <a href="/adverts">Adverts</a>
+                        </li>
+                      </ul>
                     </li>
-                    <li>
+                    <li :class="{ active: customer }">
                         <a  href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                            <li>
+                            <li :class="{ active: classCustomer }">
                                 <a href="/customers">All</a>
                             </li>
-                            <li>
+                            <li :class="{ active: classCustomerCP }">
                                 <a href="#">Branch<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
                                             <a href="/customers/company?q=1">View Company</a>
                                         </li>
                                         <li>
-                                            <a href="/customers/personal?q=0">View Perosnal</a>
+                                            <a href="/customers/personal?q=0">View Personal</a>
                                         </li>
                                     </ul>
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a  href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
+                    <li :class="{ active: passType }">
+                        <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                          <li>
+                          <li :class="{ active: classPassType }">
                               <a href="/passtype">View PassType</a>
                           </li>
                         </ul>
                     </li>
-                    <li>
+                    <li :class="{ active: staff }">
                         <a  href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                          <li>
+                          <li :class="{ active: classStaff }">
                               <a href="/staff">View Staff</a>
                           </li>
                         </ul>
@@ -223,6 +151,14 @@
                           </li>
                         </ul>
                     </li>
+                  <li>
+                    <a  href="#"><i class="fa fa-unlock"></i> <span class="nav-label">Voucher Buy</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse" >
+                      <li>
+                        <a href="/voucher/buy">View Voucher</a>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
 
             </div>
@@ -232,19 +168,64 @@
 
 <script>
 
-import Image from '../../static/img/profile_small.jpg'
+import Image from '../../static/img/icon.png'
 
 export default {
   name: 'NavSide',
-  aria: false,
+  props: ['classZone', 'classLevel', 'classZLevel', 'classStreet',
+          'classBay', 'classVoucher', 'classMaster', 'classLock',
+          'classPole', 'classCountry', 'classState', 'classCity',
+          'classAddSubscriber', 'classGateMaster', 'classGate',
+          'classAdvert', 'classCustomer', 'classCustomerCP', 'classPassType',
+          'classStaff'
+  ],
 
-  methods: {
-  },
   data () {
     return {
       Image,
+      carparkActive: null,
+      wheelMaster: null,
+      location: null,
+      subscriber: null,
+      gateMaster: null,
+      advert: null,
+      customer: null,
+      passType: null,
+      staff: null,
+      parker: null,
+      bank: null,
+      voucherBuy: null,
       isLoggedIn: localStorage.getItem('isLogged'),
     }
+  },
+  mounted() {
+      if(this.classZone || this.classLevel || this.classZLevel || this.classStreet || this.classBay || this.classVoucher) {
+        this.carparkActive = true
+      }
+      if(this.classMaster || this.classLock || this.classPole) {
+        this.wheelMaster = true
+      }
+      if(this.classCountry || this.classState || this.classCity) {
+        this.location = true
+      }
+      if(this.classAddSubscriber) {
+        this.subscriber = true
+      }
+      if(this.classGateMaster || this.classGate) {
+        this.gateMaster = true
+      }
+      if(this.classAdvert) {
+        this.advert = true
+      }
+      if(this.classCustomer || this.classCustomerCP) {
+        this.customer = true
+      }
+      if(this.classPassType) {
+        this.passType = true
+      }
+      if(this.classStaff) {
+        this.staff = true
+      }
   }
 }
 

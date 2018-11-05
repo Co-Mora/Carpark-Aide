@@ -5,6 +5,9 @@
 
         <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+          <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+          </div>
         <div class="navbar-header">
             </div>
                 <ul class="nav navbar-top-links navbar-right">
@@ -22,7 +25,8 @@
         </div>
       <div class="wrapper wrapper-content animated fadeInRight">
 
-          <CarPark v-show="false" :selected="selected" />
+          <dashboard />
+
 
         </div>
         <div class="footer">
@@ -41,8 +45,11 @@
 <script>
 import axios from 'axios'
 import NavSide from './NavSide'
+import CarPark from '../components/CarPark'
+import Dashboard from '../components/Dashboard'
+
 export default {
-  name: 'MainSide',
+  name: 'MainChart',
   data () {
     return {
       token: localStorage.getItem('token'),
@@ -58,6 +65,8 @@ export default {
   },
   components: {
     NavSide,
+    CarPark,
+    Dashboard
   },
 
   mounted() {

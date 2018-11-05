@@ -321,7 +321,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" @click="addStreetBay" :disabled="validated == true">Add by Street</button>
+                                        <button class="btn btn-primary btn-sm" @click="addStreetBay" :disabled="validated == true">Add</button>
                                     </div>
                                 </div>
                         </div>

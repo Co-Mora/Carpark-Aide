@@ -1,6 +1,7 @@
 
 <template>
-<div v-show="isLoggedIn">
+
+  <div v-show="isLoggedIn">
     <div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content animated bounceInRight">
@@ -69,7 +70,7 @@
                                         <button class="pull-right btn btn-danger btn-sm" :value="z.id" @click="deleteZone(z.id)">Delete</button>
                                     </td>
                                     <td>
-                                        <button class="pull-right btn btn-primary btn-sm" :value="z.id" @click="viewZoneUpdate(z.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                        <button class="pull-right btn btn-primary btn-sm" :value="z.id" @click="viewZoneUpdate(z.id)">Update</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -85,237 +86,7 @@
         </div>
     </div>
     <div id="wrapper">
-        <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
-                    <li class="nav-header">
-                        <div class="dropdown profile-element">
-                            <img alt="image" class="rounded-circle" :src="Image" />
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="block m-t-xs font-bold">Admin</span>
-                                <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
-                            </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/">Logout</a></li>
-                            </ul>
-                        </div>
-                        <div class="logo-element">
-                            IN+
-                        </div>
-                    </li>
-                    <li class="active">
-                        <a href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="/carparks">All Carparks</a>
-                            </li>
-                            <li class="active">
-
-                                <a href="#">Zone<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li class="active">
-                                        <a href="/carparks/zone">View Zone</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Level<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/carparks/level">View Level</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Zone Level<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/carparks/zlevel">View ZLevel</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Street<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/carparks/street">View Street</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Bay<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/carparks/bay">View Bay</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Voucher<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/carparks/voucher">View Voucher</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Master<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/wheel/master">View Master</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Lock<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/wheel/lock">View Lock</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Pole<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/wheel/pole">View Pole</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">Location</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Country<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/location/countries">View Country</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">State<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/location/states">View State</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">City<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/location/cities">View City</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Subscriber<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/subscribe/add">Add User</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Gate Master</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Master<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/get-master">View Master</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Gates<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/gates">View Gates</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bullhorn"></i> <span class="nav-label">Adverts</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Adverts<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/adverts">View Adverts</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-address-book "></i> <span class="nav-label">Customers</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="/customers">All</a>
-                            </li>
-                            <li>
-                                <a href="#">Branch<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="/customers/company?q=1">View Company</a>
-                                    </li>
-                                    <li>
-                                        <a href="/customers/personal?q=0">View Perosnal</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">PassType</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="/passtype">View PassType</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-child"></i> <span class="nav-label">Staff</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="/staff">View Staff</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="/parker">View Parker</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
-            </div>
-        </nav>
+        <NavSide :classZone="classZone"/>
         <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -355,7 +126,7 @@
                                    <div class="col-sm-3">
 
                                      <div class="input-group" style="margin-bottom: 20px">
-                                       <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                       <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
                                       <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
                                      </div>
                                   </div>
@@ -405,7 +176,7 @@
 
         </div>
     </div>
-</div>
+ </div>
 
 </template>
 
@@ -413,8 +184,7 @@
 
 import axios from "axios";
 import qs from 'qs'
-import { CoolSelect } from 'vue-cool-select'
-
+import NavSide from '../components/NavSide'
 
 export default {
     name: "Zone",
@@ -443,6 +213,7 @@ export default {
             searchResult: '',
             errorResult: false,
             mySearch: [],
+            classZone: true,
         };
     },
     methods: {
@@ -493,7 +264,7 @@ export default {
       },
       handleFileUpload() {
          this.file = this.$refs.file.files[0];
-         console.log("File:", this.file)
+         console.log("File:", this.file);
          this.processFile();
       },
         addZone() {
@@ -528,9 +299,7 @@ export default {
                     )
                     .then(response => {
                         this.selectedZone = response.data;
-                        if (this.selectedZone.length === 0) {
-                            //this.message = "No Zone Found";
-                        }
+                        // this.selectContinousEnd = this.selectedGate + 1;
                     });
 
             },
@@ -545,7 +314,7 @@ export default {
                     )
                     .then(response => {
                         if (response.status == 200) {
-                            document.getElementById('myModal5').style.display = "none";
+                            $("#myModal5").modal("hide");
                             setTimeout(() => {
                                 swal({
                                     title: 'Delete it successfully',
@@ -559,7 +328,8 @@ export default {
                     });
             },
             viewZoneUpdate(value) {
-              document.getElementById('myModal5').style.display = "none";
+              $("#myModal5").modal("hide");
+              $("#myModalUpdate").modal("show");
                 axios
                     .get(
                         `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`, {
@@ -576,7 +346,6 @@ export default {
             },
             updateZone(value) {
                 this.validated = true;
-                document.getElementById('myModalUpdate').style.display = "none";
                 axios({
                         method: 'put',
                         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${value}`,
@@ -588,6 +357,7 @@ export default {
                             NonReservedCount: this.nonReservedCount,
                             MotorcycleCount: this.motorcycleCount,
                             carparkID: this.carparkID
+
                         }),
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -639,7 +409,11 @@ export default {
                 localStorage.removeItem('token');
             }
     },
+    components: {
+      NavSide
+    },
     mounted() {
+
         axios
             .get("https://sys2.parkaidemobile.com/api/carparks/", {
                 headers: {
@@ -648,6 +422,7 @@ export default {
             })
             .then(response => {
                 this.carpark = response.data;
+                this.classZone = true;
                 this.carparkID = response.data[0].id;
                 this.addZone()
 
