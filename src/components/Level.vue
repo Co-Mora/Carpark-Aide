@@ -69,13 +69,10 @@
                                       <td>
                                           <button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="viewLevelUpdate(level.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
                                       </td>
-
                                   </tr>
                               </tbody>
-
                           </table>
                       </div>
-
                   </div>
 
                   <div class="modal-footer">

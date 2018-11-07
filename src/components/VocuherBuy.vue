@@ -23,19 +23,20 @@
             </ul>
           </nav>
         </div>
+        <div class="ibox-title">
+          <p>Home / VoucherBuy</p>
+        </div>
         <div class="wrapper wrapper-content animated fadeInRight">
           <div class="row">
             <div class="col-lg-12">
               <div class="ibox ">
-                <div class="ibox-title">
-                  <h5>VoucherBuy</h5>
-                </div>
+
                 <div class="ibox-content">
                   <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                       <div class="input-group" style="margin-bottom: 20px">
                         <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                       </div>
                     </div>
                   </div>
@@ -53,7 +54,6 @@
                       </tr>
                       </thead>
                       <tbody>
-                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                       <tr v-for="voucher in voucherBuy" :key="voucher" class="gradeX"  v-if="result == true && errorResult === false">
                         <td class="center">{{voucher.voucherID || 'Unknown'}}</td>
                         <td class="center">{{voucher.mobile || 'Unknown'}}</td>
@@ -71,8 +71,10 @@
                       </tr>
                       </tfoot>
                     </table>
-                  </div>
+                    <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                    <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageVoucher" role="alert">{{messageVoucher}}</div>
 
+                  </div>
                 </div>
               </div>
             </div>
@@ -108,7 +110,8 @@
         message: '',
         searchResult: '',
         errorResult: false,
-        classVoucherBuy: true
+        classVoucherBuy: true,
+        messageVoucher: null,
       };
     },
     methods: {
@@ -142,7 +145,7 @@
             if (this.voucherBuy.length === 0) {
               this.errorResult = true;
               this.result = true;
-              this.message = "No Data Available";
+              this.message = "No data available.";
             }
           })
 
@@ -168,7 +171,7 @@
           this.voucherBuy = response.data;
           console.log(response)
           if (this.voucherBuy.length === 0) {
-            this.message = "voucherBuy Not Found";
+            this.messageVoucher = "No data available.";
           }
         });
     }

@@ -60,24 +60,19 @@
                     </ul>
                 </nav>
             </div>
+            <div class="ibox-title">
+              <p>Home / Customer / {{parseInt(query) === 1 ? 'Company': 'Personal'}}</p>
+            </div>
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
-                            <div class="ibox-title">
-                                <h5>Customers</h5>
-                            </div>
                             <div class="ibox-content">
                               <div class="row">
-                                <div class="col-lg-12">
-                                  <div class="input-group" style="margin-bottom: 20px">
-                                    <a href="/customers/add" class="btn btn-w-m btn-success">Add Customer</a>
-                                  </div>
-                                </div>
-                                  <div class="col-sm-8">
+                                  <div class="col-sm-12">
                                     <div class="input-group" style="margin-bottom: 20px">
                                         <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                        <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                        <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                     </div>
                                   </div>
                                 </div>
@@ -93,7 +88,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                             <tr v-for="cus in customers" v-show="cus.isCompany === parseInt(query)" :key="cus" class="gradeX"  v-if="result == true && errorResult === false">
                                                 <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewCustomer(cus.id)">{{'Customer: ' + cus.id || 'Unknown'}}</a></td>
                                                 <td class="center">{{cus.name || 'Unknown'}}</td>
@@ -109,6 +103,9 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                  <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                  <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageCustomer" role="alert">{{messageCustomer}}</div>
+
                                 </div>
 
                             </div>
@@ -146,6 +143,7 @@ export default {
             isLoggedIn: localStorage.getItem("isLogged"),
             result: true,
             message: '',
+            messageCustomer: null,
             searchResult: '',
             errorResult: false,
             mySearch: [],
@@ -168,7 +166,7 @@ export default {
             .then(response => {
               this.customers = response.data;
               if (this.customers.length === 0) {
-                this.message = "Customer NOt Found";
+                this.message = "No data available.";
               }
             });
         }
@@ -186,7 +184,7 @@ export default {
             if (this.customers.length === 0) {
               this.errorResult = true;
               this.result = true;
-              this.message = "No Data Available";
+              this.message = "No data available.";
             }
           })
 
@@ -203,7 +201,7 @@ export default {
               .then(response => {
                   this.selectedCustomer = response.data;
                   if (this.selectedCustomer.length === 0) {
-                      this.message = "Customer NOt Found";
+                      this.messageCustomer = "No data available.";
                   }
               });
               this.customers.forEach((el) => {
@@ -255,7 +253,7 @@ export default {
             .then(response => {
                 this.customers = response.data;
                 if (this.customers.length === 0) {
-                    this.message = "Threre's no carpark";
+                    this.messageCustomer = "No data available.";
                 }
             });
     }

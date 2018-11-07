@@ -242,7 +242,7 @@
                   hours = date.getHours();
                   minutes = "0" + date.getMinutes();
                   seconds = "0" + date.getSeconds();
-                  if(month - 1 === new Date().getMonth()) {
+                  if(month  === new Date().getMonth()) { // month - 1
                     this.viewVoucherBuy.push(el.VoucherBuy);
                     this.viewVoucher.push(el.Voucher);
                     this.viewTenant.push(el.Tenant);

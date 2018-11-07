@@ -81,40 +81,38 @@
                 </ul>
             </nav>
             </div>
-
-                <div class="ibox-content">
-
-                      <div class="col-lg-12">
-                          <!-- <div class="input-group" style="margin-bottom: 20px">
-                            <a href="/gate/add" class="btn btn-w-m btn-success">Add Gate</a>
-                          </div> -->
-
-                          <div class="input-group" style="margin-bottom: 20px">
-                            <select v-model="carparkID" class="form-control m-b" @change="addGateMaster">
-                                <option disabled selected value="null" key="null">Please Select Carpark Name</option>
-                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
-                            </select>
-                          </div>
-                          <div class="input-group">
-                            <select v-model="gateMasterID" class="form-control m-b" @change="addGates">
-                                <option disabled selected value="null" key="null">Please Select Gate Master Name</option>
-                                <option v-for="gate in gateMaster" :value="gate.id" :key="gate">{{gate.name}}</option>
-                            </select>
-                          </div>
-
-                    </div>
-                    <div class="col-lg-2">
-
-                    </div>
-                </div>
+              <div class="ibox-title">
+                <p>Home / Gates</p>
+              </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Gates (Carpark)</h5>
-                        </div>
+
                         <div class="ibox-content">
+                          <div class="row">
+                            <div class="input-group" style="margin: 0 0 20px 16px">
+                              <a href="/carparks/street/add" class="btn btn-w-m btn-rounded btn-outline-primary">Create New Gate</a>
+                            </div>
+                            <div class="col-sm-9 m-b-xs">
+                              <select v-model="carparkID" class="form-control m-b" @change="addGateMaster">
+                                <option disabled selected value="null" key="null">Please Select Car Park Name</option>
+                                <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-9 m-b-xs">
+                              <select v-model="gateMasterID" class="form-control m-b" @change="addGates">
+                                <option disabled selected value="null" key="null">Please Select Gate Master Name</option>
+                                <option v-for="gate in gateMaster" :value="gate.id" :key="gate">{{gate.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="input-group" style="margin-bottom: 20px">
+                                <input v-model="searchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                      <button type="button" class="btn btn-sm btn-success">Search</button></span>
+                              </div>
+                            </div>
+                          </div>
                           <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover dataTables-example">
                                <thead>
@@ -126,9 +124,8 @@
                                </tr>
                                </thead>
                                <tbody>
-                                    <span v-show="gates == 0" style="font-size: 20px;">{{message}}</span>
                                    <tr v-for="get in gates" :key="m" class="gradeX">
-                                      <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewGate(get.id)">{{'Gate: ' + get.id || 'Unknown'}}</a></td>
+                                      <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewGate(get.id)">{{get.id}}</a></td>
                                       <td class="center">{{get.name || 'Unknown'}}</a></td>
                                       <td class="center">{{get.remark || 'Unknown'}}</td>
                                       <td class="center">{{gateMasterName || 'Unknown'}}</td>
@@ -142,6 +139,8 @@
                                </tr>
                                </tfoot>
                            </table>
+                            <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageGate" role="alert">{{messageGate}}</div>
+
                           </div>
 
                         </div>
@@ -188,7 +187,8 @@ export default {
       token: localStorage.getItem("token"),
       isLoggedIn: localStorage.getItem("isLogged"),
       message: null,
-      classGate: true
+      classGate: true,
+      messageGate: null,
     };
   },
   methods: {
@@ -203,7 +203,7 @@ export default {
           this.gateMasterID = response.data[0].id
           this.addGates()
           if (this.gateMaster.length === 0) {
-            this.message = "Threre's no carpark";
+            this.messageGate = "No data available.";
           }
         });
     },
@@ -216,7 +216,7 @@ export default {
         .then(response => {
           this.gates = response.data;
           if (this.gates.length === 0) {
-            this.message = "Threre's no carpark";
+            this.messageGate = "No data available.";
           }
         });
         this.gateMaster.forEach((el) => {
@@ -237,7 +237,7 @@ export default {
             .then(response => {
                 this.selectedGate = response.data;
                 if (this.selectedGate.length === 0) {
-                    this.message = "Threre's no carpark";
+                    this.messageGate = "No data available.";
                 }
             });
 

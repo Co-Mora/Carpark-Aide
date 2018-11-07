@@ -20,13 +20,14 @@
                 </ul>
             </nav>
             </div>
+              <div class="ibox-title">
+                <p>Home / Location / Cities</p>
+              </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>City</h5>
-                        </div>
+
                         <div class="ibox-content">
                           <div class="row">
                               <div class="col-sm-9 m-b-xs">
@@ -44,7 +45,7 @@
                               <div class="col-sm-3">
                                 <div class="input-group" style="margin-bottom: 20px">
                                   <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                 </div>
                               </div>
                           </div>
@@ -58,9 +59,8 @@
                                  </tr>
                                  </thead>
                                  <tbody>
-                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                      <tr v-for="c in city" :key="c" class="gradeU"  v-if="result == true && errorResult === false">
-                                         <td class="center">{{c.id || 'Unknown'}}</td>
+                                         <td class="center">{{c.id}}</td>
                                          <td class="center"><a :href="c.image"><img style="width: 10%" :src="c.image"></a></td>
                                          <td class="center">{{c.name || 'Unknown'}}</td>
                                      </tr>
@@ -73,8 +73,9 @@
                                  </tr>
                                  </tfoot>
                              </table>
+                              <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageCity" role="alert">{{messageCity}}</div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -88,7 +89,6 @@
                     <strong>Copyright</strong> CarPark Company &copy; 2018
                 </div>
             </div>
-
         </div>
     </div>
     </div>
@@ -112,6 +112,7 @@ export default {
 
       result: true,
       message: '',
+      messageCity: null,
       searchResult: '',
       errorResult: false,
       classCity: true
@@ -131,14 +132,14 @@ export default {
                 }
             })
             .then(response => {
-                this.city = response.data
-                this.errorResult = false
+                this.city = response.data;
+                this.errorResult = false;
                 this.message = "";
                 this.result = true;
                 if (this.city.length === 0) {
                         this.errorResult = true;
                         this.result = true;
-                        this.message = "No Data Avaliable";
+                        this.message = "No data available.";
                 }
             })
 
@@ -152,10 +153,10 @@ export default {
         )
         .then(response => {
           this.state = response.data;
-          this.stateID = response.data[0].id
-          this.getCity()
+          this.stateID = response.data[0].id;
+          this.getCity();
           if (this.state.length === 0) {
-            this.message = "Threre's no carpark";
+            this.messageCity = "No data available.";
           }
         });
     },

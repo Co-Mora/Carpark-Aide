@@ -83,19 +83,18 @@
                 </ul>
             </nav>
             </div>
-
+              <div class="ibox-title">
+                <p>Home / Adverts</p>
+              </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Adverts (Carpark)</h5>
-                        </div>
                         <div class="ibox-content">
                           <div class="row">
                             <div class="col-lg-6">
                               <div class="input-group" style="margin-bottom: 20px">
-                                <a href="/adverts/add" class="btn btn-w-m btn-success">Add Adverts</a>
+                                <a href="/adverts/add" class="btn btn-w-m btn-outline-primary btn-rounded">Create New Advert</a>
                               </div>
                             </div>
                             <div class="col-sm-9 m-b-xs">
@@ -107,7 +106,7 @@
                             <div class="col-sm-3">
                               <div class="input-group" style="margin-bottom: 20px">
                                 <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                               </div>
                             </div>
                           </div>
@@ -122,7 +121,6 @@
                                </tr>
                                </thead>
                                <tbody>
-                                   <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                    <tr v-for="ad in adverts" :key="ad" class="gradeX" v-if="result == true && errorResult === false">
                                      <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewAdverts(ad.id)">{{'Advert: ' + ad.id || 'Unknown'}}</a></td>
                                        <td class="center"><a :href="ad.image"><img style="width: 10%" :src="ad.image"></a></td>
@@ -138,6 +136,9 @@
                                </tr>
                                </tfoot>
                            </table>
+                            <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                            <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageAdvert" role="alert">{{messageAdvert}}</div>
+
                           </div>
 
                         </div>
@@ -186,6 +187,7 @@ export default {
       searchResult: '',
       errorResult: false,
       mySearch: [],
+      messageAdvert: null,
       classAdvert: true
     };
   },
@@ -212,7 +214,7 @@ export default {
     },
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
-      console.log("File:", this.file)
+      console.log("File:", this.file);
       this.processFile();
     },
     getSearchResult() {
@@ -235,7 +237,7 @@ export default {
           if (this.adverts.length === 0) {
             this.errorResult = true;
             this.result = true;
-            this.message = "No Data Available";
+            this.message ="No data available.";
           }
         })
 
@@ -250,7 +252,7 @@ export default {
           this.adverts = response.data;
           console.log(this.adverts)
           if (this.adverts.length === 0) {
-            this.message = "Threre's no carpark";
+            this.messageAdvert ="No data available.";
           }
         });
         this.carpark.forEach((el) => {
@@ -271,7 +273,7 @@ export default {
             .then(response => {
                 this.selectedAdverts = response.data;
                 if (this.selectedAdverts.length === 0) {
-                    this.message = "Threre's no carpark";
+                    this.messageAdvert = "No data available.";
                 }
             });
 

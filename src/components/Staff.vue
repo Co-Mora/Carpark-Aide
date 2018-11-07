@@ -20,20 +20,20 @@
                 </ul>
             </nav>
             </div>
-
+              <div class="ibox-title">
+                <p>Home / Staffs</p>
+              </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Staffs</h5>
-                        </div>
+
                         <div class="ibox-content">
                           <div class="row">
-                            <div class="col-sm-8">
+                            <div class="col-sm-12">
                               <div class="input-group" style="margin-bottom: 20px">
                                 <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                               </div>
                             </div>
                           </div>
@@ -48,7 +48,6 @@
                               </tr>
                               </thead>
                               <tbody>
-                              <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                               <tr v-for="s in staff" :key="s" class="gradeU"  v-if="result == true && errorResult === false">
                                 <td class="center">{{s.id || 'Unknown'}}</td>
                                 <td class="center">{{s.name || 'Unknown'}}</td>
@@ -63,6 +62,8 @@
                               </tr>
                               </tfoot>
                             </table>
+                            <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                            <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageStaff" role="alert">{{messageStaff}}</div>
 
                           </div>
 
@@ -98,11 +99,11 @@ export default {
       carparkID: null,
       result: true,
       message: '',
+      messageStaff: null,
       searchResult: '',
       errorResult: false,
       mySearch: [],
       classStaff: true,
-
     };
   },
   methods: {
@@ -121,7 +122,7 @@ export default {
           .then(response => {
             this.staff = response.data;
             if (this.staff.length === 0) {
-              this.message = "Customer NOt Found";
+              this.message =  "No data available.";
             }
           });
       }
@@ -139,7 +140,7 @@ export default {
           if (this.staff.length === 0) {
             this.errorResult = true;
             this.result = true;
-            this.message = "No Data Available";
+            this.message =  "No data available.";
           }
         })
 
@@ -160,7 +161,11 @@ export default {
       )
       .then(response => {
         this.staff = response.data;
+        if (this.staff.length === 0) {
+          this.messageStaff =  "No data available.";
+        }
         this.staffID = response.data[0].id;
+
       });
   }
 };

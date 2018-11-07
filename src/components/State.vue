@@ -20,13 +20,14 @@
                 </ul>
             </nav>
             </div>
+              <div class="ibox-title">
+                <p>Home / Location / States</p>
+              </div>
          <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>States</h5>
-                        </div>
+
                         <div class="ibox-content">
                           <div class="row">
                               <div class="col-sm-9 m-b-xs">
@@ -38,7 +39,7 @@
                               <div class="col-sm-3">
                                 <div class="input-group" style="margin-bottom: 20px">
                                   <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                 </div>
                               </div>
                           </div>
@@ -52,7 +53,6 @@
                                  </tr>
                                  </thead>
                                  <tbody>
-                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                      <tr v-for="s in state" :key="s" class="gradeU" v-if="result == true && errorResult === false">
                                          <td class="center">{{s.id || 'Unknown'}}</td>
                                          <td class="center"><a :href="s.image"><img style="width: 10%" :src="s.image"></a></td>
@@ -67,6 +67,9 @@
                                  </tr>
                                  </tfoot>
                               </table>
+                              <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageState" role="alert">{{messageState}}</div>
+
                             </div>
 
                         </div>
@@ -106,6 +109,7 @@ export default {
 
       result: true,
       message: '',
+      messageState: null,
       searchResult: '',
       errorResult: false,
       classState: true
@@ -132,7 +136,7 @@ export default {
                 if (this.state.length === 0) {
                         this.errorResult = true;
                         this.result = true;
-                        this.message = "No Data Avaliable";
+                        this.message = "No data available.";
                 }
             })
 
@@ -147,7 +151,7 @@ export default {
         .then(response => {
           this.state = response.data;
           if (this.state.length === 0) {
-            this.message = "Threre's no carpark";
+            this.messageState = "No data available.";
           }
         });
     },
@@ -167,10 +171,10 @@ export default {
       )
       .then(response => {
         this.country = response.data;
-        this.countryID = response.data[0].id
+        this.countryID = response.data[0].id;
         this.getState()
         if (this.country.length === 0) {
-          this.message = "Threre's no carpark";
+          this.messageState = "No data available.";
         }
       });
   }
