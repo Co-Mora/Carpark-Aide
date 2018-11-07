@@ -54,7 +54,7 @@
                         </ul>
                     </li>
                     <li :class="{ active: wheelMaster }">
-                        <a  href="#"><i class="fa fa-bandcamp"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
+                        <a  href="#"><i class="fa fa-motorcycle"></i> <span class="nav-label">Wheel</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                             <li :class="{ active: classMaster }">
                               <a href="/wheel/master">Master</a>
@@ -82,7 +82,7 @@
                         </ul>
                     </li>
                     <li :class="{ active: subscriber }">
-                        <a  href="#"><i class="fa fa-sign-in"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
+                        <a  href="#"><i class="fa fa-tag"></i> <span class="nav-label">Subscribers</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                           <li :class="{ active: classAddSubscriber }">
                             <a href="/subscribe/add">subscriber</a>
@@ -160,12 +160,15 @@
                         </ul>
                     </li>
                   <li :class="{ active: voucherBuy }">
-                    <a  href="#"><i class="fa fa-unlock"></i> <span class="nav-label">Voucher Buy</span><span class="fa arrow"></span></a>
+                    <a  href="#"><i class="fa fa-ticket"></i> <span class="nav-label">Voucher Buy</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" >
                       <li :class="{ active: classVoucherBuy }">
                         <a href="/voucher/buy">View Voucher</a>
                       </li>
                     </ul>
+                  </li>
+                  <li>
+                    <a href="/login" @click-="logout"><i class="fa fa-key"></i> <span class="nav-label">Log out</span></a>
                   </li>
                 </ul>
 
@@ -205,6 +208,12 @@ export default {
       voucherBuy: null,
       classAll: false,
       isLoggedIn: localStorage.getItem('isLogged'),
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('isLogged');
+      localStorage.removeItem('token');
     }
   },
   mounted() {

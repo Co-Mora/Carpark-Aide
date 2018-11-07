@@ -98,7 +98,6 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                         <tr v-for="car in carpark" :key="car" class="gradeX" v-if="result == true && errorResult === false">
                                             <td class="center"><a  data-toggle="modal" data-target="#myModal5" @click="viewCarpark(car.id)">{{car.id}}</a></td>
                                             <td class="center"><a :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
@@ -115,6 +114,9 @@
                                     </tr>
                                   </tfoot>
                                 </table>
+                                <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageCar" role="alert">{{messageCar}}</div>
+
                               </div>
 
                           </div>
@@ -141,7 +143,7 @@ export default {
       carparkName: null,
       validated: false,
       selectedCarpark: null,
-
+      messageCar: null,
       name: null,
       file: null,
       image: null,
@@ -199,7 +201,7 @@ export default {
           .then(response => {
             this.carpark = response.data;
             if (this.carpark.length === 0) {
-              this.message = "No Data Found";
+              this.message = "No data available.";
             }
           });
       }
@@ -217,7 +219,7 @@ export default {
                 if (this.carpark.length === 0) {
                         this.errorResult = true;
                         this.result = true;
-                        this.message = "No Data Avaliable";
+                        this.message = "No data available.";
                 }
             })
 
@@ -355,6 +357,9 @@ export default {
       .get(`https://sys2.parkaidemobile.com/api/carparks/`,{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
+        if(this.carpark.length === 0 ){
+          this.messageCar = "No data available.";
+        }
       });
 
 

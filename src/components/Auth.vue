@@ -3,10 +3,12 @@
          <div class="middle-box text-center loginscreen animated fadeInDown">
         <div>
             <div>
-                <h1 class="logo-name">CA</h1>
+              <img alt="image" class="-square-full" :width="100" :src="Image" />
+
+              <h1 class="logo-name"></h1>
 
             </div>
-            <h3>Welcome to IN+</h3>
+            <h3>Welcome to Car Park Aide</h3>
             <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
             </p>
             <p>Login in. To see it in action.</p>
@@ -17,7 +19,7 @@
                     <input type="password" v-model="password" class="form-control" placeholder="Password" required="">
                 </div>
                 <button class="btn btn-primary block full-width m-b" @click="auth">Login</button>
-            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+            <p class="m-t"> <small>Car Park Aide web app &copy; 2018</small> </p>
         </div>
     </div>
     </div>
@@ -26,12 +28,14 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import Image from '../../static/img/icon.png'
 
 export default {
   name: 'Level',
 
   data () {
     return {
+      Image,
       isLoggedIn: false,
       token: null,
       email: null,
