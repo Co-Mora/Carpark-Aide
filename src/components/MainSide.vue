@@ -23,7 +23,7 @@
         </div>
       <div class="wrapper wrapper-content animated fadeInRight">
 
-          <CarPark/>
+          <CarPark />
 
         </div>
         <div class="footer">
@@ -45,7 +45,7 @@ export default {
   name: 'MainSide',
   data () {
     return {
-      username: localStorage.getItem('email')
+      username: localStorage.getItem('email'),
 
     }
   },

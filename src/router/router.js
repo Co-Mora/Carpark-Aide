@@ -59,6 +59,9 @@ import Bank from '../components/Bank'
 
 import VoucherBuy from '../components/VocuherBuy'
 
+
+import CarParkProduct from '../components/CarParkProduct'
+
 Vue.use(Router)
 
 
@@ -253,6 +256,10 @@ export function createRouter () {
       {
         path:'/voucher/buy',
         component: VoucherBuy,
+      },
+      {
+        path:'/carparks/product',
+        component: CarParkProduct,
       },
 
     ]

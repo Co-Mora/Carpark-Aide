@@ -34,13 +34,13 @@
                   </div>
                   <div class="modal-body">
                       <div class="table-responsive">
-                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                          <table class="table table-bordered">
                               <thead>
                                   <tr>
-                                      <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">City Name</th>
-                                      <th data-hide="phone,tablet">Delete</th>
-                                      <th data-hide="phone,tablet">Update</th>
+                                      <th>name</th>
+                                      <th>City Name</th>
+                                      <th>Delete</th>
+                                      <th>Update</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -64,63 +64,67 @@
               </div>
           </div>
         </div>
+      <div class="ibox-title">
+        <p>Home / Car Park</p>
+      </div>
+      <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>CarParks</h5>
-                        </div>
-                        <div class="ibox-content">
-                          <div class="row">
-                              <div class="col-lg-6">
-                                <div class="input-group" style="margin-bottom: 20px">
-                                      <a href="/carparks/add" class="btn btn-w-m btn-success">Add Carpark</a>
+                  <div class="col-lg-12">
+                      <div class="ibox ">
+
+                          <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                  <div class="input-group" style="margin-bottom: 20px">
+                                        <a href="/carparks/add" class="btn btn-rounded btn-w-m btn-outline-primary">Create New Car Park</a>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                  <div class="input-group" style="margin-bottom: 20px">
+                                      <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
+                                        <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                  </div>
                                 </div>
                               </div>
+                              <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>ID(s)</th>
+                                        <th >image</th>
+                                        <th>isEnable</th>
+                                        <th>name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                        <tr v-for="car in carpark" :key="car" class="gradeX" v-if="result == true && errorResult === false">
+                                            <td class="center"><a  data-toggle="modal" data-target="#myModal5" @click="viewCarpark(car.id)">{{car.id}}</a></td>
+                                            <td class="center"><a :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
+                                            <td class="center"><span :class="{ 'label-primary': car.isEnable == 1, 'label-danger': car.isEnable == 0 }" class="float-right label">{{car.isEnable == 1 ? 'Enable' : 'Disable'}}</span></td>
+                                            <td class="center">{{car.name   || 'Unknown'}}</td>
+                                        </tr>
 
-                              <div class="col-sm-6">
-                                <div class="input-group" style="margin-bottom: 20px">
-                                    <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
-                                </div>
+                                    </tbody>
+                                  <tfoot>
+                                    <tr v-show="carpark.length > 0">
+                                      <td colspan="3">
+                                        <ul class="pagination float-lg-left"></ul>
+                                      </td>
+                                    </tr>
+                                  </tfoot>
+                                </table>
                               </div>
-                            </div>
-                            <div class="table-responsive">
-                              <table class="footable table table-stripped" data-page-size="6">
-                                  <thead>
-                                  <tr>
-                                      <th data-toggle="true">ID(s)</th>
-                                      <th >image</th>
-                                      <th>isEnable</th>
-                                      <th>name</th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>
-                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                      <tr v-for="car in carpark" :key="car" class="gradeX" v-if="result == true && errorResult === false">
-                                          <td class="center"><a  data-toggle="modal" data-target="#myModal5" @click="viewCarpark(car.id)">{{'Car: ' + car.id || 'Unknown'}}</a></td>
-                                          <td class="center"><a :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
-                                          <td class="center"><span :class="{ 'label-primary': car.isEnable == 1, 'label-danger': car.isEnable == 0 }" class="float-right label">{{car.isEnable == 1 ? 'Enable' : 'Disable'}}</span></td>
-                                          <td class="center">{{car.name   || 'Unknown'}}</td>
-                                      </tr>
 
-                                  </tbody>
-                                <tfoot>
-                                  <tr v-show="carpark.length > 0">
-                                    <td colspan="3">
-                                      <ul class="pagination float-lg-left"></ul>
-                                    </td>
-                                  </tr>
-                                </tfoot>
-                              </table>
-                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+      </div>
     </div>
+
 
 </template>
 

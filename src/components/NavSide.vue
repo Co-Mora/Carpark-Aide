@@ -5,7 +5,7 @@
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <img alt="image" class="-square-full" :width="40" :src="Image" />
+                            <img alt="image" class="-square-full" style="margin-left: 40px" :width="60" :src="Image" />
                         </div>
                         <div class="logo-element">
                           <img alt="image" class="-square-full" :width="40" :src="Image" />
@@ -20,28 +20,36 @@
                       </ul>
                     </li>
                     <li :class="{ active: carparkActive }">
-                        <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">CarPark</span><span class="fa arrow"></span></a>
+                        <a  href="#"><i class="fa fa-car"></i> <span class="nav-label">Car Park</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
                             <li>
-                              <a href="/carparks">Carparks</a>
+                              <a href="/carparks">Car park</a>
                             </li>
-                            <li :class="{ active: classZone }">
-                                <a href="/carparks/zone">Zone</a>
+                            <li :class="{ active: classAll }">
+                                <a href="/carparks/zone">Car park Zone<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                  <li :class="{ active: classZone }">
+                                    <a href="/carparks/zone">Car park Zone</a>
+                                  </li>
+                                  <li :class="{ active: classLevel }">
+                                    <a href="/carparks/level">Car park Level</a>
+                                  </li>
+                                  <li :class="{ active: classZLevel }">
+                                    <a href="/carparks/zlevel">Car park ZLevel</a>
+                                  </li>
+                                  <li :class="{ active: classStreet }">
+                                    <a href="/carparks/street">Car park Street</a>
+                                  </li>
+                                  <li :class="{ active: classBay }">
+                                    <a href="/carparks/bay">Car park Bay</a>
+                                  </li>
+                                </ul>
                             </li>
-                            <li :class="{ active: classLevel }">
-                              <a href="/carparks/level">Level</a>
-                            </li>
-                            <li :class="{ active: classZLevel }">
-                              <a href="/carparks/zlevel">ZLevel</a>
-                            </li>
-                            <li :class="{ active: classStreet }">
-                              <a href="/carparks/street">Street</a>
-                            </li>
-                            <li :class="{ active: classBay }">
-                              <a href="/carparks/bay">Bay</a>
+                            <li :class="{ active: classProduct }">
+                              <a href="/carparks/product">Car park Product</a>
                             </li>
                             <li :class="{ active: classVoucher }">
-                              <a href="/carparks/voucher">Vocuher</a>
+                              <a href="/carparks/voucher">Car park Voucher</a>
                             </li>
                         </ul>
                     </li>
@@ -135,26 +143,26 @@
                           </li>
                         </ul>
                     </li>
-                    <li>
+                    <li :class="{ active: parker }">
                         <a  href="#"><i class="fa fa-thumb-tack "></i> <span class="nav-label">Parker</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                          <li>
+                          <li  :class="{ active: classParker }">
                               <a href="/parker">View Parker</a>
                           </li>
                         </ul>
                     </li>
-                    <li>
+                    <li :class="{ active: bank }">
                         <a  href="#"><i class="fa fa-university"></i> <span class="nav-label">Bank</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" >
-                          <li>
+                          <li :class="{ active: classBank }">
                               <a href="/bank">View Bank</a>
                           </li>
                         </ul>
                     </li>
-                  <li>
+                  <li :class="{ active: voucherBuy }">
                     <a  href="#"><i class="fa fa-unlock"></i> <span class="nav-label">Voucher Buy</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" >
-                      <li>
+                      <li :class="{ active: classVoucherBuy }">
                         <a href="/voucher/buy">View Voucher</a>
                       </li>
                     </ul>
@@ -177,7 +185,7 @@ export default {
           'classPole', 'classCountry', 'classState', 'classCity',
           'classAddSubscriber', 'classGateMaster', 'classGate',
           'classAdvert', 'classCustomer', 'classCustomerCP', 'classPassType',
-          'classStaff'
+          'classStaff', 'classParker', 'classBank', 'classVoucherBuy', 'classProduct'
   ],
 
   data () {
@@ -195,13 +203,22 @@ export default {
       parker: null,
       bank: null,
       voucherBuy: null,
+      classAll: false,
       isLoggedIn: localStorage.getItem('isLogged'),
     }
   },
   mounted() {
-      if(this.classZone || this.classLevel || this.classZLevel || this.classStreet || this.classBay || this.classVoucher) {
-        this.carparkActive = true
+      if(this.classZone || this.classLevel || this.classZLevel || this.classStreet || this.classBay) {
+        this.carparkActive = true;
+        this.classAll = true
       }
+      if(this.classVoucher) {
+        this.carparkActive = true;
+      }
+      if(this.classProduct) {
+        this.carparkActive = true;
+      }
+
       if(this.classMaster || this.classLock || this.classPole) {
         this.wheelMaster = true
       }
@@ -225,6 +242,15 @@ export default {
       }
       if(this.classStaff) {
         this.staff = true
+      }
+      if(this.classParker) {
+        this.parker = true
+      }
+      if(this.classBank) {
+        this.bank = true
+      }
+      if(this.classVoucherBuy) {
+        this.voucherBuy = true
       }
   }
 }

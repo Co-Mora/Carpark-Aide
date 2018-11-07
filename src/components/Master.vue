@@ -88,18 +88,19 @@
                     </ul>
                 </nav>
             </div>
+            <div class="ibox-title">
+              <p>Home / Wheel / Master</p>
+            </div>
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
-                            <div class="ibox-title">
-                                <h5>Wheel Master</h5>
-                            </div>
+
                             <div class="ibox-content">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="input-group" style="margin-bottom: 20px">
-                                            <a href="/wheel/master/add" class="btn btn-w-m btn-success">Add Master</a>
+                                            <a href="/wheel/master/add" class="btn btn-w-m btn-rounded btn-outline-primary">Create New Master</a>
                                         </div>
                                     </div>
                                     <div class="col-sm-9 m-b-xs">
@@ -111,7 +112,7 @@
                                     <div class="col-sm-3">
                                       <div class="input-group" style="margin-bottom: 20px">
                                         <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                       </div>
                                     </div>
                                 </div>
@@ -122,13 +123,12 @@
                                                 <th data-hide="phone,tablet">id(s)</th>
                                                 <th data-hide="phone,tablet">name</th>
                                                 <th data-hide="phone,tablet">remark</th>
-                                                <th data-hide="phone,tablet">Carpark Name</th>
+                                                <th data-hide="phone,tablet">Car Park Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                             <tr v-for="master in masters" :key="master" class="gradeX" v-if="result == true && errorResult === false">
-                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewMaster(master.id)">{{'Master: ' + master.id || 'Unknown'}}</a></td>
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewMaster(master.id)">{{master.id}}</a></td>
                                                 <td>{{master.name || 'Unknown'}}</td>
                                                 <td>{{master.remark || 'Unknown'}}</td>
                                                 <td>{{carparkName || 'Unknown'}}</td>
@@ -142,6 +142,9 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                    <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageMaster" role="alert">{{messageMaster}}</div>
+
                                 </div>
 
                             </div>
@@ -191,6 +194,7 @@ export default {
 
             result: true,
             message: '',
+            messageMaster: null,
             searchResult: '',
             errorResult: false,
             classMaster: true,
@@ -210,18 +214,16 @@ export default {
                         }
                     })
                     .then(response => {
-                        this.masters = response.data
-                        this.errorResult = false
+                        this.masters = response.data;
+                        this.errorResult = false;
                         this.message = "";
                         this.result = true;
                         if (this.masters.length === 0) {
                             this.errorResult = true;
                             this.result = true;
-                            this.message = "No Data Avaliable";
+                            this.message = "No data available.";
                         }
                     })
-
-
             },
             addMaster() {
                 axios
@@ -232,7 +234,10 @@ export default {
                     })
                     .then(response => {
                         this.masters = response.data
-                    })
+                        if(this.masters.length === 0 ){
+                          this.messageMaster = "No data available.";
+                        }
+                    });
                 this.carpark.forEach((el) => {
                     if (el.id === this.carparkID) {
                         this.carparkName = el.name

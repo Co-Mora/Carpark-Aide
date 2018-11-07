@@ -92,18 +92,19 @@
                 </ul>
             </nav>
             </div>
+               <div class="ibox-title">
+                 <p>Home / Wheel / Lock</p>
+               </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Wheel Lock</h5>
-                        </div>
+
                         <div class="ibox-content">
                           <div class="row">
                               <div class="col-lg-6">
                                   <div class="input-group" style="margin-bottom: 20px">
-                                      <a href="/wheel/lock/add" class="btn btn-w-m btn-success">Add Lock</a>
+                                      <a href="/wheel/lock/add" class="btn btn-w-m btn-rounded btn-outline-primary">Create New Lock</a>
                                   </div>
                               </div>
                               <div class="col-sm-9 m-b-xs">
@@ -121,7 +122,7 @@
                               <div class="col-sm-3">
                                 <div class="input-group" style="margin-bottom: 20px">
                                   <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                 </div>
                               </div>
                           </div>
@@ -138,7 +139,6 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                       <tr v-for="lock in locks" :key="lock" class="gradeX" v-if="result == true && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLock(lock.id)">{{'Lock: ' + lock.id || 'Unknown'}}</a></td>
                                           <td>{{lock.name || 'Unknown'}}</td>
@@ -148,14 +148,10 @@
                                           <td><button class="pull-right btn btn-primary btn-sm" value="lock.id" @click="addTrigger(lock.id)">Trigger</button></td>
                                       </tr>
                                   </tbody>
-                                  <tfoot>
-                                  <!-- <tr>
-                                      <td colspan="5">
-                                          <ul class="pagination float-right"></ul>
-                                      </td>
-                                  </tr> -->
-                                  </tfoot>
                               </table>
+                              <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageLock" role="alert">{{messageLock}}</div>
+
                             </div>
 
                         </div>
@@ -208,6 +204,7 @@ export default {
 
       result: true,
       message: '',
+      messageLock: null,
       searchResult: '',
       errorResult: false,
       classLock: true
@@ -237,7 +234,7 @@ export default {
               if (this.locks.length === 0) {
                   this.errorResult = true;
                   this.result = true;
-                  this.message = "No Data Avaliable";
+                  this.message = "No data available.";
               }
           })
     },
@@ -283,18 +280,17 @@ export default {
         axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
-            this.locks = response.data
-            if(this.Istrigger == 200 && this.locks.length > 0) {
-
+            this.locks = response.data;
+            if(this.locks.length === 0) {
+              this.messageLock = "No data available.";
 
             }
-        })
+        });
         this.wheelMasters.forEach((el) => {
            if(el.id === this.wheelMastersID) {
              this.wheelMastersName = el.name
            }
         })
-
     },
     viewLock(value) {
         axios

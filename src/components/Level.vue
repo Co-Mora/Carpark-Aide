@@ -105,17 +105,18 @@
 
             </nav>
             </div>
+               <div class="ibox-title">
+                 <p>Home / Car Park / Levels</p>
+               </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Levels</h5>
-                        </div>
+
                         <div class="ibox-content">
                             <div class="row">
                               <div class="input-group" style="margin: 0 0 20px 16px">
-                                  <a href="/carparks/level/add" class="btn btn-w-m btn-success" style="border-radius: 6px">Add Level</a>
+                                  <a href="/carparks/level/add" class="btn btn-w-m btn-rounded btn-outline-primary" >Create New Level</a>
                               </div>
                               <div class="col-sm-9 m-b-xs">
                                 <select v-model="carparkID" class="form-control m-b" @change="addLevel">
@@ -126,7 +127,7 @@
                               <div class="col-sm-3">
                                 <div class="input-group" style="margin-bottom: 20px">
                                   <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                 </div>
                              </div>
                             </div>
@@ -144,9 +145,8 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                       <tr v-for="level in levels" :key="level" class="gradeU" v-if="result == true && errorResult === false">
-                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(level.id)">{{'Level: ' + level.id || 'Unknown'}}</a></td>
+                                          <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLevel(level.id)">{{level.id}}</a></td>
                                           <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
                                           <td class="center">{{carparkName || 'Unknown'}}</td>
                                            <td class="center">{{level.name || 'Unknown'}}</td>
@@ -156,6 +156,9 @@
                                       </tr>
                                   </tbody>
                               </table>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageLevel" role="alert">{{messageLevel}}</div>
+
                             </div>
                         </div>
                     </div>
@@ -193,6 +196,7 @@ export default {
       carparkID: 'null',
       carparkName: null,
       validated: false,
+      messageLevel: null,
       levelID: null,
 
       result: true,
@@ -227,7 +231,7 @@ export default {
           if (this.levels.length === 0) {
             this.errorResult = true;
             this.result = true;
-            this.message = "No Data Available";
+            this.message = "No data available.";
           }
         })
 
@@ -263,7 +267,7 @@ export default {
         .then(response => {
             this.levels = response.data
             if(this.levels.length === 0) {
-                this.message = "No Levels Found";
+              this.messageLevel = "No data available.";
             }
         })
         this.carpark.forEach((el) => {

@@ -60,7 +60,6 @@
                                   </tr>
                               </thead>
                               <tbody>
-                                  <span v-show="selectedLevel == 0" style="font-size: 20px;">{{message}}</span>
                                   <tr v-for="level in selectedLevel" :key="z" class="gradeX">
                                       <td class="center">{{carparkName || 'Unknown'}}</td>
                                       <td class="center">{{level.NonReservedCount || 'Unknown'}}</td>
@@ -104,17 +103,17 @@
 
             </nav>
             </div>
+               <div class="ibox-title">
+                 <p>Home / Car Park / ZLevel</p>
+               </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>ZLevel</h5>
-                        </div>
                         <div class="ibox-content">
                             <div class="row">
                               <div class="input-group" style="margin: 0 0 20px 16px">
-                                  <a href="/carparks/zlevel/add" class="btn btn-w-m btn-success" style="border-radius: 6px">Add ZLevel</a>
+                                  <a href="/carparks/zlevel/add" class="btn btn-rounded btn-w-m btn-outline-primary">Create New ZLevel</a>
                               </div>
                               <div class="col-sm-9 m-b-xs">
                                 <select v-model="carparkID" class="form-control m-b" @change="ViewZone">
@@ -149,7 +148,6 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                      <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                       <tr v-for="level in zlevels" :key="level" class="gradeU" v-if="result == true && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZLevel(level.id)">{{'Level: ' + level.id || 'Unknown'}}</a></td>
                                           <td class="center"><a :href="level.image"><img style="width: 10%" :src="level.image"></a></td>
@@ -160,6 +158,8 @@
                                       </tr>
                                   </tbody>
                               </table>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageZLevels" role="alert">{{messageZLevels}}</div>
                             </div>
                         </div>
                     </div>
@@ -187,7 +187,7 @@ import qs from 'qs'
 
 import NavSide from './NavSide'
 export default {
-  name: 'Level',
+  name: 'ZLevel',
 
   data () {
     return {
@@ -204,6 +204,7 @@ export default {
 
       result: true,
       message: '',
+      messageZLevels: null,
       searchResult: '',
       errorResult: false,
       mySearch: [],
@@ -231,7 +232,7 @@ export default {
           if (this.zlevels.length === 0) {
             this.errorResult = true;
             this.result = true;
-            this.message = "No Data Available";
+            this.message = "No data available.";
           }
         })
 
@@ -258,18 +259,18 @@ export default {
     },
     handleFileUpload() {
        this.file = this.$refs.file.files[0];
-       console.log("File:", this.file)
+       console.log("File:", this.file);
        this.processFile();
     },
     addZLevel() {
         axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/zlevels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
-            this.zlevels = response.data
-            // if(this.zlevels.length === 0) {
-            //   this.message = "No Zone Level Found";
-            // }
-        })
+            this.zlevels = response.data;
+            if(this.zlevels.length === 0) {
+              this.messageZLevels = "No data available.";
+            }
+        });
         this.carpark.forEach((el) => {
            if(el.id === this.carparkID) {
              this.carparkName = el.name
@@ -287,11 +288,8 @@ export default {
                 )
                 .then(response => {
                     this.zone = response.data;
-                    this.zoneID = response.data[0].id
+                    this.zoneID = response.data[0].id;
                     this.addZLevel()
-                    // if (this.zone.length === 0) {
-                    //   this.message = "No Zone Level Found";
-                    // }
                 });
         },
     viewZLevel(value) {

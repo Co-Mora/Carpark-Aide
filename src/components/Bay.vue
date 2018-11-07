@@ -99,18 +99,19 @@
 
                 </nav>
             </div>
+          <div class="ibox-title">
+            <p>Home / Car Park / Bay</p>
+          </div>
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
-                            <div class="ibox-title">
-                                <h5>Bay (Carpark)</h5>
-                            </div>
+
                             <div class="ibox-content">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="input-group" style="margin-bottom: 20px">
-                                            <a href="/carparks/bay/add" class="btn btn-w-m btn-success">Add Bay</a>
+                                            <a href="/carparks/bay/add" class="btn btn-w-m btn-rounded btn-outline-primary">Create New Bay</a>
                                         </div>
                                     </div>
                                     <div class="col-sm-9 m-b-xs">
@@ -134,7 +135,7 @@
                                     <div class="col-sm-3">
                                       <div class="input-group" style="margin-bottom: 20px">
                                         <input v-model="searchResult" @change="getSearchResult" placeholder="Search" type="text" class="form-control form-control-sm"><span class="input-group-append">
-                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-primary">Search</button></span>
+                                      <button type="button"  @click="getSearchResult()" class="btn btn-sm btn-success">Search</button></span>
                                       </div>
                                     </div>
                                 </div>
@@ -168,6 +169,9 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                  <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageBay" role="alert">{{messageBay}}</div>
+
                                 </div>
 
                             </div>
@@ -222,6 +226,7 @@ export default {
 
             result: true,
             message: '',
+            messageBay :null,
             searchResult: '',
             errorResult: false,
             classBay: true,
@@ -276,7 +281,7 @@ export default {
             if (this.bays.length === 0) {
               this.errorResult = true;
               this.result = true;
-              this.message = "No Data Available";
+              this.message = "No data available.";
             }
           })
 
@@ -344,6 +349,9 @@ export default {
                     })
                     .then(response => {
                         this.bays = response.data
+                        if(this.bays.length === 0 ) {
+                          this.messageBay =  "No data available.";
+                        }
                     })
 
                 this.streets.forEach((el) => {
