@@ -8,10 +8,8 @@
               <h1 class="logo-name"></h1>
 
             </div>
-            <h3>Welcome to Car Park Aide</h3>
-            <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
-            </p>
-            <p>Login in. To see it in action.</p>
+            <h2>Park Aide</h2>
+            <p>Welcome to Car Park Aide.</p>
                 <div class="form-group">
                     <input type="email" v-model="email" class="form-control" placeholder="Email Address" required="">
                 </div>
@@ -19,6 +17,9 @@
                     <input type="password" v-model="password" class="form-control" placeholder="Password" required="">
                 </div>
                 <button class="btn btn-primary block full-width m-b" @click="auth">Login</button>
+                <a href="#"><small>Forgot password?</small></a>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="/register">Create an account</a>
             <p class="m-t"> <small>Car Park Aide web app &copy; 2018</small> </p>
         </div>
     </div>
@@ -71,13 +72,13 @@ export default {
 
         })
         .catch(error => {
-            if(error.message == 'Request failed with status code 401') {
+            if(error.message) {
                  setTimeout(() => {
                     swal({
                         title: 'Your Email or password is wrong',
                         icon: 'error'
                     })
-                }, 1000)
+                }, 200)
             }
 
         });

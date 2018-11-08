@@ -54,7 +54,7 @@
                                             <button class="pull-right btn btn-danger btn-sm" :value="master.id" @click="deleteMaster(master.id)">Delete</button>
                                         </td>
                                         <td>
-                                            <button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="viewMasterUpdate(master.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                            <button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="viewMasterUpdate(master.id)" >Update</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -234,6 +234,7 @@ export default {
                     })
                     .then(response => {
                         this.masters = response.data
+                        this.messageMaster = '';
                         if(this.masters.length === 0 ){
                           this.messageMaster = "No data available.";
                         }
@@ -269,7 +270,7 @@ export default {
                     )
                     .then(response => {
                         if (response.status == 200) {
-                            document.getElementById('myModal5').style.display = "none";
+                            $("#myModal5").modal("hide");
                             setTimeout(() => {
                                 swal({
                                     title: 'Delete it successfully',
@@ -283,7 +284,8 @@ export default {
                     });
             },
             viewMasterUpdate(value) {
-                document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
+                $("#myModalUpdate").modal("show");
                 axios
                     .get(
                         `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${value}`, {

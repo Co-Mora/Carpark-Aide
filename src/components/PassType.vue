@@ -116,6 +116,7 @@ export default {
         )
         .then(response => {
           this.passcard = response.data;
+          this.messagePass = '';
           if (this.passcard.length === 0) {
             this.messagePass = "No data available.";
           }

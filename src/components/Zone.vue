@@ -88,23 +88,7 @@
     <div id="wrapper">
         <nav-side :classZone="classZone"/>
         <div id="page-wrapper" class="gray-bg">
-            <div class="row border-bottom">
-                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header">
-                    </div>
-                    <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <span class="m-r-sm text-muted welcome-message">Welcome to Carpark Aide.</span>
-                        </li>
-
-                        <li>
-                            <a @click="logout" href="/login">
-                                <i class="fa fa-sign-out"></i> Log out
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <NavBar />
             <div class="ibox-title">
               <p>Home / Car Park / Zone</p>
             </div>
@@ -186,6 +170,7 @@
 import axios from "axios";
 import qs from 'qs'
 import NavSide from '../components/NavSide'
+import NavBar from '../components/NavBar'
 
 export default {
     name: "Zone",
@@ -280,7 +265,7 @@ export default {
                     )
                     .then(response => {
                         this.zone = response.data;
-
+                        this.messageZone = '';
                         if (this.zone.length === 0) {
                           this.messageZone = "No data available.";
                         }
@@ -407,13 +392,11 @@ export default {
 
               })
             },
-            logout() {
-                localStorage.removeItem('isLogged');
-                localStorage.removeItem('token');
-            }
+          
     },
     components: {
-      NavSide
+      NavSide,
+      NavBar
     },
     mounted() {
 

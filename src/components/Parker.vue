@@ -205,9 +205,9 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.customerParker = response.data
-            if(this.customerParker.length === 0 ) {
-              this.messageParker = "No data available.";
-            }
+            // if(this.customerParker.length === 0 ) {
+            //   this.messageParker = "No data available.";
+            // }
             this.customerParkerID = response.data[0].id;
             this.getParker();
         })
@@ -216,7 +216,12 @@ export default {
         axios
         .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers/${this.customerParkerID}`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
-            this.parker = response.data
+            this.parker = response.data;
+            this.messageParker = '';
+
+          if(this.parker.length === 0) {
+            this.messageParker = "No data available.";
+            }
             var date;
             var hours;
             var minutes;

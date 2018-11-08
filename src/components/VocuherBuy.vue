@@ -169,7 +169,7 @@
         )
         .then(response => {
           this.voucherBuy = response.data;
-          console.log(response)
+          this.messageVoucher = '';
           if (this.voucherBuy.length === 0) {
             this.messageVoucher = "No data available.";
           }

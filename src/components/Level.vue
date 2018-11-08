@@ -67,7 +67,7 @@
                                       <td class="center">{{level.ReservedCount || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="level.id" @click="deleteLevel(level.id)">Delete</button></td>
                                       <td>
-                                          <button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="viewLevelUpdate(level.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="level.id" @click="viewLevelUpdate(level.id)" >Update</button>
                                       </td>
                                   </tr>
                               </tbody>
@@ -263,6 +263,7 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.levels = response.data
+            this.messageLevel = '';
             if(this.levels.length === 0) {
               this.messageLevel = "No data available.";
             }
@@ -301,7 +302,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -315,7 +316,8 @@ export default {
           });
     },
     viewLevelUpdate(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
         axios
             .get(
                 `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/levels/${value}`, {

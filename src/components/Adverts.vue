@@ -47,7 +47,7 @@
                                   <tr v-for="ad in selectedAdverts" :key="z" class="gradeX">
                                       <td class="center">{{ad.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="ad.id" @click="deleteAdverts(ad.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="ad.id" @click="viewUpdateAdvert(ad.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="ad.id" @click="viewUpdateAdvert(ad.id)" >Update</button></td>
 
 
                                   </tr>
@@ -250,7 +250,7 @@ export default {
         )
         .then(response => {
           this.adverts = response.data;
-          console.log(this.adverts)
+          this.messageAdvert = '';
           if (this.adverts.length === 0) {
             this.messageAdvert ="No data available.";
           }
@@ -289,7 +289,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -304,7 +304,8 @@ export default {
     },
 
     viewUpdateAdvert(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
       axios
         .get(
           `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/adverts/${value}`, {

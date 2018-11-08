@@ -49,7 +49,7 @@
                                       <td>{{pole.mac || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="pole.id" @click="deletePole(pole.id)">Delete</button></td>
                                       <td>
-                                          <button class="pull-right btn btn-primary btn-sm" :value="pole.id" @click="viewPoleUpdate(pole.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="pole.id" @click="viewPoleUpdate(pole.id)" >Update</button>
                                       </td>
                                   </tr>
                               </tbody>
@@ -242,6 +242,7 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheelpoles`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.poleMasters = response.data
+            this.messagePole = '';
             if(this.poleMasters.length === 0) {
                   this.messagePole = "No data available.";
             }
@@ -280,7 +281,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -294,7 +295,8 @@ export default {
           });
     },
     viewPoleUpdate(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
         axios
             .get(
                 `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheelpoles/${value}`, {

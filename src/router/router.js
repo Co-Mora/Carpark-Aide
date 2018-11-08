@@ -61,6 +61,7 @@ import VoucherBuy from '../components/VocuherBuy'
 
 
 import CarParkProduct from '../components/CarParkProduct'
+import Register from '../components/Register'
 
 Vue.use(Router)
 
@@ -87,6 +88,10 @@ export function createRouter () {
         name: 'auth',
         path: '/login',
         component: Auth
+      },
+      {
+        path: '/register',
+        component: Register
       },
       {
         path:'/subscribe/add',

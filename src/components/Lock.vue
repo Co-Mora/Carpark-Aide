@@ -57,7 +57,7 @@
                                       <td>{{lock.mac || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="lock.id" @click="deleteLock(lock.id)">Delete</button></td>
                                       <td>
-                                          <button class="pull-right btn btn-primary btn-sm" :value="lock.id" @click="viewLockUpdate(lock.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="lock.id" @click="viewLockUpdate(lock.id)">Update</button>
                                       </td>
                                   </tr>
                               </tbody>
@@ -281,6 +281,7 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.locks = response.data;
+            this.messageLock = '';
             if(this.locks.length === 0) {
               this.messageLock = "No data available.";
 
@@ -317,7 +318,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -331,7 +332,8 @@ export default {
           });
     },
     viewLockUpdate(value) {
-      document.getElementById('myModal5').style.display = "none";
+        $("#myModal5").modal("hide");
+        $("#myModalUpdate").modal("show");
         axios
             .get(
                 `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters/${this.wheelMastersID}/wheellocks/${value}`, {

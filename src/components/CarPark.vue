@@ -93,16 +93,19 @@
                                     <tr>
                                         <th>ID(s)</th>
                                         <th >image</th>
-                                        <th>isEnable</th>
-                                        <th>name</th>
+                                        <th>Is Enable</th>
+                                        <th>Car Park</th>
+                                        <th>contractType</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="car in carpark" :key="car" class="gradeX" v-if="result == true && errorResult === false">
                                             <td class="center"><a  data-toggle="modal" data-target="#myModal5" @click="viewCarpark(car.id)">{{car.id}}</a></td>
-                                            <td class="center"><a :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
+                                            <td class="center-orientation"><a  :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
                                             <td class="center"><span :class="{ 'label-primary': car.isEnable == 1, 'label-danger': car.isEnable == 0 }" class="float-right label">{{car.isEnable == 1 ? 'Enable' : 'Disable'}}</span></td>
                                             <td class="center">{{car.name   || 'Unknown'}}</td>
+                                          <td class="center">{{parseInt(car.contractType) === 1 ? 'Lease'  : 'Manage'}}</td>
+
                                         </tr>
 
                                     </tbody>
@@ -357,6 +360,7 @@ export default {
       .get(`https://sys2.parkaidemobile.com/api/carparks/`,{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
+        this.messageCar = '';
         if(this.carpark.length === 0 ){
           this.messageCar = "No data available.";
         }

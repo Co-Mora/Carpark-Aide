@@ -236,7 +236,7 @@ export default {
           )
           .then(response => {
               this.banks = response.data;
-
+              this.messageBank = '';
               if (this.banks.length === 0) {
                   this.messageBank = "No data available.";
               }

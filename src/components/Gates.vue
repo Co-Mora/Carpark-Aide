@@ -46,7 +46,7 @@
                                   <tr v-for="gate in selectedGate" :key="z" class="gradeX">
                                       <td class="center">{{gate.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="gate.id" @click="deleteGate(gate.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="gate.id" @click="viewUpdateGate(gate.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="gate.id" @click="viewUpdateGate(gate.id)" >Update</button></td>
 
                                   </tr>
                               </tbody>
@@ -202,6 +202,7 @@ export default {
           this.gateMaster = response.data;
           this.gateMasterID = response.data[0].id
           this.addGates()
+          this.messageGate = '';
           if (this.gateMaster.length === 0) {
             this.messageGate = "No data available.";
           }
@@ -215,6 +216,7 @@ export default {
         )
         .then(response => {
           this.gates = response.data;
+          this.messageGate = '';
           if (this.gates.length === 0) {
             this.messageGate = "No data available.";
           }
@@ -253,7 +255,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -267,7 +269,8 @@ export default {
           });
     },
     viewUpdateGate(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
       axios
         .get(
           `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${this.gateMasterID}/gates/${value}`, {

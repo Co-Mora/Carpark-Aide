@@ -50,7 +50,7 @@
                                       <td class="center">{{voucher.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="voucher.id" @click="deleteVoucher(voucher.id)">Delete</button></td>
                                       <td>
-                                          <button class="pull-right btn btn-primary btn-sm" :value="voucher.id" @click="viewVoucherUpdate(voucher.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="voucher.id" @click="viewVoucherUpdate(voucher.id)" >Update</button>
                                       </td>
                                   </tr>
                               </tbody>
@@ -252,6 +252,7 @@ export default {
         )
         .then(response => {
           this.voucher = response.data;
+          this.messageVoucher = '';
           if (this.voucher.length === 0) {
             this.messageVoucher = "No data available.";
           }
@@ -274,7 +275,7 @@ export default {
             .then(response => {
                 this.selectedVoucher = response.data;
                 if (this.selectedVoucher.length === 0) {
-                    this.message = "Threre's no carpark";
+                    this.message = "No data available.";
                 }
             });
 
@@ -290,7 +291,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -304,7 +305,8 @@ export default {
           });
     },
     viewVoucherUpdate(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
         axios
             .get(
                 `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/vouchers/${value}`, {

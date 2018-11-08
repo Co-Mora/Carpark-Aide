@@ -252,6 +252,7 @@ export default {
             )
             .then(response => {
                 this.customers = response.data;
+                this.messageCustomer = '';
                 if (this.customers.length === 0) {
                     this.messageCustomer = "No data available.";
                 }

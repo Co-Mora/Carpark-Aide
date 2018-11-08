@@ -53,7 +53,7 @@
                                       <td class="center">{{street.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="street.id" @click="deleteStreet(street.id)">Delete</button></td>
                                       <td>
-                                          <button class="pull-right btn btn-primary btn-sm" :value="street.id" @click="viewStreetUpdate(street.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                          <button class="pull-right btn btn-primary btn-sm" :value="street.id" @click="viewStreetUpdate(street.id)" >Update</button>
                                       </td>
                                   </tr>
                               </tbody>
@@ -80,6 +80,9 @@
             <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+              <div class="navbar-header">
+                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+              </div>
            <div class="navbar-header">
             </div>
                 <ul class="nav navbar-top-links navbar-right">
@@ -270,7 +273,8 @@ export default {
         axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
-            this.streets = response.data
+            this.streets = response.data;
+            this.messageStreet = '';
             if(this.streets.length === 0) {
                   this.messageStreet =  "No data available.";
             }
@@ -292,9 +296,6 @@ export default {
             )
             .then(response => {
                 this.selectedStreet = response.data;
-                // if (this.selectedStreet.length === 0) {
-                //     this.message = "Threre's no carpark";
-                // }
             });
 
     },
@@ -309,7 +310,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -323,7 +324,8 @@ export default {
           });
     },
     viewStreetUpdate(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
         axios
             .get(
                 `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${value}`, {

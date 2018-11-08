@@ -63,7 +63,7 @@
                                         <button class="pull-right btn btn-danger btn-sm" :value="bay.id" @click="deleteBay(bay.id)">Delete</button>
                                     </td>
                                     <td>
-                                        <button class="pull-right btn btn-primary btn-sm" :value="bay.id" @click="viewBayUpdate(bay.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button>
+                                        <button class="pull-right btn btn-primary btn-sm" :value="bay.id" @click="viewBayUpdate(bay.id)" >Update</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -169,8 +169,8 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                                  <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageBay" role="alert">{{messageBay}}</div>
+                                    <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                                  <div class="alert alert-warning col-sm-12 m-b-xs" v-show="messageBay" role="alert">{{messageBay}}</div>
 
                                 </div>
 
@@ -226,7 +226,7 @@ export default {
 
             result: true,
             message: '',
-            messageBay :null,
+            messageBay: null,
             searchResult: '',
             errorResult: false,
             classBay: true,
@@ -240,7 +240,7 @@ export default {
             fact: "test"
           }, {headers: { 'x-access-token': JSON.parse(this.token), 'Content-Type': 'application/x-www-form-urlencoded',}})
           .then(response => {
-            console.log(response)
+            console.log(response);
             this.Istrigger = response.status;
             setTimeout(() => {
               swal({
@@ -332,12 +332,9 @@ export default {
                         }
                     })
                     .then(response => {
-                        this.streets = response.data
-                        this.streetID = response.data[0].id
+                        this.streets = response.data;
+                        this.streetID = response.data[0].id;
                         this.filterZoneByBay()
-                            // if (this.streets.length === 0) {
-                            //     this.message = "Threre's no carpark";
-                            // }
                     })
             },
             filterZoneByBay() {
@@ -349,6 +346,7 @@ export default {
                     })
                     .then(response => {
                         this.bays = response.data
+                        this.messageBay = '';
                         if(this.bays.length === 0 ) {
                           this.messageBay =  "No data available.";
                         }
@@ -385,7 +383,7 @@ export default {
                     )
                     .then(response => {
                         if (response.status == 200) {
-                            document.getElementById('myModal5').style.display = "none";
+                          $("#myModal5").modal("hide");
                             setTimeout(() => {
                                 swal({
                                     title: 'Delete it successfully',
@@ -399,8 +397,10 @@ export default {
                     });
             },
             viewBayUpdate(value) {
-                document.getElementById('myModal5').style.display = "none";
-                axios
+              $("#myModal5").modal("hide");
+              $("#myModalUpdate").modal("show");
+
+              axios
                     .get(
                         `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays/${value}`, {
                             headers: {
@@ -415,7 +415,6 @@ export default {
             },
             updateBay(value) {
                 this.validated = true;
-                document.getElementById('myModalUpdate').style.display = "none";
                 axios({
                         method: 'put',
                         url: `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/${this.streetID}/bays/${value}`,

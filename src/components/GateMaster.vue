@@ -45,7 +45,7 @@
                                   <tr v-for="master in selectedMaster" :key="z" class="gradeX">
                                       <td class="center">{{master.name || 'Unknown'}}</td>
                                       <td><button class="pull-right btn btn-danger btn-sm" :value="master.id" @click="deleteGateMaster(master.id)">Delete</button></td>
-                                      <td><button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="viewUpdateMaster(master.id)" data-toggle="modal" data-target="#myModalUpdate">Update</button></td>
+                                      <td><button class="pull-right btn btn-primary btn-sm" :value="master.id" @click="viewUpdateMaster(master.id)" >Update</button></td>
                                   </tr>
                               </tbody>
                           </table>
@@ -223,6 +223,7 @@ export default {
         )
         .then(response => {
           this.getMaster = response.data;
+          this.messageGate = '';
           if (this.getMaster.length === 0) {
             this.messageGate =  "No data available.";
           }
@@ -244,6 +245,7 @@ export default {
             )
             .then(response => {
                 this.selectedMaster = response.data;
+                this.messageGate = '';
                 if (this.selectedMaster.length === 0) {
                     this.messageGate =  "No data available.";
                 }
@@ -261,7 +263,7 @@ export default {
           )
           .then(response => {
               if(response.status == 200) {
-                 document.getElementById('myModal5').style.display = "none";
+                $("#myModal5").modal("hide");
                 setTimeout(() => {
                     swal({
                         title: 'Delete it successfully',
@@ -275,7 +277,8 @@ export default {
           });
     },
     viewUpdateMaster(value) {
-      document.getElementById('myModal5').style.display = "none";
+      $("#myModal5").modal("hide");
+      $("#myModalUpdate").modal("show");
       axios
         .get(
           `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/gatemasters/${value}`, {

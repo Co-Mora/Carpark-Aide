@@ -267,6 +267,7 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/zlevels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.zlevels = response.data;
+            this.messageZLevels
             if(this.zlevels.length === 0) {
               this.messageZLevels = "No data available.";
             }
