@@ -62,6 +62,8 @@ import VoucherBuy from '../components/VocuherBuy'
 
 import CarParkProduct from '../components/CarParkProduct'
 import Register from '../components/Register'
+import ResetPassword from '../components/ResetPassword'
+import ForgotPassword from '../components/ForgotPassword'
 
 Vue.use(Router)
 
@@ -92,6 +94,14 @@ export function createRouter () {
       {
         path: '/register',
         component: Register
+      },
+      {
+        path: '/setting/reset_password',
+        component: ResetPassword
+      },
+      {
+        path: '/setting/forgot_password',
+        component: ForgotPassword
       },
       {
         path:'/subscribe/add',

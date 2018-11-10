@@ -4,9 +4,9 @@
       <div id="wrapper">
         <NavSide />
         <div id="page-wrapper" class="gray-bg">
-         <NavBar />
+          <NavBar />
           <div class="ibox-title">
-            <p>Home / Register / Create New User</p>
+            <p>Home / Settings / Reset Password</p>
           </div>
           <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
@@ -24,21 +24,13 @@
                 <div class="ibox ">
 
                   <div class="ibox-content">
-                    <div class="form-group row"><label class="col-sm-2 col-form-label">First Name</label>
-                      <div class="col-sm-10"><input v-model="name"  placeholder="first name" type="text" class="form-control"></div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
-                      <div class="col-sm-10"><input v-model="email"  placeholder="email address" type="text" class="form-control"></div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
                     <div class="form-group row"><label class="col-sm-2 col-form-label">Password</label>
                       <div class="col-sm-10"><input v-model="password"  placeholder="password" type="password" class="form-control"></div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group row">
                       <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-primary btn-sm" @click="register()" :disabled="validated === true">Add</button>
+                        <button class="btn btn-primary btn-sm" @click="resetPassword()" :disabled="validated === true">Reset</button>
                       </div>
                     </div>
                   </div>
@@ -62,18 +54,13 @@
   import NavBar from '../components/NavBar'
   import MainFooter from '../components/MainFooter'
   export default {
-    name: 'Register',
+    name: 'reset-password',
 
     data () {
       return {
         validated: false,
-        isLoggedIn: false,
         token: localStorage.getItem('token'),
-        name: null,
-        email: null,
-        checked: false,
         password: null,
-        message: null,
         errors: []
       }
     },
@@ -84,26 +71,17 @@
     },
     methods: {
 
-      register() {
+      resetPassword() {
         setTimeout(() => {
           $('.alert').alert('close')
         }, 500);
-        if (!this.name && !this.email && !this.password) {
-          this.errors.push('Please fill up the forms');
-          return false
-        } if (!this.name) {
-          this.errors.push('Please fill up the First Name')
-        } if (!this.email) {
-          this.errors.push('Please fill up the Email Field')
-        } if (!this.password) {
-          this.errors.push('Please fill up the Password Field')
-        }else  {
+        if (!this.password) {
+          this.errors.push('Please fill up the Reset Password');
+        } else  {
           axios({
             method: 'post',
-            url: 'https://sys2.parkaidemobile.com/api/auth/register',
+            url: 'https://sys2.parkaidemobile.com/api/auth/reset',
             data: qs.stringify({
-              name: this.name,
-              email: this.email,
               password: this.password,
             }),
             headers: {
@@ -111,20 +89,15 @@
               'x-access-token': JSON.parse(this.token)
             },
           }).then(response => {
-            if(response.data.auth === true) {
+              console.log(response);
               this.validated = true;
               setTimeout(() => {
                 swal({
-                  title: 'Add it successfully',
+                  title: 'Reset it successfully',
                   icon: 'success'
                 })
               }, 200);
-              this.name = null;
-              this.email = null;
               this.password = null;
-              //window.location.href = '/'
-            }
-
           })
             .catch(error => {
               if(error.message) {

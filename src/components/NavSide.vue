@@ -168,7 +168,21 @@
                     </ul>
                   </li>
                   <li>
-                    <a href="/login" @click-="logout"><i class="fa fa-key"></i> <span class="nav-label">Log out</span></a>
+                    <a  href="#"><i class="fa fa-sliders"></i> <span class="nav-label">Settings</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse" >
+                      <li>
+                        <a href="/setting/forgot_password">Forgot Password</a>
+                      </li>
+                      <li>
+                        <a href="/setting/reset_password">Reset Password</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="/register"><i class="fa fa-key"></i> <span class="nav-label">Register</span></a>
+                  </li>
+                  <li>
+                    <a href="/login" @click-="logout"><i class="fa fa-power-off"></i> <span class="nav-label">Log out</span></a>
                   </li>
                 </ul>
 

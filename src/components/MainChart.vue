@@ -78,7 +78,6 @@ export default {
          'x-access-token': JSON.parse(this.token)
     },
     }).then(response => {
-        console.log(response)
         if(response.data.status == 200) {
             window.location.href = '/'
         }
