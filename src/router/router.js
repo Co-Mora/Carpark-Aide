@@ -1,4 +1,5 @@
 // router.js
+
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '../components/Index'
@@ -64,6 +65,9 @@ import CarParkProduct from '../components/CarParkProduct'
 import Register from '../components/Register'
 import ResetPassword from '../components/ResetPassword'
 import ForgotPassword from '../components/ForgotPassword'
+
+import Users from '../components/Users'
+import Activity from '../components/Activity'
 
 Vue.use(Router)
 
@@ -275,6 +279,14 @@ export function createRouter () {
       {
         path:'/carparks/product',
         component: CarParkProduct,
+      },
+      {
+        path:'/users',
+        component: Users,
+      },
+      {
+        path:'/activity',
+        component: Activity,
       },
 
     ]

@@ -55,7 +55,7 @@
                             <thead>
                                 <tr>
                                     <th data-hide="phone,tablet">Carpark Name</th>
-                                    <th data-hide="phone,tablet">ReservedCount</th>
+                                    <th data-hide="phone,tablet">Reserved Bay Count	</th>
                                     <th data-hide="phone,tablet">Delete</th>
                                     <th data-hide="phone,tablet">Update</th>
 
@@ -116,29 +116,31 @@
                                   </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet">id(s)</th>
-                                                <th data-hide="phone,tablet">image</th>
-                                                <th data-hide="phone,tablet">Carpark Name</th>
-                                                <th data-hide="phone,tablet">name</th>
-                                                <th data-hide="phone,tablet">TandemCount</th>
-                                                <th data-hide="phone,tablet">NonReservedCount</th>
-                                                <th data-hide="phone,tablet">MotorcycleCount</th>
+                                                <th>id(s)</th>
+                                                <th>image</th>
+                                                <th >Zone Name</th>
+                                                <th >Tandem-Reserved Bay Count	</th>
+                                                <th >Non-Reserved Bay Count	</th>
+                                                <th >Motorcycle Bay Count	</th>
+                                                <th >Total</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="z in zone" :key="z" class="gradeX" v-if="result == true && errorResult === false">
-                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZone(z.id)">{{'Zone: ' + z.id || 'Unknown'}}</a></td>
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewZone(z.id)">{{z.id}}</a></td>
                                                 <td class="center">
                                                     <a :href="z.image"><img style="width: 10%" :src="z.image"></a>
                                                 </td>
-                                                <td class="center">{{carparkName || 'Unknown'}}</td>
                                                 <td class="center">{{z.name || 'Unknown'}}</td>
                                                 <td class="center">{{z.TandemCount || 0}}</td>
                                                 <td class="center">{{z.NonReservedCount || 0}}</td>
                                                 <td class="center">{{z.MotorcycleCount || 0}}</td>
+                                               <td class="center">{{z.totalSeason || 0}}</td>
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -171,6 +173,7 @@ import axios from "axios";
 import qs from 'qs'
 import NavSide from '../components/NavSide'
 import NavBar from '../components/NavBar'
+import authMe from '../api/authMe'
 
 export default {
     name: "Zone",
@@ -399,6 +402,7 @@ export default {
       NavBar
     },
     mounted() {
+      authMe();
       axios({
         method: 'get',
         url: 'https://sys2.parkaidemobile.com/api/auth/me',

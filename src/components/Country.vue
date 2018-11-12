@@ -89,7 +89,7 @@ import axios from "axios";
 import NavSide from '../components/NavSide'
 
 export default {
-  name: "Zone",
+  name: "Country",
   data() {
     return {
       country: null,
@@ -162,7 +162,7 @@ export default {
       )
       .then(response => {
         this.country = response.data;
-        this.countryID = response.data[0].id;
+        this.messageCountry = '';
         if (this.country.length === 0) {
           this.messageCountry = "No data available.";
         }

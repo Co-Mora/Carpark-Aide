@@ -32,7 +32,6 @@ export default {
     MainFooter
   },
   mounted() {
-    a
   }
 }
 

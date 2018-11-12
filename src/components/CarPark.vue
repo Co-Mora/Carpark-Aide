@@ -24,7 +24,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal inmodal " id="myModal5"  role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -55,9 +54,7 @@
                               </tbody>
                           </table>
                       </div>
-
                   </div>
-
                   <div class="modal-footer">
                       <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                   </div>
@@ -71,7 +68,6 @@
         <div class="row">
                   <div class="col-lg-12">
                       <div class="ibox ">
-
                           <div class="ibox-content">
                             <div class="row">
                                 <div class="col-lg-6">
@@ -95,7 +91,10 @@
                                         <th >image</th>
                                         <th>Is Enable</th>
                                         <th>Car Park</th>
-                                        <th>contractType</th>
+                                        <th>Total Bay</th>
+                                        <th>contract Type</th>
+                                        <th>DateCreated</th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -104,8 +103,9 @@
                                             <td class="center-orientation"><a  :href="car.image"><img style="width: 10%" :src="car.image"></a></td>
                                             <td class="center"><span :class="{ 'label-primary': car.isEnable == 1, 'label-danger': car.isEnable == 0 }" class="float-right label">{{car.isEnable == 1 ? 'Enable' : 'Disable'}}</span></td>
                                             <td class="center">{{car.name   || 'Unknown'}}</td>
-                                          <td class="center">{{parseInt(car.contractType) === 1 ? 'Lease'  : 'Manage'}}</td>
-
+                                            <td class="center">{{car.bay}}</td>
+                                            <td class="center">{{parseInt(car.contractType) === 1 ? 'Lease'  : 'Manage'}}</td>
+                                            <td class="center">{{car.createDate}}</td>
                                         </tr>
 
                                     </tbody>
@@ -119,9 +119,7 @@
                                 </table>
                                 <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                 <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageCar" role="alert">{{messageCar}}</div>
-
                               </div>
-
                           </div>
                       </div>
                   </div>
@@ -136,7 +134,7 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
-
+import auth from '../api/authMe'
 export default {
  name: 'CarPark',
   data () {
@@ -355,30 +353,31 @@ export default {
     },
   },
   mounted () {
-    axios({
-      method: 'get',
-      url: 'https://sys2.parkaidemobile.com/api/auth/me',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'x-access-token': JSON.parse(this.token)
-      },
-    }).then(response => {
-      console.log(response)
-      if(response.data.status == 200) {
-        window.location.href = '/carparks'
-      }
-
-    })
-      .catch(error => {
-        if(error.message == 'Request failed with status code 500') {
-          window.location.href = '/login'
-        }
-
-      });
+    auth();
     axios
       .get(`https://sys2.parkaidemobile.com/api/carparks/`,{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
+        var date;
+        var day;
+        var month;
+        var year;
+        var hours;
+        var minutes;
+        var seconds;
+        var formattedTime;
+        this.carpark.forEach((el) => {
+
+          date = new Date(el.createDate * 1000);
+          day = date.getDay();
+          month = date.getMonth();
+          year = date.getFullYear();
+          hours = date.getHours();
+          minutes = "0" + date.getMinutes();
+          seconds = "0" + date.getSeconds();
+          formattedTime = year + '-' + month + '-' + day + '  ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+          el.createDate = formattedTime
+        });
         this.messageCar = '';
         if(this.carpark.length === 0 ){
           this.messageCar = "No data available.";

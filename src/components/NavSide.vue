@@ -179,6 +179,12 @@
                     </ul>
                   </li>
                   <li>
+                    <a href="/activity"><i class="fa fa-flag-o"></i> <span class="nav-label">Activity</span></a>
+                  </li>
+                  <li :class="{ active: classUsers }">
+                    <a href="/users"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
+                  </li>
+                  <li>
                     <a href="/register"><i class="fa fa-key"></i> <span class="nav-label">Register</span></a>
                   </li>
                   <li>
@@ -202,7 +208,7 @@ export default {
           'classPole', 'classCountry', 'classState', 'classCity',
           'classAddSubscriber', 'classGateMaster', 'classGate',
           'classAdvert', 'classCustomer', 'classCustomerCP', 'classPassType',
-          'classStaff', 'classParker', 'classBank', 'classVoucherBuy', 'classProduct'
+          'classStaff', 'classParker', 'classBank', 'classVoucherBuy', 'classProduct', 'classUsers'
   ],
 
   data () {
@@ -231,7 +237,9 @@ export default {
     }
   },
   mounted() {
+
       if(this.classZone || this.classLevel || this.classZLevel || this.classStreet || this.classBay) {
+
         this.carparkActive = true;
         this.classAll = true
       }
@@ -275,6 +283,7 @@ export default {
       if(this.classVoucherBuy) {
         this.voucherBuy = true
       }
+
   }
 }
 
