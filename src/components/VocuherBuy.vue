@@ -41,7 +41,7 @@
                     </div>
                   </div>
                   <div class="table-responsive">
-                    <table v-show="!messageVoucher" class="table table-striped table-bordered table-hover dataTables-example">
+                    <table v-show="!messageVoucher  && !message" class="table table-striped table-bordered table-hover dataTables-example">
                       <thead>
                       <tr>
                         <th data-hide="phone,tablet">id(s)</th>

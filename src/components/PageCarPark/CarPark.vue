@@ -84,7 +84,7 @@
                                 </div>
                               </div>
                               <div class="table-responsive">
-                                <table v-show="carpark.length > 0" class="table table-bordered">
+                                <table v-show="!messageCar > 0 && !message" class="table table-bordered">
                                     <thead>
                                     <tr>
                                         <th>ID(s)</th>

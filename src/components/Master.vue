@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table v-show="!messageMaster" class="table table-striped table-bordered table-hover dataTables-example">
+                                    <table v-show="!messageMaster  && !message" class="table table-striped table-bordered table-hover dataTables-example">
                                         <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet">id(s)</th>

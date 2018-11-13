@@ -50,7 +50,7 @@
                               </div>
                           </div>
                             <div class="table-responsive">
-                              <table  v-show="!messageCity" class="table table-striped table-bordered table-hover dataTables-example">
+                              <table  v-show="!messageCity  && !message" class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
                                  <tr>
                                      <th data-hide="phone,tablet">id(s)</th>

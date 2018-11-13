@@ -135,7 +135,7 @@
                              </div>
                             </div>
                             <div class="table-responsive">
-                              <table v-show="!messageZLevels" class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageZLevels  && !message" class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
                                   <tr>
                                       <th>id(s)</th>

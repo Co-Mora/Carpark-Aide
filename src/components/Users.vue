@@ -22,7 +22,7 @@
                     </div>
                   </div>
                   <div class="table-responsive">
-                    <table v-show="!messageUsers" class="table table-striped table-bordered table-hover dataTables-example">
+                    <table v-show="!messageUsers && !message" class="table table-striped table-bordered table-hover dataTables-example">
                       <thead>
                       <tr>
                         <th data-hide="phone,tablet">id(s)</th>
@@ -47,7 +47,7 @@
                       </tr>
                       </tfoot>
                     </table>
-                    <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
+                    <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                     <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageUsers" role="alert">{{messageUsers}}</div>
 
                   </div>

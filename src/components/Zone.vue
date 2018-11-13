@@ -116,7 +116,7 @@
                                   </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table v-show="!messageZone" class="table table-bordered">
+                                    <table v-show="!messageZone && !message" class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>id(s)</th>

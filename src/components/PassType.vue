@@ -47,7 +47,7 @@
                                 </div>
                               </div>
                             </div>
-                             <table v-show="!messagePass" class="table table-striped table-bordered table-hover dataTables-example">
+                             <table v-show="!messagePass  && !message" class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                 <tr>
                                     <th data-hide="phone,tablet">id(s)</th>

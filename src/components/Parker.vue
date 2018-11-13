@@ -95,7 +95,7 @@
                             </div>
                           </div>
                             <div class="table-responsive">
-                              <table v-show="!messageParker" class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageParker && !message" class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
                                  <tr>
                                      <th data-hide="phone,tablet">id(s)</th>
