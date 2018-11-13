@@ -38,7 +38,7 @@
                             </div>
                           </div>
                           <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <table v-show="!messageStaff" class="table table-striped table-bordered table-hover dataTables-example">
                               <thead>
                               <tr>
                                 <th data-hide="phone,tablet">id(s)</th>
@@ -161,10 +161,13 @@ export default {
       )
       .then(response => {
         this.staff = response.data;
+        this.messageStaff = "";
         if (this.staff.length === 0) {
           this.messageStaff =  "No data available.";
+        } else {
+          this.staffID = response.data[0].id;
         }
-        this.staffID = response.data[0].id;
+
 
       });
   }

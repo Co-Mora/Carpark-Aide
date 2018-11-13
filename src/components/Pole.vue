@@ -119,7 +119,7 @@
                               </div>
                           </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messagePole" class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">id(s)</th>
@@ -232,9 +232,13 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.wheelMasters = response.data
-            this.wheelMastersID = response.data[0].id
-            this.filterMasterPole()
-            console.log(response)
+            this.messagePole = '';
+            if(this.wheelMasters.length === 0) {
+              this.messagePole = "No data available.";
+            } else {
+              this.wheelMastersID = response.data[0].id
+              this.filterMasterPole()
+            }
         })
     },
     filterMasterPole() {

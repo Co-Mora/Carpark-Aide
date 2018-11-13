@@ -36,7 +36,7 @@
                               </div>
                               <div class="col-sm-9 m-b-xs">
                                 <select v-model="passTypeID" class="form-control m-b" @change="getPasscard">
-                                  <option disabled selected value="null" key="null">Please Select Pass Type</option>
+                                  <option disabled selected value="null" key="null">{{passTypeID ? 'Please Select Pass Type' : 'NOT Found'}}</option>
                                   <option v-for="pass in passType" :value="pass.id" :key="pass">{{pass.name}}</option>
                                 </select>
                               </div>
@@ -47,7 +47,7 @@
                                 </div>
                               </div>
                             </div>
-                             <table class="table table-striped table-bordered table-hover dataTables-example">
+                             <table v-show="!messagePass" class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                 <tr>
                                     <th data-hide="phone,tablet">id(s)</th>
@@ -140,10 +140,12 @@ export default {
       )
       .then(response => {
         this.passType = response.data;
-        this.passTypeID = response.data[0].id
-        this.getPasscard()
+        this.messagePass = "";
         if (this.passType.length === 0) {
           this.messagePass = "No data available.";
+        } else {
+          this.passTypeID = response.data[0].id
+          this.getPasscard()
         }
       });
   }

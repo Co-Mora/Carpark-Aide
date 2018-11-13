@@ -12,7 +12,7 @@ import Street from '../components/Street'
 import Bay from '../components/Bay'
 import Voucher from '../components/Voucher'
 
-import AddCarpark from '../components/AddCarpark'
+import AddCarpark from '../components/PageCarPark/AddCarpark'
 import CarparkFees from '../components/CarparkFees'
 import Auth from '../components/Auth'
 

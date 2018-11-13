@@ -45,7 +45,7 @@
 <script>
 import axios from 'axios'
 import NavSide from './NavSide'
-import CarPark from '../components/CarPark'
+import CarPark from './PageCarPark/CarPark'
 import Dashboard from '../components/Dashboard'
 
 export default {

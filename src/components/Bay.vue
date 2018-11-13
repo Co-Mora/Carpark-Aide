@@ -140,7 +140,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover dataTables-example">
+                                    <table v-show="!messageBay" class="table table-striped table-bordered table-hover dataTables-example">
                                         <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet">id(s)</th>
@@ -154,9 +154,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <div class="alert alert-primary col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
                                             <tr v-for="b in bays" :key="b" class="gradeU" v-if="result == true && errorResult === false">
-                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBay(b.id)">{{'Bay: ' + b.id || 'Unknown'}}</a></td>
+                                                <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewBay(b.id)">{{b.id}}</a></td>
                                                 <td class="center">
                                                     <a :href="b.image"><img style="width: 10%" :src="b.image"></a>
                                                 </td>
@@ -217,9 +216,9 @@ export default {
 
             bays: null,
             bayID: null,
-            zoneID: 'null',
+            zoneID: null,
             streetName: null,
-            carparkID: 'null',
+            carparkID: null,
             selectedBay: null,
             token: localStorage.getItem('token'),
             isLoggedIn: localStorage.getItem('isLogged'),
@@ -319,9 +318,13 @@ export default {
                     })
                     .then(response => {
                         this.zone = response.data;
-                        this.zoneID = response.data[0].id;
-                        this.filterZoneByStreet();
-                        console.log(this.zone)
+                        this.messageBay = '';
+                        if(this.zone.length === 0 ) {
+                          this.messageBay =  "No data available.";
+                        } else {
+                          this.zoneID = response.data[0].id;
+                          this.filterZoneByStreet();
+                        }
                     })
             },
             filterZoneByStreet() {
@@ -333,8 +336,14 @@ export default {
                     })
                     .then(response => {
                         this.streets = response.data;
-                        this.streetID = response.data[0].id;
-                        this.filterZoneByBay()
+                        this.messageBay = '';
+                        if(this.streets.length === 0 ) {
+                          this.messageBay =  "No data available.";
+                        } else {
+                          this.streetID = response.data[0].id;
+                          this.filterZoneByBay()
+                        }
+
                     })
             },
             filterZoneByBay() {
@@ -350,7 +359,7 @@ export default {
                         if(this.bays.length === 0 ) {
                           this.messageBay =  "No data available.";
                         }
-                    })
+                    });
 
                 this.streets.forEach((el) => {
                     if (el.id === this.streetID) {

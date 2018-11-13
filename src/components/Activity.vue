@@ -33,7 +33,7 @@
                     </div>
                   </div>
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table v-show="!messageActivity" class="table table-striped">
                       <thead>
                       <tr>
                         <th data-hide="phone,tablet">id(s)</th>
@@ -131,6 +131,10 @@
           )
           .then(response => {
             this.activity = response.data;
+            this.messageActivity = "";
+            if (this.activity.length === 0) {
+              this.messageActivity = "No data available.";
+            }
             var date;
             var day;
             var month;
@@ -175,8 +179,14 @@
         })
         .then(response => {
           this.users = response.data;
-          this.userID = response.data[0].operatorID;
-          this.getActivity()
+          this.messageActivity = "";
+          if (this.users.length === 0) {
+            this.messageActivity = "No data available.";
+          } else {
+            this.userID = response.data[0].operatorID;
+            this.getActivity()
+          }
+
 
         });
 

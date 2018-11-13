@@ -49,7 +49,7 @@
                   </div>
                   <div class="modal-body">
                       <div class="table-responsive">
-                          <table class="table table-striped table-bordered table-hover dataTables-example">
+                          <table  class="table table-striped table-bordered table-hover dataTables-example">
                               <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">Carpark Name</th>
@@ -135,15 +135,15 @@
                              </div>
                             </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageZLevels" class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
                                   <tr>
-                                      <th data-hide="phone,tablet">id(s)</th>
-                                      <th data-hide="phone,tablet">image</th>
-                                      <th data-hide="phone,tablet">carpark Name</th>
-                                      <th data-hide="phone,tablet">name</th>
-                                      <th data-hide="phone,tablet">ReservedCount</th>
-                                      <th data-hide="phone,tablet">TandemCount</th>
+                                      <th>id(s)</th>
+                                      <th>image</th>
+                                      <th>Car Park Name</th>
+                                      <th>name</th>
+                                      <th>ReservedCount</th>
+                                      <th>TandemCount</th>
 
                                   </tr>
                                   </thead>
@@ -159,7 +159,7 @@
                                   </tbody>
                               </table>
                               <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageZLevels" role="alert">{{messageZLevels}}</div>
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-show="messageZLevels" role="alert">{{messageZLevels}}</div>
                             </div>
                         </div>
                     </div>
@@ -267,7 +267,7 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/zlevels`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.zlevels = response.data;
-            this.messageZLevels
+            this.messageZLevels = '';
             if(this.zlevels.length === 0) {
               this.messageZLevels = "No data available.";
             }
@@ -289,8 +289,19 @@ export default {
                 )
                 .then(response => {
                     this.zone = response.data;
+                    this.messageZLevels = "";
+                  if(this.zone.length === 0) {
+                      this.messageZLevels = "No data available.";
+                    } else {
                     this.zoneID = response.data[0].id;
                     this.addZLevel()
+
+                  }
+
+
+
+
+
                 });
         },
     viewZLevel(value) {

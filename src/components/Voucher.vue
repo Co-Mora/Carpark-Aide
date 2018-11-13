@@ -101,7 +101,7 @@
                                   </div>
                               </div>
                               <div class="col-sm-9 m-b-xs">
-                                <select v-model="carparkID" class="form-control m-b" @change="addVocuher">
+                                <select v-model="carparkID" class="form-control m-b" @change="addVoucher">
                                     <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                     <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                                 </select>
@@ -114,7 +114,7 @@
                               </div>
                           </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageVoucher" class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
                                  <tr>
                                      <th data-hide="phone,tablet">id(s)</th>
@@ -244,7 +244,7 @@ export default {
        console.log("File:", this.file)
        this.processFile();
     },
-    addVocuher() {
+    addVoucher() {
       axios
         .get(
           `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/vouchers`,
@@ -386,8 +386,12 @@ export default {
       })
       .then(response => {
         this.carpark = response.data;
+        this.messageVoucher = '';
+        if (this.carpark.length === 0) {
+          this.messageVoucher = "No data available.";
+        }
         this.carparkID = response.data[0].id;
-        this.addVocuher()
+        this.addVoucher()
       });
   }
 };

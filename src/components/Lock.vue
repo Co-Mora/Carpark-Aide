@@ -108,7 +108,7 @@
                                   </div>
                               </div>
                               <div class="col-sm-9 m-b-xs">
-                                <select v-model="carparkID" class="form-control m-b" @change="addMaster">
+                                <select v-model="carparkID" class="form-control m-b" @change="filterMaster">
                                     <option disabled selected value="null" key="null">Please Select Carpark Name</option>
                                     <option v-for="car in carpark" :value="car.id" :key="car">{{car.name}}</option>
                                 </select>
@@ -127,7 +127,7 @@
                               </div>
                           </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageLock" class="table table-striped table-bordered table-hover dataTables-example">
                                   <thead>
                                   <tr>
                                       <th data-hide="phone,tablet">id(s)</th>
@@ -139,7 +139,7 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                      <tr v-for="lock in locks" :key="lock" class="gradeX" v-if="result == true && errorResult === false">
+                                      <tr v-for="lock in locks" :key="lock" class="gradeX" v-if="result === true && errorResult === false">
                                           <td class="center"><a data-toggle="modal" data-target="#myModal5" @click="viewLock(lock.id)">{{'Lock: ' + lock.id || 'Unknown'}}</a></td>
                                           <td>{{lock.name || 'Unknown'}}</td>
                                           <td>{{lock.remark || 'Unknown'}}</td>
@@ -270,9 +270,14 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/wheelmasters`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.wheelMasters = response.data;
+          if(this.wheelMasters.length === 0) {
+            this.messageLock = "No data available.";
+
+          } else {
             this.wheelMastersID = response.data[0].id;
             this.filterLock();
-            console.log(response)
+
+          }
         })
     },
     filterLock() {

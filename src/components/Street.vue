@@ -132,7 +132,7 @@
                              </div>
                             </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageStreet" class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
                                  <tr>
                                      <th data-hide="phone,tablet">id(s)</th>
@@ -150,9 +150,8 @@
                                      </tr>
                                  </tbody>
                              </table>
-                              <div class="alert alert-warning col-sm-12 m-b-xs" v-if="messageStreet" role="alert">{{messageStreet}}</div>
                               <div class="alert alert-warning col-sm-12 m-b-xs" v-show="errorResult === true" role="alert">{{message}}</div>
-
+                              <div class="alert alert-warning col-sm-12 m-b-xs" v-show="messageStreet" role="alert">{{messageStreet}}</div>
                             </div>
 
                         </div>
@@ -184,15 +183,15 @@ export default {
   data () {
     return {
       carpark: null,
-      zone: [],
+      zone: null,
       name: null,
       image: null,
       file: null,
       streets: null,
       streetID: null,
-      zoneID: 'null',
+      zoneID: null,
       selectedStreet: null,
-      carparkID: 'null',
+      carparkID: null,
       validated: false,
       zoneName: null,
 
@@ -263,20 +262,25 @@ export default {
        axios
         .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
-            this.zone = response.data
-            this.zoneID = response.data[0].id
-            this.filterZoneByStreet()
-        })
-        console.log('worked')
+            this.zone = response.data;
+              if(this.zone.length === 0) {
+                this.messageStreet = "No data available.";
+              } else {
+                this.zoneID = response.data[0].id;
+                this.filterZoneByStreet()
+              }
+
+
+        });
     },
     filterZoneByStreet() {
         axios
-        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets`,{headers: { 'x-access-token': JSON.parse(this.token)}})
+        .get(`https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones/${this.zoneID}/streets/`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.streets = response.data;
             this.messageStreet = '';
             if(this.streets.length === 0) {
-                  this.messageStreet =  "No data available.";
+                this.messageStreet =  "No data available.";
             }
         });
         this.zone.forEach((el) => {
@@ -403,7 +407,7 @@ export default {
   mounted () {
 
     axios
-      .get('https://sys2.parkaidemobile.com/api/carparks/',{headers: { 'x-access-token': JSON.parse(this.token)}})
+      .get('https://sys2.parkaidemobile.com/api/carparks',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.carpark = response.data
         this.carparkID = response.data[0].id;

@@ -84,7 +84,7 @@
                                 </div>
                               </div>
                               <div class="table-responsive">
-                                <table class="table table-bordered">
+                                <table v-show="carpark.length > 0" class="table table-bordered">
                                     <thead>
                                     <tr>
                                         <th>ID(s)</th>
@@ -134,7 +134,7 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
-import auth from '../api/authMe'
+import auth from '../../api/authMe'
 export default {
  name: 'CarPark',
   data () {

@@ -109,7 +109,7 @@
                               </div>
                             </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageGate" class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                 <tr>
                                   <th data-hide="phone,tablet">id(s)</th>
@@ -360,8 +360,14 @@ export default {
       })
       .then(response => {
         this.carpark = response.data;
-        this.carparkID = response.data[0].id;
-        this.addGateMaster()
+        this.messageGate = '';
+        if (this.carpark.length === 0) {
+          this.messageGate =  "No data available.";
+        } else {
+          this.carparkID = response.data[0].id;
+          this.addGateMaster()
+        }
+
       });
   }
 };

@@ -50,7 +50,7 @@
                               </div>
                           </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table  v-show="!messageCity" class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
                                  <tr>
                                      <th data-hide="phone,tablet">id(s)</th>
@@ -153,11 +153,14 @@ export default {
         )
         .then(response => {
           this.state = response.data;
-          this.stateID = response.data[0].id;
-          this.getCity();
+          this.messageCity = "";
           if (this.state.length === 0) {
             this.messageCity = "No data available.";
+          } else {
+            this.stateID = response.data[0].id;
+            this.getCity();
           }
+
         });
     },
     getCity() {
@@ -168,6 +171,10 @@ export default {
         )
         .then(response => {
           this.city = response.data;
+          this.messageCity = "";
+          if (this.city.length === 0) {
+            this.messageCity = "No data available.";
+          }
         });
     },
     logout() {
@@ -186,8 +193,14 @@ export default {
       )
       .then(response => {
         this.country = response.data;
-        this.countryID = response.data[0].id;
-        this.filterByState()
+        this.messageCity = "";
+        if (this.country.length === 0) {
+          this.messageCity = "No data available.";
+        } else {
+          this.countryID = response.data[0].id;
+          this.filterByState()
+        }
+
 
       });
 

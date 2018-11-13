@@ -95,7 +95,7 @@
                             </div>
                           </div>
                             <div class="table-responsive">
-                              <table class="table table-striped table-bordered table-hover dataTables-example">
+                              <table v-show="!messageParker" class="table table-striped table-bordered table-hover dataTables-example">
                                  <thead>
                                  <tr>
                                      <th data-hide="phone,tablet">id(s)</th>
@@ -205,11 +205,14 @@ export default {
         .get(`https://sys2.parkaidemobile.com/api/customers/${this.customerID}/parkers`,{headers: { 'x-access-token': JSON.parse(this.token)}})
         .then(response => {
             this.customerParker = response.data
-            // if(this.customerParker.length === 0 ) {
-            //   this.messageParker = "No data available.";
-            // }
-            this.customerParkerID = response.data[0].id;
-            this.getParker();
+            this.messageParker = "";
+            if(this.customerParker.length === 0 ) {
+                this.messageParker = "No data available.";
+              } else {
+              this.customerParkerID = response.data[0].id;
+              this.getParker();
+            }
+
         })
     },
     getParker() {
@@ -269,8 +272,14 @@ export default {
       .get('https://sys2.parkaidemobile.com/api/customers',{headers: { 'x-access-token': JSON.parse(this.token)}})
       .then(response => {
         this.customer   = response.data;
-        this.customerID = response.data[0].id;
-        this.filterByParker()
+        this.messageParker = "";
+        if(this.customer.length === 0 ) {
+          this.messageParker = "No data available.";
+        } else {
+          this.customerID = response.data[0].id;
+          this.filterByParker()
+        }
+
       })
     }
 }

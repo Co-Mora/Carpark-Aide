@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import CarPark from './CarPark'
+import CarPark from './PageCarPark/CarPark'
 import NavBar from './NavBar'
 import MainFooter from './MainFooter'
 export default {
