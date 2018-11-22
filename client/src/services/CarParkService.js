@@ -14,7 +14,7 @@ export default {
                     })
                 }, 200)
                 setTimeout(() => {
-                    window.location.href = '/carparks/zone'
+                    window.location.href = `/`
                 }, 200)
             } else {
                 setTimeout(() => {
