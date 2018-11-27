@@ -30,6 +30,9 @@ export default {
     },
     updateData(token, URL, value) {
         return API(token).put(`${URL}/${value}`);
+    },
+    deleteeData(token, URL, value) {
+        return API(token).delete(`${URL}/${value}`);
     }
 
 }

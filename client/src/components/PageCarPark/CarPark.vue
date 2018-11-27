@@ -355,7 +355,6 @@ export default {
     },
     loadData() {
         CarParkService.fetchAllData(JSON.parse(this.token), 'carparks').then(response => {
-        const json = JSON.stringify(response);
         this.carpark = response.data
         var date;
         var day;

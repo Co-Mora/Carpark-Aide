@@ -59,7 +59,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="pass in passcard" :key="s" class="gradeU">
+                                    <tr v-for="pass in passcard" :key="pass" class="gradeU">
                                         <td class="center">{{pass.id || 'Unknown'}}</td>
                                         <td class="center">{{pass.sku || 'Unknown'}}</td>
                                         <td class="center">{{pass.conditions || 'Unknown'}}</td>
