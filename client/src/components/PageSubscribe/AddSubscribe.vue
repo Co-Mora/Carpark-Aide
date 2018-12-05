@@ -76,7 +76,7 @@
 
 <script>
 import axios from 'axios'
-import NavSide from './NavSide'
+import NavSide from '../App/NavSide'
 import qs from 'qs'
 export default {
   name: 'AddSubscriber',

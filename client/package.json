@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "browserify-fs": "^1.0.0",
     "cross-env": "^5.2.0",
     "express-vue": "^5.8.2",
     "http": "0.0.0",

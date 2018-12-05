@@ -92,7 +92,7 @@
 
 <script>
 import axios from 'axios'
-import NavSide from '../NavSide'
+import NavSide from '../../App/NavSide'
 import CarParkService from '@/services/CarParkService'
 
 import qs from 'qs'
@@ -181,7 +181,7 @@ export default {
             this.city = response.data
         });
     },
-    
+
   },
  mounted () {
      this.loadData();

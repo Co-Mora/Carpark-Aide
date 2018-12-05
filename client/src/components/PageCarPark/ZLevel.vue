@@ -185,7 +185,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-import NavSide from './NavSide'
+import NavSide from '../App/NavSide'
 export default {
   name: 'ZLevel',
 

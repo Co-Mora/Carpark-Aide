@@ -181,6 +181,9 @@
                   <li>
                     <a href="/activity"><i class="fa fa-flag-o"></i> <span class="nav-label">Activity</span></a>
                   </li>
+                  <li>
+                    <a href="/role"><i class="fa fa-flag-o"></i> <span class="nav-label">Role</span></a>
+                  </li>
                   <li :class="{ active: classUsers }">
                     <a href="/users"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
                   </li>
@@ -199,7 +202,7 @@
 
 <script>
 
-import Image from '../../static/img/icon.png'
+import Image from '../../../static/img/icon.png'
 
 export default {
   name: 'NavSide',
@@ -208,7 +211,7 @@ export default {
           'classPole', 'classCountry', 'classState', 'classCity',
           'classAddSubscriber', 'classGateMaster', 'classGate',
           'classAdvert', 'classCustomer', 'classCustomerCP', 'classPassType',
-          'classStaff', 'classParker', 'classBank', 'classVoucherBuy', 'classProduct', 'classUsers'
+          'classStaff', 'classParker', 'classBank', 'classVoucherBuy', 'classProduct', 'classUsers', 'classRoles'
   ],
 
   data () {

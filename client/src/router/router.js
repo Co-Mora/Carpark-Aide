@@ -2,72 +2,75 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '../components/Index'
-import MainChart from '../components/MainChart'
+import Index from '../components/App/Index'
+import MainChart from '../components/App/MainChart'
 
-import Level from '../components/Level'
-import Zone from '../components/Zone'
-import ZLevel from '../components/ZLevel'
-import Street from '../components/Street'
-import Bay from '../components/Bay'
-import Voucher from '../components/Voucher'
+import Level from '../components/PageCarPark/Level'
+import Zone from '../components/PageCarPark/Zone'
+import ZLevel from '../components/PageCarPark/ZLevel'
+import Street from '../components/PageCarPark/Street'
+import Bay from '../components/PageCarPark/Bay'
+import Voucher from '../components/PageCarPark/Voucher'
 
-import AddCarpark from '../components/PageCarPark/AddCarpark'
-import CarparkFees from '../components/CarparkFees'
-import Auth from '../components/Auth'
+import AddCarpark from '../components/PageCarPark/PageAdd/AddCarpark'
+import CarparkFees from '../components/PageCarPark/CarparkFees'
+import Auth from '../components/PageLogin/Auth'
 
-import Master from '../components/Master'
-import Lock from '../components/Lock'
-import Pole from '../components/Pole'
+import Master from '../components/PageWheel/Master'
+import Lock from '../components/PageWheel/Lock'
+import Pole from '../components/PageWheel/Pole'
 
-import Country from '../components/Country'
-import State from '../components/State'
-import City from '../components/City'
+import Country from '../components/PageCountry/Country'
+import State from '../components/PageCountry/State'
+import City from '../components/PageCountry/City'
 
-import AddSubscribe from '../components/AddSubscribe'
-import VerifySubscribe from '../components/VerifySubscribe'
+import AddSubscribe from '../components/PageSubscribe/AddSubscribe'
+import VerifySubscribe from '../components/PageSubscribe/VerifySubscribe'
 
-import AddLevel from '../components/AddLevel'
-import AddZone from '../components/AddZone'
-import AddStreet from '../components/AddStreet'
-import AddBay from '../components/AddBay'
-import AddZLevel from '../components/AddZLevel'
+import AddLevel from '../components/PageCarPark/PageAdd/AddLevel'
+import AddZone from '../components/PageCarPark/PageAdd/AddZone'
+import AddStreet from '../components/PageCarPark/PageAdd/AddStreet'
+import AddBay from '../components/PageCarPark/PageAdd/AddBay'
+import AddZLevel from '../components/PageCarPark/PageAdd/AddZLevel'
 
-import AddMaster from '../components/AddMaster'
-import AddLock from '../components/AddLock'
-import AddPole from '../components/AddPole'
-import AddVoucher from '../components/AddVoucher'
-import AddCity from '../components/AddCity'
+import AddMaster from '../components/PageWheel/PageAdd/AddMaster'
+import AddLock from '../components/PageWheel/PageAdd/AddLock'
+import AddPole from '../components/PageWheel/PageAdd/AddPole'
+import AddVoucher from '../components/PageCarPark/PageAdd/AddVoucher'
+import AddCity from '../components/PageCountry/PageAdd/AddCity'
 
-import GateMaster from '../components/GateMaster'
-import AddGetMaster from '../components/AddGetMaster'
-import Gates from '../components/Gates'
+import GateMaster from '../components/PageGate/GateMaster'
+import AddGetMaster from '../components/PageGate/AddPage/AddGetMaster'
+import Gates from '../components/PageGate/Gates'
 
-import Adverts from '../components/Adverts'
-import AddAdverts from '../components/AddAdverts'
+import Adverts from '../components/PageAdvert/Adverts'
+import AddAdverts from '../components/PageAdvert/PageAdd/AddAdverts'
 
-import Customer from '../components/Customer'
-import CustomerCP from '../components/CustomerCP'
-import AddCustomer from '../components/AddCustomer'
+import Customer from '../components/PageCustomer/Customer'
+import CustomerCP from '../components/PageCustomer/CustomerCP'
+import AddCustomer from '../components/PageCustomer/PageAdd/AddCustomer'
 
-import PassType from '../components/PassType'
-import Staff from '../components/Staff'
+import PassType from '../components/PagePassType/PassType'
+import Staff from '../components/PageStaff/Staff'
 
-import Parker from '../components/Parker'
-import AddParker from '../components/AddParker'
+import Parker from '../components/PageParker/Parker'
+import AddParker from '../components/PageParker/PageAdd/AddParker'
 
-import Bank from '../components/Bank'
+import Bank from '../components/PageBank/Bank'
+import VoucherBuy from '../components/PageVoucherBuy/VocuherBuy'
 
-import VoucherBuy from '../components/VocuherBuy'
+import CarParkProduct from '../components/PageCarpark/CarParkProduct'
+import Register from '../components/PageRegister/Register'
+import ResetPassword from '../components/PageLogin/ResetPassword'
+import ForgotPassword from '../components/PageLogin/ForgotPassword'
+
+import Users from '../components/PageUsers/Users'
+import Activity from '../components/PageActivity/Activity'
+
+import Role from '../components/PageRole/Role'
+import AddRole from '../components/PageRole/PageAdd/AddRole'
 
 
-import CarParkProduct from '../components/CarParkProduct'
-import Register from '../components/Register'
-import ResetPassword from '../components/ResetPassword'
-import ForgotPassword from '../components/ForgotPassword'
-
-import Users from '../components/Users'
-import Activity from '../components/Activity'
 
 Vue.use(Router)
 
@@ -288,7 +291,14 @@ export function createRouter () {
         path:'/activity',
         component: Activity,
       },
-
+      {
+        path:'/role',
+        component: Role,
+      },
+      {
+        path:'/role/add',
+        component: AddRole,
+      },
     ]
   })
 }

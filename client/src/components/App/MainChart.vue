@@ -14,6 +14,38 @@
                     <li>
                         <span class="m-r-sm text-muted welcome-message">Welcome {{email}}</span>
                     </li>
+                      <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i style="font-size: 22px" class="fa fa-qrcode"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="dropdown-item float-left" href="/">
+                                    <img alt="image" class="rounded-circle" :src="Image">
+                                </a>
+                                <div>
+                                    <strong>Park Bill</strong> . <br>
+                                    <small class="text-muted">Authorized - 11.06.2014</small>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li style="margin: 1rem 0" class="dropdown-divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="dropdown-item float-left" href="/">
+                                    <img alt="image" class="rounded-circle" :src="Image">
+                                </a>
+                                <div>
+                                    <strong>Park Aide </strong>. <br>
+                                    <small class="text-muted">Authorized - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                
 
                     <li>
                         <a @click="logout" href="/login">
@@ -45,13 +77,15 @@
 <script>
 import axios from 'axios'
 import NavSide from './NavSide'
-import CarPark from './PageCarPark/CarPark'
-import Dashboard from '../components/Dashboard'
+import CarPark from '../PageCarPark/CarPark'
+import Dashboard from './Dashboard'
+import Image from '../../../static/img/icon.png'
 
 export default {
   name: 'MainChart',
   data () {
     return {
+      Image,
       token: localStorage.getItem('token'),
       isLoggedIn: localStorage.getItem('isLogged'),
       email: localStorage.getItem('email')

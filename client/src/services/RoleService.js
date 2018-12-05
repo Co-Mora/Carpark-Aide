@@ -14,7 +14,7 @@ const createData = (token, URL, credentials) => {
         })
       }, 200);
       setTimeout(() => {
-        //window.location.href = `/`
+        window.location.href = `/role/add`
       }, 200)
     } else {
       setTimeout(() => {

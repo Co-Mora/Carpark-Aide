@@ -65,9 +65,9 @@
 </template>
 <script>
   import axios from "axios";
-  import NavSide from '../components/NavSide'
-  import NavBar from '../components/NavBar'
-  import MainFooter from '../components/MainFooter'
+  import NavSide from '../App/NavSide'
+  import NavBar from '../App/NavBar'
+  import MainFooter from '../App/MainFooter'
   export default {
     name: "Users",
     data() {

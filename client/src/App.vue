@@ -6,14 +6,12 @@
 
 <script>
 
-import Index from './components/Index'
-import Zone from './components/Zone'
+import Index from './components/App/Index'
 
 export default {
   name: 'App',
   components: {
     Index,
-    Zone
   }
 }
 

@@ -86,7 +86,7 @@
 </template>
 <script>
 import axios from "axios";
-import NavSide from '../components/NavSide'
+import NavSide from '../App/NavSide'
 
 export default {
   name: "Country",

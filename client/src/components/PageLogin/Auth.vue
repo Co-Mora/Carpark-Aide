@@ -25,70 +25,77 @@
 </template>
 
 <script>
-import axios from 'axios'
-import qs from 'qs'
-import Image from '../../static/img/icon.png'
+  import axios from 'axios'
+  import AuthenticationService from '@/services/AuthenticationService'
+  import qs from 'qs'
+  import Image from '../../../static/img/icon.png'
 
-export default {
-  name: 'Level',
+  export default {
+    name: 'Auth',
 
-  data () {
-    return {
-      Image,
-      isLoggedIn: false,
-      token: null,
-      email: null,
-      password: null,
-      message: null,
-    }
-  },
-
-  methods: {
-
-    auth() {
-        axios({
-        method: 'post',
-        url: 'https://sys2.parkaidemobile.com/api/auth/login',
-        data: qs.stringify({
-            email: this.email,
-            password: this.password,
-        }),
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        }).then(response => {
-            if(response.data.auth == true) {
-                this.token = response.data.token
-                this.isLoggedIn = true
-                 const parsed = JSON.stringify(this.token);
-                 localStorage.setItem('token', parsed);
-                 let loggedIn = JSON.stringify(this.isLoggedIn)
-                localStorage.setItem('isLogged', loggedIn);
-                localStorage.setItem('email', this.email);
-                window.location.href = '/'
-            }
-
-        })
-        .catch(error => {
-            if(error.message) {
-                 setTimeout(() => {
-                    swal({
-                        title: 'Your Email or password is wrong',
-                        icon: 'error'
-                    })
-                }, 200)
-            }
-
-        });
+    data () {
+      return {
+        Image,
+        isLoggedIn: false,
+        token: null,
+        email: null,
+        password: null,
+        message: null,
+      }
     },
-  },
-  mounted() {
-    if(localStorage.getItem("token")) {
-      window.location.href = '/'
+
+    methods: {
+      loadData() {
+        AuthenticationService.login(JSON.parse(this.token), qs.stringify({
+          email: this.email,
+          password: this.password,
+        }));
+      },
+
+      auth() {
+          axios({
+          method: 'post',
+          url: 'https://sys2.parkaidemobile.com/api/auth/login',
+          data: qs.stringify({
+              email: this.email,
+              password: this.password,
+          }),
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          }).then(response => {
+              if(response.data.auth === true) {
+                  this.token = response.data.token;
+                  this.isLoggedIn = true;
+                   const parsed = JSON.stringify(this.token);
+                   localStorage.setItem('token', parsed);
+                   let loggedIn = JSON.stringify(this.isLoggedIn)
+                  localStorage.setItem('isLogged', loggedIn);
+                  localStorage.setItem('email', this.email);
+                  window.location.href = '/'
+              }
+
+          })
+          .catch(error => {
+              if(error.message) {
+                   setTimeout(() => {
+                      swal({
+                          title: 'Your Email or password is wrong',
+                          icon: 'error'
+                      })
+                  }, 200)
+              }
+
+          });
+      },
+    },
+    mounted() {
+      if(localStorage.getItem("token")) {
+        window.location.href = '/'
+      }
     }
+
+
   }
-
-
-}
 
 </script>

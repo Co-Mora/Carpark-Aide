@@ -171,8 +171,8 @@
 
 import axios from "axios";
 import qs from 'qs'
-import NavSide from '../components/NavSide'
-import NavBar from '../components/NavBar'
+import NavSide from '../App/NavSide'
+import NavBar from '../App/NavBar'
 import CarParkService from '@/services/CarParkService'
 
 export default {
@@ -258,7 +258,7 @@ export default {
          this.processFile();
       },
         addZone() {
-              
+
                 axios
                     .get(
                         `https://sys2.parkaidemobile.com/api/carparks/${this.carparkID}/zones`, {

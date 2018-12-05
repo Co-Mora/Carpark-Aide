@@ -94,7 +94,6 @@
                                         <th>Total Bay</th>
                                         <th>contract Type</th>
                                         <th>DateCreated</th>
-
                                     </tr>
                                     </thead>
                                     <tbody>
